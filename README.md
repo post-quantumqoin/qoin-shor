@@ -1,2 +1,2 @@
 # qoin-shor
- Decentralized Quantum-resistant AI Supercomputing Network
+ Decentralized Quantum-resistant AI Supercomputing Network.
