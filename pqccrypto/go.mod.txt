@@ -1,0 +1,8 @@
+module pqccrypto
+
+go 1.22.2
+
+require (
+	github.com/ipsn/go-secp256k1 v0.0.0-20180726113642-9d62b9f0bc52
+	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
+)
