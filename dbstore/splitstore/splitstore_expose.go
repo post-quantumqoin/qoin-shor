@@ -8,7 +8,7 @@ import (
 	"github.com/ipfs/go-cid"
 	ipld "github.com/ipfs/go-ipld-format"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 type exposedSplitStore struct {
