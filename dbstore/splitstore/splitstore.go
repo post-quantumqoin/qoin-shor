@@ -17,13 +17,13 @@ import (
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/post-quantumqoin/core-types/abi"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/metrics"
+	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
+	"github.com/post-quantumqoin/qoin-shor/build"
+	"github.com/post-quantumqoin/qoin-shor/chain/stmgr"
+	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 
 var (

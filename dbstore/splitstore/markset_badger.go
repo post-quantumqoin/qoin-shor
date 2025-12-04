@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/system"
+	system "github.com/post-quantumqoin/qoin-shor/sys"
 )
 
 type BadgerMarkSetEnv struct {

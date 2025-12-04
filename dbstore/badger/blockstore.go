@@ -22,7 +22,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/blockstore"
+	blockstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 var (

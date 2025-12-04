@@ -7,7 +7,7 @@ import (
 	mh "github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/post-quantumqoin/core-types/abi"
 )
 
 func epochToBytes(epoch abi.ChainEpoch) []byte {

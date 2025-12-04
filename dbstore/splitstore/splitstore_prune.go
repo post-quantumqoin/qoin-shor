@@ -14,11 +14,11 @@ import (
 	"go.opencensus.io/stats"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"
-	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/metrics"
+	"github.com/post-quantumqoin/qoin-shor/api"
+	"github.com/post-quantumqoin/qoin-shor/build"
+	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
+	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 
 var (
