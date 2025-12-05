@@ -1,4 +1,4 @@
-package system
+package sys
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	logSystem = logging.Logger("system")
+	logSystem = logging.Logger("sys")
 )
 
 // EnvMaximumHeap is name of the environment variable with which the user can
