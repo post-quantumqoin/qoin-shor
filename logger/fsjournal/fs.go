@@ -9,9 +9,9 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/post-quantumqoin/qoin-shor/build"
+	journal "github.com/post-quantumqoin/qoin-shor/logger"
+	"github.com/post-quantumqoin/qoin-shor/node/repo"
 )
 
 var log = logging.Logger("fsjournal")

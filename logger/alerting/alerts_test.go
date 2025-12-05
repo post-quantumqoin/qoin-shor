@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	journal "github.com/post-quantumqoin/qoin-shor/logger"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/journal/mockjournal"
+	"github.com/post-quantumqoin/qoin-shor/logger/mockjournal"
 )
 
 func TestAlerting(t *testing.T) {
