@@ -9,7 +9,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 
-	journal "github.com/filecoin-project/lotus/journal"
+	journal "github.com/post-quantumqoin/qoin-shor/logger"
 )
 
 // MockJournal is a mock of Journal interface.
