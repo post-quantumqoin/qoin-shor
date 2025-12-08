@@ -19,11 +19,11 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	mh "github.com/multiformats/go-multihash"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/post-quantumqoin/core-types/abi"
 
-	"github.com/post-quantumqoin/qoin-shor/chain/stmgr"
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
-	"github.com/post-quantumqoin/qoin-shor/chain/types/mock"
+	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types/mock"
 	blockstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 

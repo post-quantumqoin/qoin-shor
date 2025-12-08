@@ -21,7 +21,7 @@ import (
 	"github.com/post-quantumqoin/core-types/abi"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 
