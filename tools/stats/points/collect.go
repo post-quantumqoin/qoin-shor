@@ -16,16 +16,16 @@ import (
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/tools/stats/influx"
-	"github.com/filecoin-project/lotus/tools/stats/metrics"
+	"github.com/post-quantumqoin/qoin-shor/api"
+	"github.com/post-quantumqoin/qoin-shor/build"
+	"github.com/post-quantumqoin/qoin-shor/chain/actors/adt"
+	"github.com/post-quantumqoin/qoin-shor/chain/actors/builtin"
+	"github.com/post-quantumqoin/qoin-shor/chain/actors/builtin/power"
+	"github.com/post-quantumqoin/qoin-shor/chain/actors/builtin/reward"
+	"github.com/post-quantumqoin/qoin-shor/chain/store"
+	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/tools/stats/influx"
+	"github.com/post-quantumqoin/qoin-shor/tools/stats/metrics"
 )
 
 type LotusApi interface {
