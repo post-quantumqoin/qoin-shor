@@ -16,7 +16,7 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
