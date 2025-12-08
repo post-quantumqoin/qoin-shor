@@ -9,13 +9,13 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
 
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/post-quantumqoin/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/chain/store"
-	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/lib/backupds"
-	"github.com/filecoin-project/lotus/node/config"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/post-quantumqoin/qoin-shor/chain/store"
+	lcli "github.com/post-quantumqoin/qoin-shor/cli"
+	"github.com/post-quantumqoin/qoin-shor/lib/backupds"
+	"github.com/post-quantumqoin/qoin-shor/node/config"
+	"github.com/post-quantumqoin/qoin-shor/node/repo"
 )
 
 var backupCmd = lcli.BackupCmd("repo", repo.FullNode, func(cctx *cli.Context) (lcli.BackupAPI, jsonrpc.ClientCloser, error) {
