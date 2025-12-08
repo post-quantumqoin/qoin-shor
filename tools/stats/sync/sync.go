@@ -4,13 +4,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/post-quantumqoin/core-types/abi"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/tools/stats/headbuffer"
+	"github.com/post-quantumqoin/qoin-shor/api"
+	"github.com/post-quantumqoin/qoin-shor/build"
+	"github.com/post-quantumqoin/qoin-shor/chain/store"
+	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/tools/stats/headbuffer"
 )
 
 type SyncWaitApi interface {
