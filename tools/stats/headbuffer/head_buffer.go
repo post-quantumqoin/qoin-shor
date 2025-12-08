@@ -3,7 +3,7 @@ package headbuffer
 import (
 	"container/list"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/post-quantumqoin/qoin-shor/api"
 )
 
 type HeadChangeStackBuffer struct {

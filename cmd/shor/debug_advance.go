@@ -13,11 +13,11 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lapi "github.com/post-quantumqoin/qoin-shor/api"
+	"github.com/post-quantumqoin/qoin-shor/build"
+	"github.com/post-quantumqoin/qoin-shor/chain/gen"
+	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	lcli "github.com/post-quantumqoin/qoin-shor/cli"
 )
 
 func init() {
