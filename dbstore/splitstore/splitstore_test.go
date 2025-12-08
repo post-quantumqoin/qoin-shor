@@ -21,10 +21,10 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"
+	"github.com/post-quantumqoin/qoin-shor/chain/stmgr"
+	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/chain/types/mock"
+	blockstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 func init() {
