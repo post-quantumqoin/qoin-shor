@@ -19,10 +19,10 @@ import (
 
 	"github.com/post-quantumqoin/core-types/abi"
 
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/chain/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 
