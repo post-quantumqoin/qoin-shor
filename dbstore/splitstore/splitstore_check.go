@@ -11,7 +11,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/chain/types"
 	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 

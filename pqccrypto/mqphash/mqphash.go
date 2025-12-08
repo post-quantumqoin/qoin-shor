@@ -3,8 +3,7 @@ package mqphash
 import (
 	"fmt"
 
-	// "github.com/filecoin-project/lotus/pqccrypto/shake3"
-	"github.com/filecoin-project/lotus/pqccrypto/shake3"
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/shake3"
 )
 
 type MQPHash struct {

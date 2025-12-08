@@ -10,7 +10,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/post-quantumqoin/address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
