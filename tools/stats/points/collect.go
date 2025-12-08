@@ -18,12 +18,12 @@
 
 // 	"github.com/post-quantumqoin/qoin-shor/api"
 // 	"github.com/post-quantumqoin/qoin-shor/build"
-// 	"github.com/post-quantumqoin/qoin-shor/chain/actors/adt"
-// 	"github.com/post-quantumqoin/qoin-shor/chain/actors/builtin"
-// 	"github.com/post-quantumqoin/qoin-shor/chain/actors/builtin/power"
-// 	"github.com/post-quantumqoin/qoin-shor/chain/actors/builtin/reward"
-// 	"github.com/post-quantumqoin/qoin-shor/chain/store"
-// 	"github.com/post-quantumqoin/qoin-shor/chain/types"
+// 	"github.com/post-quantumqoin/qoin-shor/core/actors/adt"
+// 	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
+// 	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/power"
+// 	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/reward"
+// 	"github.com/post-quantumqoin/qoin-shor/core/store"
+// 	"github.com/post-quantumqoin/qoin-shor/core/types"
 // 	"github.com/post-quantumqoin/qoin-shor/tools/stats/influx"
 // 	"github.com/post-quantumqoin/qoin-shor/tools/stats/metrics"
 // )
