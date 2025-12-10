@@ -10,7 +10,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
-	journal "github.com/post-quantumqoin/qoin-shor/logger"
+	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"
 )
 

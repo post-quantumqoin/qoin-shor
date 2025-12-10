@@ -8,7 +8,7 @@ import (
 
 	logging "github.com/ipfs/go-log/v2"
 
-	journal "github.com/post-quantumqoin/qoin-shor/logger"
+	"github.com/post-quantumqoin/qoin-shor/journal"
 )
 
 var log = logging.Logger("alerting")
