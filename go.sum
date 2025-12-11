@@ -1093,8 +1093,8 @@ github.com/polydawn/refmt v0.89.0 h1:ADJTApkvkeBZsN0tBTx8QjpD9JkmxbKp0cxfr9qszm4
 github.com/polydawn/refmt v0.89.0/go.mod h1:/zvteZs/GwLtCgZ4BL6CBsk9IKIlexP43ObX9AxTqTw=
 github.com/post-quantumqoin/address v0.0.2 h1:wMKQ+lZ1iLNd9f8hNjwbsYPZ6JZmDDU4jQWpgdmIKS0=
 github.com/post-quantumqoin/address v0.0.2/go.mod h1:+JZ6OiqCj7qQsoFLu8gKQdXXeuekSR0L4+psU0xM+to=
-github.com/post-quantumqoin/core-types v0.1.0 h1:uEcPTDKZd7GKcGuFrP8ycZ5G08SXrVcQrk1xo7yS0bA=
-github.com/post-quantumqoin/core-types v0.1.0/go.mod h1:aRUV986kqsdkS+P0XYgqIdMSJEq2qM33L6wRixgSe/U=
+github.com/post-quantumqoin/core-types v0.1.1 h1:Ivju/PkX11+Y1ZtNete0Lmjlu3AESNALC+c5D7lzG5Y=
+github.com/post-quantumqoin/core-types v0.1.1/go.mod h1:aRUV986kqsdkS+P0XYgqIdMSJEq2qM33L6wRixgSe/U=
 github.com/post-quantumqoin/go-jsonrpc v0.0.1 h1:f+ifq/nkKOa7Eoy4H1W5C1Hwy1h22Ua/9x+v8GjD/LQ=
 github.com/post-quantumqoin/go-jsonrpc v0.0.1/go.mod h1:AWEvfZc+Y0ePNuIRwU+xJCNEWob7iefTksBE9bOEO+s=
 github.com/prometheus/client_golang v1.18.0 h1:HzFfmkOzH5Q8L8G+kSJKUx5dtG87sewO+FoDDqP5Tbk=
