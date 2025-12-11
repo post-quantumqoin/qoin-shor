@@ -29,12 +29,13 @@ require (
 	github.com/multiformats/go-multiaddr v0.12.2
 	github.com/multiformats/go-multihash v0.2.3
 	github.com/post-quantumqoin/address v0.0.2
-	github.com/post-quantumqoin/core-types v0.1.1
+	github.com/post-quantumqoin/core-types v0.2.0
 	github.com/post-quantumqoin/go-jsonrpc v0.0.1
 	github.com/prometheus/client_golang v1.18.0
 	github.com/raulk/clock v1.1.0
 	github.com/stretchr/testify v1.11.1
 	github.com/whyrusleeping/cbor-gen v0.3.1
+	github.com/xorcare/golden v0.8.3
 	go.opencensus.io v0.24.0
 	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.27.0
