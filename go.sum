@@ -1093,8 +1093,8 @@ github.com/polydawn/refmt v0.89.0 h1:ADJTApkvkeBZsN0tBTx8QjpD9JkmxbKp0cxfr9qszm4
 github.com/polydawn/refmt v0.89.0/go.mod h1:/zvteZs/GwLtCgZ4BL6CBsk9IKIlexP43ObX9AxTqTw=
 github.com/post-quantumqoin/address v0.0.2 h1:wMKQ+lZ1iLNd9f8hNjwbsYPZ6JZmDDU4jQWpgdmIKS0=
 github.com/post-quantumqoin/address v0.0.2/go.mod h1:+JZ6OiqCj7qQsoFLu8gKQdXXeuekSR0L4+psU0xM+to=
-github.com/post-quantumqoin/core-types v0.1.0 h1:uEcPTDKZd7GKcGuFrP8ycZ5G08SXrVcQrk1xo7yS0bA=
-github.com/post-quantumqoin/core-types v0.1.0/go.mod h1:aRUV986kqsdkS+P0XYgqIdMSJEq2qM33L6wRixgSe/U=
+github.com/post-quantumqoin/core-types v0.2.0 h1:ff4emIQEA9C6Pt5oCtRlXw/MRsiSTHzDoIomoH4zWvM=
+github.com/post-quantumqoin/core-types v0.2.0/go.mod h1:aRUV986kqsdkS+P0XYgqIdMSJEq2qM33L6wRixgSe/U=
 github.com/post-quantumqoin/go-jsonrpc v0.0.1 h1:f+ifq/nkKOa7Eoy4H1W5C1Hwy1h22Ua/9x+v8GjD/LQ=
 github.com/post-quantumqoin/go-jsonrpc v0.0.1/go.mod h1:AWEvfZc+Y0ePNuIRwU+xJCNEWob7iefTksBE9bOEO+s=
 github.com/prometheus/client_golang v1.18.0 h1:HzFfmkOzH5Q8L8G+kSJKUx5dtG87sewO+FoDDqP5Tbk=
@@ -1176,6 +1176,8 @@ github.com/whyrusleeping/cbor-gen v0.1.0/go.mod h1:pM99HXyEbSQHcosHc0iW7YFmwnscr
 github.com/whyrusleeping/go-keyspace v0.0.0-20160322163242-5b898ac5add1 h1:EKhdznlJHPMoKr0XTrX+IlJs1LH3lyx2nfr1dOlZ79k=
 github.com/whyrusleeping/go-keyspace v0.0.0-20160322163242-5b898ac5add1/go.mod h1:8UvriyWtv5Q5EOgjHaSseUEdkQfvwFv1I/In/O2M9gc=
 github.com/xhit/go-str2duration/v2 v2.1.0/go.mod h1:ohY8p+0f07DiV6Em5LKB0s2YpLtXVyJfNt1+BlmyAsU=
+github.com/xorcare/golden v0.8.3 h1:0sFBpM6/ju8YzhN2akrsPTgm6YEuIwuh0JaeAk5Ne3g=
+github.com/xorcare/golden v0.8.3/go.mod h1:lRw6LV+0Pp37EBDMR4sXIz4Y7r75dDZ6bYm0ILDpIHY=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

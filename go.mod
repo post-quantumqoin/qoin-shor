@@ -7,6 +7,7 @@ toolchain go1.24.11
 require (
 	contrib.go.opencensus.io/exporter/prometheus v0.4.2
 	github.com/dgraph-io/badger/v2 v2.2007.4
+	github.com/docker/go-units v0.5.0
 	github.com/dustin/go-humanize v1.0.1
 	github.com/elastic/gosigar v0.14.2
 	github.com/filecoin-project/kubo-api-client v0.27.0
@@ -23,15 +24,18 @@ require (
 	github.com/ipsn/go-secp256k1 v0.0.0-20180726113642-9d62b9f0bc52
 	github.com/libp2p/go-buffer-pool v0.1.0
 	github.com/libp2p/go-msgio v0.3.0
+	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1
 	github.com/multiformats/go-base32 v0.1.0
 	github.com/multiformats/go-multiaddr v0.12.2
 	github.com/multiformats/go-multihash v0.2.3
-	github.com/post-quantumqoin/core-types v0.1.0
+	github.com/post-quantumqoin/address v0.0.2
+	github.com/post-quantumqoin/core-types v0.2.0
 	github.com/post-quantumqoin/go-jsonrpc v0.0.1
 	github.com/prometheus/client_golang v1.18.0
 	github.com/raulk/clock v1.1.0
 	github.com/stretchr/testify v1.11.1
 	github.com/whyrusleeping/cbor-gen v0.3.1
+	github.com/xorcare/golden v0.8.3
 	go.opencensus.io v0.24.0
 	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.27.0
@@ -83,7 +87,6 @@ require (
 	github.com/libp2p/go-netroute v0.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/miekg/dns v1.1.58 // indirect
-	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1 // indirect
 	github.com/minio/sha256-simd v1.0.1 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mr-tron/base58 v1.2.0 // indirect
@@ -97,7 +100,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/polydawn/refmt v0.89.0 // indirect
-	github.com/post-quantumqoin/address v0.0.2 // indirect
 	github.com/prometheus/client_model v0.6.0 // indirect
 	github.com/prometheus/common v0.47.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
