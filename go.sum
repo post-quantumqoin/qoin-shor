@@ -703,6 +703,8 @@ github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7
 github.com/envoyproxy/protoc-gen-validate v0.6.7/go.mod h1:dyJXwwfPK2VSqiB9Klm1J6romD608Ba7Hij42vrOBCo=
 github.com/envoyproxy/protoc-gen-validate v0.9.1/go.mod h1:OKNgG7TCp5pF4d6XftA0++PMirau2/yoOwVac3AbF2w=
 github.com/envoyproxy/protoc-gen-validate v0.10.0/go.mod h1:DRjgyB0I43LtJapqN6NiRwroiAU2PaFuvk/vjgh61ss=
+github.com/filecoin-project/go-bitfield v0.2.4 h1:uZ7MeE+XfM5lqrHJZ93OnhQKc/rveW8p9au0C68JPgk=
+github.com/filecoin-project/go-bitfield v0.2.4/go.mod h1:CNl9WG8hgR5mttCnUErjcQjGvuiZjRqK9rHVBsQF4oM=
 github.com/filecoin-project/go-crypto v0.1.0 h1:Pob2MphoipMbe/ksxZOMcQvmBHAd3sI/WEqcbpIsGI0=
 github.com/filecoin-project/go-crypto v0.1.0/go.mod h1:K9UFXvvoyAVvB+0Le7oGlKiT9mgA5FHOJdYQXEE8IhI=
 github.com/filecoin-project/kubo-api-client v0.27.0 h1:rQNbReJCCQ8L107VIQR0qjAlEqdDQRYOhDKYcKGcnPI=
@@ -1093,10 +1095,14 @@ github.com/polydawn/refmt v0.89.0 h1:ADJTApkvkeBZsN0tBTx8QjpD9JkmxbKp0cxfr9qszm4
 github.com/polydawn/refmt v0.89.0/go.mod h1:/zvteZs/GwLtCgZ4BL6CBsk9IKIlexP43ObX9AxTqTw=
 github.com/post-quantumqoin/address v0.0.2 h1:wMKQ+lZ1iLNd9f8hNjwbsYPZ6JZmDDU4jQWpgdmIKS0=
 github.com/post-quantumqoin/address v0.0.2/go.mod h1:+JZ6OiqCj7qQsoFLu8gKQdXXeuekSR0L4+psU0xM+to=
-github.com/post-quantumqoin/core-types v0.2.0 h1:ff4emIQEA9C6Pt5oCtRlXw/MRsiSTHzDoIomoH4zWvM=
-github.com/post-quantumqoin/core-types v0.2.0/go.mod h1:aRUV986kqsdkS+P0XYgqIdMSJEq2qM33L6wRixgSe/U=
+github.com/post-quantumqoin/bitset v0.1.0 h1:8/ghIT8P1nwFBMuqCacFZnwR/P+nPIAdnccbw5Dc4SE=
+github.com/post-quantumqoin/bitset v0.1.0/go.mod h1:7PyYtShZHG2EZYzWFy6iJCDIFB04LsrkNvlVmNV8qtk=
+github.com/post-quantumqoin/core-types v0.3.0 h1:vbBovhwg9l/jmT6KMk4xcK+/505hMpbU5iDPmV0l/f4=
+github.com/post-quantumqoin/core-types v0.3.0/go.mod h1:aRUV986kqsdkS+P0XYgqIdMSJEq2qM33L6wRixgSe/U=
 github.com/post-quantumqoin/go-jsonrpc v0.0.1 h1:f+ifq/nkKOa7Eoy4H1W5C1Hwy1h22Ua/9x+v8GjD/LQ=
 github.com/post-quantumqoin/go-jsonrpc v0.0.1/go.mod h1:AWEvfZc+Y0ePNuIRwU+xJCNEWob7iefTksBE9bOEO+s=
+github.com/post-quantumqoin/specs-contracts v0.0.2 h1:7xGjpuAmvbox1vx4kdiODMUHsh4UaVyHG70gdV3ywMs=
+github.com/post-quantumqoin/specs-contracts v0.0.2/go.mod h1:FDd1KLlrKjiQvaNsedacZqcGjpjKJvIxcwRkS1u/v7E=
 github.com/prometheus/client_golang v1.18.0 h1:HzFfmkOzH5Q8L8G+kSJKUx5dtG87sewO+FoDDqP5Tbk=
 github.com/prometheus/client_golang v1.18.0/go.mod h1:T+GXkCk5wSJyOqMIzVgvvjFDlkOQntgjkJWKrN5txjA=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=

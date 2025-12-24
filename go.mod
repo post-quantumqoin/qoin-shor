@@ -29,8 +29,9 @@ require (
 	github.com/multiformats/go-multiaddr v0.12.2
 	github.com/multiformats/go-multihash v0.2.3
 	github.com/post-quantumqoin/address v0.0.2
-	github.com/post-quantumqoin/core-types v0.2.0
+	github.com/post-quantumqoin/core-types v0.3.0
 	github.com/post-quantumqoin/go-jsonrpc v0.0.1
+	github.com/post-quantumqoin/specs-contracts v0.0.2
 	github.com/prometheus/client_golang v1.18.0
 	github.com/raulk/clock v1.1.0
 	github.com/stretchr/testify v1.11.1
@@ -100,6 +101,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/polydawn/refmt v0.89.0 // indirect
+	github.com/post-quantumqoin/bitset v0.1.0 // indirect
 	github.com/prometheus/client_model v0.6.0 // indirect
 	github.com/prometheus/common v0.47.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
