@@ -11,7 +11,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/address"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/post-quantumqoin/core-types/crypto"
 
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
