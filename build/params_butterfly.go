@@ -1,0 +1,107 @@
+//go:build butterflynet
+// +build butterflynet
+
+package build
+
+import (
+	"fmt"
+
+	"github.com/ipfs/go-cid"
+
+	"github.com/filecoin-project/go-address"
+	"github.com/post-quantumqoin/core-types/abi"
+	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	"github.com/post-quantumqoin/core-types/network"
+	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
+)
+
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
+	0:                    DrandMainnet,
+	UpgradePhoenixHeight: DrandQuicknet,
+}
+
+const GenesisNetworkVersion = network.Version21
+
+var NetworkBundle = "butterflynet"
+var BundleOverrides map[actorstypes.Version]string
+var ActorDebugging = false
+
+const BootstrappersFile = "butterflynet.pi"
+const GenesisFile = "butterflynet.car"
+
+const UpgradeBreezeHeight = -1
+const BreezeGasTampingDuration = 120
+const UpgradeSmokeHeight = -2
+const UpgradeIgnitionHeight = -3
+const UpgradeRefuelHeight = -4
+
+var UpgradeAssemblyHeight = abi.ChainEpoch(-5)
+
+const UpgradeTapeHeight = -6
+const UpgradeLiftoffHeight = -7
+const UpgradeKumquatHeight = -8
+const UpgradeCalicoHeight = -9
+const UpgradePersianHeight = -10
+const UpgradeClausHeight = -11
+const UpgradeOrangeHeight = -12
+const UpgradeTrustHeight = -13
+const UpgradeNorwegianHeight = -14
+const UpgradeTurboHeight = -15
+const UpgradeHyperdriveHeight = -16
+const UpgradeChocolateHeight = -17
+const UpgradeOhSnapHeight = -18
+const UpgradeSkyrHeight = -19
+const UpgradeSharkHeight = -20
+const UpgradeHyggeHeight = -21
+const UpgradeLightningHeight = -22
+const UpgradeThunderHeight = -23
+const UpgradeWatermelonHeight = -24
+
+const UpgradeDragonHeight = 5760
+
+const UpgradePhoenixHeight = UpgradeDragonHeight + 120
+
+// This fix upgrade only ran on calibrationnet
+const UpgradeWatermelonFixHeight = -100
+
+// This fix upgrade only ran on calibrationnet
+const UpgradeWatermelonFix2Height = -101
+
+var SupportedProofTypes = []abi.RegisteredSealProof{
+	abi.RegisteredSealProof_StackedDrg512MiBV1,
+	abi.RegisteredSealProof_StackedDrg32GiBV1,
+	abi.RegisteredSealProof_StackedDrg64GiBV1,
+}
+var ConsensusMinerMinPower = abi.NewStoragePower(2 << 30)
+var MinVerifiedDealSize = abi.NewStoragePower(1 << 20)
+var PreCommitChallengeDelay = abi.ChainEpoch(150)
+
+func init() {
+	policy.SetSupportedProofTypes(SupportedProofTypes...)
+	policy.SetConsensusMinerMinPower(ConsensusMinerMinPower)
+	policy.SetMinVerifiedDealSize(MinVerifiedDealSize)
+	policy.SetPreCommitChallengeDelay(PreCommitChallengeDelay)
+
+	SetAddressNetwork(address.Testnet)
+	fmt.Println("params_butterfly.go SetAddressNetwork:%s\n", address.Testnet)
+	Devnet = true
+
+	BuildType = BuildButterflynet
+}
+
+const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
+
+const PropagationDelaySecs = uint64(6)
+
+var EquivocationDelaySecs = uint64(2)
+
+// BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
+const BootstrapPeerThreshold = 2
+
+// ChainId defines the chain ID used in the Ethereum JSON-RPC endpoint.
+// As per https://github.com/ethereum-lists/chains
+const Eip155ChainId = 3141592
+
+var WhitelistedBlock = cid.Undef
