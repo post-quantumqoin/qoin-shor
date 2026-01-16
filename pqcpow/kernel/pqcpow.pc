@@ -1,0 +1,4 @@
+Name: pqcpow
+Version: 1fb52f02056a4d48c5ff92005348395b631210a2
+Description: C bindings for qoin Proofs
+Libs: -lstdc++  -L/usr/lib/x86_64-linux-gnu -lnvidia-ml
