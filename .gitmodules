@@ -1,0 +1,3 @@
+[submodule "ext/qvm"]
+	path = ext/qvm
+	url = https://github.com/post-quantumqoin/qvm
