@@ -8,7 +8,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/address"
-	paychtypes "github.com/post-quantumqoin/core-types/builtin/paych"
+	paychtypes "github.com/post-quantumqoin/core-types/builtin/v8/paych"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/core/types"

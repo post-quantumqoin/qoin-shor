@@ -7,15 +7,15 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
 
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/system"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 func SetupSystemActor(ctx context.Context, bs bstore.Blockstore, av actorstypes.Version) (*types.Actor, error) {

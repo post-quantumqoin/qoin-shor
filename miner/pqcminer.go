@@ -22,7 +22,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v1api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	cliutil "github.com/post-quantumqoin/qoin-shor/cli/util"
+	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/gen"

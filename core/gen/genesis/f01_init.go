@@ -11,15 +11,15 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 	"github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
 
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	init_ "github.com/post-quantumqoin/qoin-shor/core/actors/builtin/init"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/genesis"
 )
 

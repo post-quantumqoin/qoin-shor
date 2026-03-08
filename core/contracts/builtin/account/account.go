@@ -7,9 +7,9 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/address"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"

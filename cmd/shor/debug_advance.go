@@ -15,9 +15,9 @@ import (
 
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/chain/gen"
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
-	lcli "github.com/post-quantumqoin/qoin-shor/cli"
+	lcli "github.com/post-quantumqoin/qoin-shor/climd"
+	"github.com/post-quantumqoin/qoin-shor/core/gen"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
 func init() {

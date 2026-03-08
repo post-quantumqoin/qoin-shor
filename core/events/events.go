@@ -6,7 +6,7 @@ import (
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 
 	"github.com/post-quantumqoin/qoin-shor/api"

@@ -7,16 +7,16 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/address"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
 	"github.com/post-quantumqoin/core-types/builtin"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 	"github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
 
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/datacap"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/datacap"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 var GovernorId address.Address

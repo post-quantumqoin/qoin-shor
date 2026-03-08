@@ -8,10 +8,10 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	rmnet "github.com/post-quantumqoin/go-qoin-markets/retrievalmarket/network"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket/impl/storedask"
 	"github.com/post-quantumqoin/core-types/abi"
 
 	"github.com/post-quantumqoin/qoin-shor/api"

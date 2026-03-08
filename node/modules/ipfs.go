@@ -6,10 +6,10 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/markets/retrievaladapter"
 	"github.com/post-quantumqoin/qoin-shor/markets/storageadapter"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"

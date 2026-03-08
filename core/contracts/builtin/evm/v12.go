@@ -3,10 +3,10 @@ package evm
 import (
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	evm12 "github.com/filecoin-project/go-state-types/builtin/v12/evm"
+	"github.com/post-quantumqoin/core-types/abi"
+	evm12 "github.com/post-quantumqoin/core-types/builtin/v12/evm"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 )
 
 var _ State = (*state12)(nil)

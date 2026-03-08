@@ -32,9 +32,9 @@ import (
 	// named msgarray here to make it clear that these are the types used by
 	// messages, regardless of specs-actors version.
 	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
-
+	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	
 	"github.com/post-quantumqoin/qoin-shor/api"
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
 	"github.com/post-quantumqoin/qoin-shor/core/exchange"
@@ -42,6 +42,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 
@@ -419,8 +420,14 @@ func zipTipSetAndMessages(bs cbor.IpldStore, ts *types.TipSet, allbmsgs []*types
 func computeMsgMeta(bs cbor.IpldStore, bmsgCids, smsgCids []cid.Cid) (cid.Cid, error) {
 	// block headers use adt0
 	store := blockadt.WrapStore(context.TODO(), bs)
-	bmArr := blockadt.MakeEmptyArray(store)
-	smArr := blockadt.MakeEmptyArray(store)
+	bmArr, err := blockadt.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
+	if err != nil {
+		return cid.Undef, err
+	}
+	smArr, err := blockadt.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
+	if err != nil {
+		return cid.Undef, err
+	}
 
 	for i, m := range bmsgCids {
 		c := cbg.CborCid(m)

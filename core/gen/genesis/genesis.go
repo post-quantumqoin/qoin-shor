@@ -14,35 +14,36 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/manifest"
 	"github.com/post-quantumqoin/core-types/network"
+	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	verifreg0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/verifreg"
 	adt0 "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
 
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/adt"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/account"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/cron"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/datacap"
-	init_ "github.com/post-quantumqoin/qoin-shor/core/actors/builtin/init"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/market"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/multisig"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/power"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/reward"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/system"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/verifreg"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/account"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/cron"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/datacap"
+	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/market"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/multisig"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/power"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/reward"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/system"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/verifreg"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/genesis"
 	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"
@@ -604,7 +605,11 @@ func MakeGenesisBlock(ctx context.Context, j journal.Journal, bs bstore.Blocksto
 	}
 
 	store := adt.WrapStore(ctx, cbor.NewCborStore(bs))
-	emptyroot, err := adt0.MakeEmptyArray(store).Root()
+	emptyArr, err := adt0.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
+	if err != nil {
+		return nil, xerrors.Errorf("amt build failed: %w", err)
+	}
+	emptyroot, err := emptyArr.Root()
 	if err != nil {
 		return nil, xerrors.Errorf("amt build failed: %w", err)
 	}

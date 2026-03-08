@@ -16,8 +16,8 @@ import (
 	init12 "github.com/post-quantumqoin/core-types/builtin/v12/init"
 	"github.com/post-quantumqoin/core-types/exitcode"
 
-	builtinactors "github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/evm"
+	builtinactors "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/evm"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"

@@ -1,0 +1,39 @@
+package utils
+
+import (
+	"github.com/libp2p/go-libp2p/core/peer"
+	"github.com/multiformats/go-multiaddr"
+
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
+	"github.com/post-quantumqoin/core-types/big"
+
+	"github.com/post-quantumqoin/qoin-shor/api"
+)
+
+func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
+	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
+	for _, a := range addrs {
+		maddr, err := multiaddr.NewMultiaddrBytes(a)
+		if err != nil {
+			return storagemarket.StorageProviderInfo{}
+		}
+		multiaddrs = append(multiaddrs, maddr)
+	}
+
+	return storagemarket.StorageProviderInfo{
+		Address:    address,
+		Worker:     miner,
+		SectorSize: uint64(sectorSize),
+		PeerID:     peer,
+		Addrs:      multiaddrs,
+	}
+}
+
+func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {
+	return storagemarket.Balance{
+		Locked:    bal.Locked,
+		Available: big.Sub(bal.Escrow, bal.Locked),
+	}
+}

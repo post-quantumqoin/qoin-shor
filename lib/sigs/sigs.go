@@ -12,7 +12,7 @@ import (
 
 	// pqccrypto "github.com/post-quantumqoin/qoin-shor/pqccrypto"
 
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
 // Sign takes in signature type, private key and message. Returns a signature for that message.

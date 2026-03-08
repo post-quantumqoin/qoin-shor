@@ -5,31 +5,31 @@ import (
 	"bytes"
 	"errors"
 {{if (le .v 1)}}
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/post-quantumqoin/core-types/big"
 {{end}}
-	"github.com/filecoin-project/go-bitfield"
-	rle "github.com/filecoin-project/go-bitfield/rle"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/post-quantumqoin/bitset"
+	rle "github.com/post-quantumqoin/bitset/rle"
+	"github.com/post-quantumqoin/core-types/abi"
+	"github.com/post-quantumqoin/core-types/dline"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"https://github.com/post-quantumqoin/qoin-shor/core/contracts"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/manifest"
 
 {{if (le .v 7)}}
     {{if (ge .v 3)}}
-	    builtin{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/builtin"
+	    builtin{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/builtin"
     {{end}}
-        miner{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/builtin/miner"
-        adt{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/util/adt"
+        miner{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/builtin/miner"
+        adt{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/util/adt"
 {{else}}
-	miner{{.v}} "github.com/filecoin-project/go-state-types/builtin{{.import}}miner"
-	adt{{.v}} "github.com/filecoin-project/go-state-types/builtin{{.import}}util/adt"
-	builtin{{.v}} "github.com/filecoin-project/go-state-types/builtin"
+	miner{{.v}} "github.com/post-quantumqoin/core-types/builtin{{.import}}miner"
+	adt{{.v}} "github.com/post-quantumqoin/core-types/builtin{{.import}}util/adt"
+	builtin{{.v}} "github.com/post-quantumqoin/core-types/builtin"
 {{end}}
 )
 

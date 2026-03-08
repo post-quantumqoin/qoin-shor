@@ -10,8 +10,8 @@ import (
 
 	"github.com/post-quantumqoin/address"
 
-	"github.com/post-quantumqoin/qoin-shor/core/blockstore"
-	"github.com/post-quantumqoin/qoin-shor/core/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 type MockAPI struct {

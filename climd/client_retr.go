@@ -27,12 +27,12 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/big"
 
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
-	cliutil "github.com/post-quantumqoin/qoin-shor/cli/util"
+	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/markets/utils"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"

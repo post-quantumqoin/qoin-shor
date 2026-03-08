@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/ipfs/go-cid"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 
-	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/post-quantumqoin/address"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	account13 "github.com/post-quantumqoin/core-types/builtin/v13/account"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"

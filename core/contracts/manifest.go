@@ -9,7 +9,7 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
 
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"

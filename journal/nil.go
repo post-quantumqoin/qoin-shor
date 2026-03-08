@@ -1,4 +1,4 @@
-package logger
+package journal
 
 type nilJournal struct{}
 

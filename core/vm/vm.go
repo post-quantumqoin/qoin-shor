@@ -24,7 +24,6 @@ import (
 	"github.com/post-quantumqoin/core-types/exitcode"
 	"github.com/post-quantumqoin/core-types/network"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/aerrors"
@@ -34,6 +33,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/rand"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 

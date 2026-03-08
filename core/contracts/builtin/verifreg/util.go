@@ -8,7 +8,7 @@ import (
 	"github.com/post-quantumqoin/core-types/big"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/verifreg"
 
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 )
 

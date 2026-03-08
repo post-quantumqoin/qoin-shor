@@ -1,0 +1,18 @@
+{
+  "go.useLanguageServer": true,
+  "[go]": {
+    "editor.formatOnSave": true
+  },
+  "go.lintOnSave": "off",
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": ["--timeout=5m"],
+  "[go-mod]": {
+    "editor.formatOnSave": true
+  },
+  "gopls": {
+    "usePlaceholders": true,
+    "completeUnimported": true,
+    "staticcheck": false,
+    "gofumpt": false
+  }
+}

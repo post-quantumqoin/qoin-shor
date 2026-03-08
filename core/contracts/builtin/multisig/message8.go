@@ -3,17 +3,18 @@ package multisig
 import (
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	builtintypes "github.com/filecoin-project/go-state-types/builtin"
-	init13 "github.com/filecoin-project/go-state-types/builtin/v13/init"
-	multisig8 "github.com/filecoin-project/go-state-types/builtin/v8/multisig"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
+	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	init13 "github.com/post-quantumqoin/core-types/builtin/v13/init"
+	multisig8 "github.com/post-quantumqoin/core-types/builtin/v8/multisig"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/manifest"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/types"
+	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
+
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
 type message8 struct{ message0 }

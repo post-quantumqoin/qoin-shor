@@ -18,14 +18,14 @@ import (
 	"github.com/ipld/go-car"
 	"golang.org/x/xerrors"
 
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
-//go:embed actors/*.tar.zst
+//go:embed contracts/*.tar.zst
 var embeddedBuiltinActorReleases embed.FS
 
 func init() {

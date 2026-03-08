@@ -21,7 +21,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
-//go:generate go run github.com/golang/mock/mockgen -destination=servicesmock_test.go -package=cli -self_package github.com/post-quantumqoin/qoin-shor/cli . ServicesAPI
+//go:generate go run github.com/golang/mock/mockgen -destination=servicesmock_test.go -package=cli -self_package github.com/post-quantumqoin/qoin-shor/climd . ServicesAPI
 
 type ServicesAPI interface {
 	FullNodeAPI() api.FullNode

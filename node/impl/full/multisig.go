@@ -8,13 +8,13 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	multisig2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/multisig"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/multisig"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/multisig"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 

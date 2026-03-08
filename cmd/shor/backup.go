@@ -11,8 +11,8 @@ import (
 
 	"github.com/post-quantumqoin/go-jsonrpc"
 
-	"github.com/post-quantumqoin/qoin-shor/chain/store"
-	lcli "github.com/post-quantumqoin/qoin-shor/cli"
+	lcli "github.com/post-quantumqoin/qoin-shor/climd"
+	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/lib/backupds"
 	"github.com/post-quantumqoin/qoin-shor/node/config"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"

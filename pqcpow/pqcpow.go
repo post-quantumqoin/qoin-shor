@@ -11,7 +11,7 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/qoin-shor/api"
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/mqphash"
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/shake3"
 )

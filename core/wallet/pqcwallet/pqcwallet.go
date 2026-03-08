@@ -18,7 +18,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/wallet/key"
 
-	// "github.com/filecoin-project/go-address"
+	// "github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"
 	_ "github.com/post-quantumqoin/qoin-shor/lib/sigs/bls" // enable bls signatures
 	_ "github.com/post-quantumqoin/qoin-shor/lib/sigs/delegated"

@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/ipfs/go-cid"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	cron13 "github.com/post-quantumqoin/core-types/builtin/v13/cron"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"

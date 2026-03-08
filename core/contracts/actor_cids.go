@@ -4,7 +4,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"

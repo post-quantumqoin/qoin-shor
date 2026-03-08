@@ -16,20 +16,20 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
+	init2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/init"
+	msig2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/multisig"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/multisig"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	blockstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 var multisigCmd = &cli.Command{

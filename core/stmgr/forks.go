@@ -481,7 +481,7 @@ func MakeKeyAddr(splitAddr address.Address, count uint64) (address.Address, erro
 		return address.Undef, xerrors.Errorf("writing fork name into a buffer: %w", err)
 	}
 
-	addr, err := address.NewActorAddress(b.Bytes())
+	addr, err := address.NewContractAddress(b.Bytes())
 	if err != nil {
 		return address.Undef, xerrors.Errorf("create actor address: %w", err)
 	}

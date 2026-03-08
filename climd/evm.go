@@ -20,7 +20,7 @@ import (
 	"github.com/post-quantumqoin/core-types/builtin/v10/eam"
 
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"
@@ -462,7 +462,7 @@ func ethAddrFromFilecoinAddress(ctx context.Context, addr address.Address, fnapi
 		if err != nil {
 			return ethtypes.EthAddress{}, addr, err
 		}
-	case address.Actor, address.ID:
+	case address.Contract, address.ID:
 		faddr, err = fnapi.StateLookupID(ctx, addr, types.EmptyTSK)
 		if err != nil {
 			return ethtypes.EthAddress{}, addr, err

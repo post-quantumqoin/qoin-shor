@@ -5,18 +5,18 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/ipfs/go-cid"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	bitfield "github.com/post-quantumqoin/bitset"
 	rle "github.com/post-quantumqoin/bitset/rle"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	miner13 "github.com/post-quantumqoin/core-types/builtin/v13/miner"
 	adt13 "github.com/post-quantumqoin/core-types/builtin/v13/util/adt"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/dline"
 	"github.com/post-quantumqoin/core-types/manifest"
 

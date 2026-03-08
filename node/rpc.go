@@ -27,7 +27,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
 	"github.com/post-quantumqoin/qoin-shor/api/v1api"
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/lib/rpcenc"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 	"github.com/post-quantumqoin/qoin-shor/metrics/proxy"

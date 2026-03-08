@@ -10,9 +10,9 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
-	badgerbs "github.com/post-quantumqoin/qoin-shor/blockstore/badger"
-	"github.com/post-quantumqoin/qoin-shor/blockstore/splitstore"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
+	badgerbs "github.com/post-quantumqoin/qoin-shor/dbstore/badger"
+	"github.com/post-quantumqoin/qoin-shor/dbstore/splitstore"
 	"github.com/post-quantumqoin/qoin-shor/node/config"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/helpers"

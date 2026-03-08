@@ -12,8 +12,8 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	lcli "github.com/post-quantumqoin/qoin-shor/cli"
-	cliutil "github.com/post-quantumqoin/qoin-shor/cli/util"
+	lcli "github.com/post-quantumqoin/qoin-shor/climd"
+	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
 	"github.com/post-quantumqoin/qoin-shor/lib/lotuslog"
 	"github.com/post-quantumqoin/qoin-shor/lib/tracing"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"

@@ -12,8 +12,6 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
-	"github.com/post-quantumqoin/qoin-shor/blockstore/splitstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	chain "github.com/post-quantumqoin/qoin-shor/core"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
@@ -26,6 +24,8 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
+	"github.com/post-quantumqoin/qoin-shor/dbstore/splitstore"
 	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/helpers"

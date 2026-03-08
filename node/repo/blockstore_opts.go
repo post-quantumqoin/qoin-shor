@@ -4,7 +4,7 @@ import (
 	"os"
 	"strconv"
 
-	badgerbs "github.com/post-quantumqoin/qoin-shor/blockstore/badger"
+	badgerbs "github.com/post-quantumqoin/qoin-shor/dbstore/badger"
 )
 
 // BadgerBlockstoreOptions returns the badger options to apply for the provided

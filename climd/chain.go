@@ -27,6 +27,7 @@ import (
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/account"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/market"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/miner"
@@ -37,8 +38,8 @@ import (
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
@@ -873,7 +874,7 @@ func (ht *apiIpldStore) Put(ctx context.Context, v interface{}) (cid.Cid, error)
 
 func handleAmt(ctx context.Context, api v0api.FullNode, r cid.Cid) error {
 	s := &apiIpldStore{ctx, api}
-	mp, err := adt.AsArray(s, r)
+	mp, err := adt.AsArray(s, r, builtintypes.DefaultHamtBitwidth)
 	if err != nil {
 		return err
 	}
@@ -886,7 +887,7 @@ func handleAmt(ctx context.Context, api v0api.FullNode, r cid.Cid) error {
 
 func handleHamtEpoch(ctx context.Context, api v0api.FullNode, r cid.Cid) error {
 	s := &apiIpldStore{ctx, api}
-	mp, err := adt.AsMap(s, r)
+	mp, err := adt.AsMap(s, r, builtintypes.DefaultHamtBitwidth)
 	if err != nil {
 		return err
 	}
@@ -904,7 +905,7 @@ func handleHamtEpoch(ctx context.Context, api v0api.FullNode, r cid.Cid) error {
 
 func handleHamtAddress(ctx context.Context, api v0api.FullNode, r cid.Cid) error {
 	s := &apiIpldStore{ctx, api}
-	mp, err := adt.AsMap(s, r)
+	mp, err := adt.AsMap(s, r, builtintypes.DefaultHamtBitwidth)
 	if err != nil {
 		return err
 	}

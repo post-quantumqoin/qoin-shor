@@ -3,16 +3,17 @@ package multisig
 import (
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	builtintypes "github.com/filecoin-project/go-state-types/builtin"
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
-	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
+	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	init3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/init"
+	multisig3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/multisig"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/types"
+	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
+
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
 type message3 struct{ message0 }

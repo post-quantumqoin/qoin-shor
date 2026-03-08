@@ -10,18 +10,18 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
-	paychtypes "github.com/post-quantumqoin/core-types/builtin/paych"
+	paychtypes "github.com/post-quantumqoin/core-types/builtin/v8/paych"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
-	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	paych0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/paych"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
@@ -61,26 +61,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	switch act.Code {
 
-	case builtin0.PaymentChannelActorCodeID:
-		return load0(store, act.Head)
+	// case builtin0.PaymentChannelActorCodeID:
+	// 	return load0(store, act.Head)
 
-	case builtin2.PaymentChannelActorCodeID:
-		return load2(store, act.Head)
+	// case builtin2.PaymentChannelActorCodeID:
+	// 	return load2(store, act.Head)
 
-	case builtin3.PaymentChannelActorCodeID:
-		return load3(store, act.Head)
+	// case builtin3.PaymentChannelActorCodeID:
+	// 	return load3(store, act.Head)
 
-	case builtin4.PaymentChannelActorCodeID:
-		return load4(store, act.Head)
+	// case builtin4.PaymentChannelActorCodeID:
+	// 	return load4(store, act.Head)
 
-	case builtin5.PaymentChannelActorCodeID:
-		return load5(store, act.Head)
+	// case builtin5.PaymentChannelActorCodeID:
+	// 	return load5(store, act.Head)
 
-	case builtin6.PaymentChannelActorCodeID:
-		return load6(store, act.Head)
+	// case builtin6.PaymentChannelActorCodeID:
+	// 	return load6(store, act.Head)
 
-	case builtin7.PaymentChannelActorCodeID:
-		return load7(store, act.Head)
+	// case builtin7.PaymentChannelActorCodeID:
+	// 	return load7(store, act.Head)
 
 	}
 
@@ -196,8 +196,8 @@ func toV0SignedVoucher(sv paychtypes.SignedVoucher) paych0.SignedVoucher {
 		ChannelAddr:     sv.ChannelAddr,
 		TimeLockMin:     sv.TimeLockMin,
 		TimeLockMax:     sv.TimeLockMax,
-		SecretPreimage:  sv.SecretHash,
-		Extra:           (*paych0.ModVerifyParams)(sv.Extra),
+		SecretHash:  sv.SecretHash,
+		Extra:           sv.Extra,
 		Lane:            sv.Lane,
 		Nonce:           sv.Nonce,
 		Amount:          sv.Amount,
@@ -209,13 +209,13 @@ func toV0SignedVoucher(sv paychtypes.SignedVoucher) paych0.SignedVoucher {
 
 func AllCodes() []cid.Cid {
 	return []cid.Cid{
-		(&state0{}).Code(),
-		(&state2{}).Code(),
-		(&state3{}).Code(),
-		(&state4{}).Code(),
-		(&state5{}).Code(),
-		(&state6{}).Code(),
-		(&state7{}).Code(),
+		// (&state0{}).Code(),
+		// (&state2{}).Code(),
+		// (&state3{}).Code(),
+		// (&state4{}).Code(),
+		// (&state5{}).Code(),
+		// (&state6{}).Code(),
+		// (&state7{}).Code(),
 		(&state8{}).Code(),
 		(&state9{}).Code(),
 		(&state10{}).Code(),

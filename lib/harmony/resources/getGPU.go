@@ -6,7 +6,7 @@ package resources
 import (
 	"strings"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"
+	ffi "github.com/post-quantumqoin/qvm"
 )
 
 func getGPUDevices() float64 { // GPU boolean

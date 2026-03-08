@@ -11,15 +11,15 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtinst "github.com/post-quantumqoin/core-types/builtin"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/exitcode"
 	"github.com/post-quantumqoin/core-types/network"
 	vmr "github.com/post-quantumqoin/specs-contracts/contracts/runtime"
 
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/aerrors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/aerrors"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 

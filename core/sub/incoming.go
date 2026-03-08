@@ -23,6 +23,7 @@ import (
 	"github.com/post-quantumqoin/address"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
+	chain "github.com/post-quantumqoin/qoin-shor/core"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
 	"github.com/post-quantumqoin/qoin-shor/core/messagepool"
 	"github.com/post-quantumqoin/qoin-shor/core/store"

@@ -14,6 +14,7 @@ import (
 	amt4 "github.com/filecoin-project/go-amt-ipld/v4"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
+	"github.com/post-quantumqoin/core-types/builtin"
 	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
 
 	cstore "github.com/post-quantumqoin/qoin-shor/core/store"
@@ -208,7 +209,7 @@ func (f *eventFilter) matchKeys(ees []types.EventEntry) bool {
 		return true
 	}
 	// TODO: optimize this naive algorithm
-	// tracked in https://github.com/filecoin-project/lotus/issues/9987
+	// tracked in https://github.com/post-quantumqoin/qoin-shor/issues/9987
 
 	// Note keys names may be repeated so we may have multiple opportunities to match
 
@@ -432,7 +433,7 @@ func (m *EventFilterManager) loadExecutedMessages(ctx context.Context, msgTs, rc
 
 	st := m.ChainStore.ActorStore(ctx)
 
-	arr, err := blockadt.AsArray(st, rctTs.Blocks()[0].ParentMessageReceipts)
+	arr, err := blockadt.AsArray(st, rctTs.Blocks()[0].ParentMessageReceipts, builtin.DefaultHamtBitwidth)
 	if err != nil {
 		return nil, xerrors.Errorf("load receipts amt: %w", err)
 	}

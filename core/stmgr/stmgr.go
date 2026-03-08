@@ -301,7 +301,7 @@ func (sm *StateManager) ResolveToDeterministicAddress(ctx context.Context, addr 
 	switch addr.Protocol() {
 	case address.BLS, address.SECP256K1, address.Delegated, address.PQC:
 		return addr, nil
-	case address.Actor:
+	case address.Contract:
 		return address.Undef, xerrors.New("cannot resolve actor address to key address")
 	default:
 	}
@@ -344,7 +344,7 @@ func (sm *StateManager) ResolveToDeterministicAddressAtFinality(ctx context.Cont
 	switch addr.Protocol() {
 	case address.BLS, address.SECP256K1, address.Delegated, address.PQC:
 		return addr, nil
-	case address.Actor:
+	case address.Contract:
 		return address.Undef, xerrors.New("cannot resolve actor address to key address")
 	default:
 	}

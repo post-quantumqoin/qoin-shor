@@ -28,7 +28,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/node/config"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"
-	"github.com/post-quantumqoin/qoin-shor/system"
+	"github.com/post-quantumqoin/qoin-shor/sys"
 )
 
 const (
@@ -58,8 +58,8 @@ func RecordValidator(ps peerstore.Peerstore) record.Validator {
 }
 
 // MemoryConstraints returns the memory constraints configured for this system.
-func MemoryConstraints() system.MemoryConstraints {
-	constraints := system.GetMemoryConstraints()
+func MemoryConstraints() sys.MemoryConstraints {
+	constraints := sys.GetMemoryConstraints()
 	log.Infow("memory limits initialized",
 		"max_mem_heap", constraints.MaxHeapMem,
 		"total_system_mem", constraints.TotalSystemMem,
@@ -69,7 +69,7 @@ func MemoryConstraints() system.MemoryConstraints {
 
 // MemoryWatchdog starts the memory watchdog, applying the computed resource
 // constraints.
-func MemoryWatchdog(lr repo.LockedRepo, lc fx.Lifecycle, constraints system.MemoryConstraints) {
+func MemoryWatchdog(lr repo.LockedRepo, lc fx.Lifecycle, constraints sys.MemoryConstraints) {
 	if os.Getenv(EnvWatchdogDisabled) == "1" {
 		log.Infof("memory watchdog is disabled via %s", EnvWatchdogDisabled)
 		return

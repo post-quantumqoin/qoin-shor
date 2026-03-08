@@ -7,18 +7,18 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
-	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
@@ -62,26 +62,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	switch act.Code {
 
-	case builtin0.StoragePowerActorCodeID:
-		return load0(store, act.Head)
+	// case builtin0.StoragePowerActorCodeID:
+	// 	return load0(store, act.Head)
 
-	case builtin2.StoragePowerActorCodeID:
-		return load2(store, act.Head)
+	// case builtin2.StoragePowerActorCodeID:
+	// 	return load2(store, act.Head)
 
-	case builtin3.StoragePowerActorCodeID:
-		return load3(store, act.Head)
+	// case builtin3.StoragePowerActorCodeID:
+	// 	return load3(store, act.Head)
 
-	case builtin4.StoragePowerActorCodeID:
-		return load4(store, act.Head)
+	// case builtin4.StoragePowerActorCodeID:
+	// 	return load4(store, act.Head)
 
-	case builtin5.StoragePowerActorCodeID:
-		return load5(store, act.Head)
+	// case builtin5.StoragePowerActorCodeID:
+	// 	return load5(store, act.Head)
 
-	case builtin6.StoragePowerActorCodeID:
-		return load6(store, act.Head)
+	// case builtin6.StoragePowerActorCodeID:
+	// 	return load6(store, act.Head)
 
-	case builtin7.StoragePowerActorCodeID:
-		return load7(store, act.Head)
+	// case builtin7.StoragePowerActorCodeID:
+	// 	return load7(store, act.Head)
 
 	}
 
@@ -91,26 +91,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 func MakeState(store adt.Store, av actorstypes.Version) (State, error) {
 	switch av {
 
-	case actorstypes.Version0:
-		return make0(store)
+	// case actorstypes.Version0:
+	// 	return make0(store)
 
-	case actorstypes.Version2:
-		return make2(store)
+	// case actorstypes.Version2:
+	// 	return make2(store)
 
-	case actorstypes.Version3:
-		return make3(store)
+	// case actorstypes.Version3:
+	// 	return make3(store)
 
-	case actorstypes.Version4:
-		return make4(store)
+	// case actorstypes.Version4:
+	// 	return make4(store)
 
-	case actorstypes.Version5:
-		return make5(store)
+	// case actorstypes.Version5:
+	// 	return make5(store)
 
-	case actorstypes.Version6:
-		return make6(store)
+	// case actorstypes.Version6:
+	// 	return make6(store)
 
-	case actorstypes.Version7:
-		return make7(store)
+	// case actorstypes.Version7:
+	// 	return make7(store)
 
 	case actorstypes.Version8:
 		return make8(store)
@@ -184,13 +184,13 @@ func AddClaims(a Claim, b Claim) Claim {
 
 func AllCodes() []cid.Cid {
 	return []cid.Cid{
-		(&state0{}).Code(),
-		(&state2{}).Code(),
-		(&state3{}).Code(),
-		(&state4{}).Code(),
-		(&state5{}).Code(),
-		(&state6{}).Code(),
-		(&state7{}).Code(),
+		// (&state0{}).Code(),
+		// (&state2{}).Code(),
+		// (&state3{}).Code(),
+		// (&state4{}).Code(),
+		// (&state5{}).Code(),
+		// (&state6{}).Code(),
+		// (&state7{}).Code(),
 		(&state8{}).Code(),
 		(&state9{}).Code(),
 		(&state10{}).Code(),

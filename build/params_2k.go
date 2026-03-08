@@ -11,7 +11,7 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/network"
 
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"

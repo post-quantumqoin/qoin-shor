@@ -15,8 +15,8 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/exitcode"
 	"github.com/post-quantumqoin/core-types/network"
@@ -30,9 +30,9 @@ import (
 	rt7 "github.com/post-quantumqoin/specs-contracts/contracts/runtime"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/aerrors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/aerrors"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
 	"github.com/post-quantumqoin/qoin-shor/core/rand"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
@@ -274,7 +274,7 @@ func (rt *Runtime) NewActorAddress() address.Address {
 	if err := binary.Write(&b, binary.BigEndian, rt.numActorsCreated); err != nil { // TODO: expose on vm
 		panic(aerrors.Fatalf("writing callSeqNum address into a buffer: %v", err))
 	}
-	addr, err := address.NewActorAddress(b.Bytes())
+	addr, err := address.NewContractAddress(b.Bytes())
 	if err != nil {
 		panic(aerrors.Fatalf("create actor address: %v", err))
 	}

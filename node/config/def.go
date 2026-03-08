@@ -13,8 +13,8 @@ import (
 	"github.com/post-quantumqoin/core-types/network"
 	miner5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/miner"
 
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/policy"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 

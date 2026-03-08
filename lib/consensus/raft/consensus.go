@@ -13,11 +13,11 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/exp/slices"
 
-	addr "github.com/filecoin-project/go-address"
+	addr "github.com/post-quantumqoin/address"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	"github.com/post-quantumqoin/qoin-shor/chain/messagepool"
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
+	"github.com/post-quantumqoin/qoin-shor/core/messagepool"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/lib/addrutil"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"
 

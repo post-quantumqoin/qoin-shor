@@ -1,5 +1,5 @@
 // stm: #unit
-package logger
+package journal
 
 import (
 	"testing"

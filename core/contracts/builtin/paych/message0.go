@@ -1,16 +1,17 @@
 package paych
 
 import (
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	paychtypes "github.com/filecoin-project/go-state-types/builtin/v8/paych"
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"
-	paych0 "github.com/filecoin-project/specs-actors/actors/builtin/paych"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
+	paychtypes "github.com/post-quantumqoin/core-types/builtin/v8/paych"
+	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	init0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/init"
+	paych0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/paych"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/types"
+	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
+
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
 type message0 struct{ from address.Address }

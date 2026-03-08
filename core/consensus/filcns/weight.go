@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"math/big"
 
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 var zero = types.NewInt(0)

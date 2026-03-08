@@ -7,6 +7,7 @@ import (
 	"go.opencensus.io/tag"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
+	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 
 func MetricedAPI[T, P any](a T) *P {

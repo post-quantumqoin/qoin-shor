@@ -5,17 +5,17 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
-	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	reward0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/reward"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
@@ -60,26 +60,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	switch act.Code {
 
-	case builtin0.RewardActorCodeID:
-		return load0(store, act.Head)
+	// case builtin0.RewardActorCodeID:
+	// 	return load0(store, act.Head)
 
-	case builtin2.RewardActorCodeID:
-		return load2(store, act.Head)
+	// case builtin2.RewardActorCodeID:
+	// 	return load2(store, act.Head)
 
-	case builtin3.RewardActorCodeID:
-		return load3(store, act.Head)
+	// case builtin3.RewardActorCodeID:
+	// 	return load3(store, act.Head)
 
-	case builtin4.RewardActorCodeID:
-		return load4(store, act.Head)
+	// case builtin4.RewardActorCodeID:
+	// 	return load4(store, act.Head)
 
-	case builtin5.RewardActorCodeID:
-		return load5(store, act.Head)
+	// case builtin5.RewardActorCodeID:
+	// 	return load5(store, act.Head)
 
-	case builtin6.RewardActorCodeID:
-		return load6(store, act.Head)
+	// case builtin6.RewardActorCodeID:
+	// 	return load6(store, act.Head)
 
-	case builtin7.RewardActorCodeID:
-		return load7(store, act.Head)
+	// case builtin7.RewardActorCodeID:
+	// 	return load7(store, act.Head)
 
 	}
 
@@ -89,26 +89,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 func MakeState(store adt.Store, av actorstypes.Version, currRealizedPower abi.StoragePower) (State, error) {
 	switch av {
 
-	case actorstypes.Version0:
-		return make0(store, currRealizedPower)
+	// case actorstypes.Version0:
+	// 	return make0(store, currRealizedPower)
 
-	case actorstypes.Version2:
-		return make2(store, currRealizedPower)
+	// case actorstypes.Version2:
+	// 	return make2(store, currRealizedPower)
 
-	case actorstypes.Version3:
-		return make3(store, currRealizedPower)
+	// case actorstypes.Version3:
+	// 	return make3(store, currRealizedPower)
 
-	case actorstypes.Version4:
-		return make4(store, currRealizedPower)
+	// case actorstypes.Version4:
+	// 	return make4(store, currRealizedPower)
 
-	case actorstypes.Version5:
-		return make5(store, currRealizedPower)
+	// case actorstypes.Version5:
+	// 	return make5(store, currRealizedPower)
 
-	case actorstypes.Version6:
-		return make6(store, currRealizedPower)
+	// case actorstypes.Version6:
+	// 	return make6(store, currRealizedPower)
 
-	case actorstypes.Version7:
-		return make7(store, currRealizedPower)
+	// case actorstypes.Version7:
+	// 	return make7(store, currRealizedPower)
 
 	case actorstypes.Version8:
 		return make8(store, currRealizedPower)
@@ -160,13 +160,13 @@ type AwardBlockRewardParams = reward0.AwardBlockRewardParams
 
 func AllCodes() []cid.Cid {
 	return []cid.Cid{
-		(&state0{}).Code(),
-		(&state2{}).Code(),
-		(&state3{}).Code(),
-		(&state4{}).Code(),
-		(&state5{}).Code(),
-		(&state6{}).Code(),
-		(&state7{}).Code(),
+		// (&state0{}).Code(),
+		// (&state2{}).Code(),
+		// (&state3{}).Code(),
+		// (&state4{}).Code(),
+		// (&state5{}).Code(),
+		// (&state6{}).Code(),
+		// (&state7{}).Code(),
 		(&state8{}).Code(),
 		(&state9{}).Code(),
 		(&state10{}).Code(),

@@ -21,9 +21,9 @@ import (
 	proof7 "github.com/post-quantumqoin/specs-contracts/contracts/runtime/proof"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/adt"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/miner"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/policy"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/miner"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"

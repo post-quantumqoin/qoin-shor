@@ -5,20 +5,20 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	builtin5 "github.com/filecoin-project/specs-actors/v5/actors/builtin"
-	builtin6 "github.com/filecoin-project/specs-actors/v6/actors/builtin"
-	builtin7 "github.com/filecoin-project/specs-actors/v7/actors/builtin"
+	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/builtin"
 	smoothingtypes "github.com/post-quantumqoin/core-types/builtin/v8/util/smoothing"
 	minertypes "github.com/post-quantumqoin/core-types/builtin/v9/miner"
 	"github.com/post-quantumqoin/core-types/manifest"
 	"github.com/post-quantumqoin/core-types/proof"
+	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 )

@@ -17,8 +17,8 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/discovery"
-	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
+	"github.com/post-quantumqoin/go-qoin-markets/discovery"
+	discoveryimpl "github.com/post-quantumqoin/go-qoin-markets/discovery/impl"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 	chain "github.com/post-quantumqoin/qoin-shor/core"

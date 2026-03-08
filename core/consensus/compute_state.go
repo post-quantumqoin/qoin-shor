@@ -15,8 +15,9 @@ import (
 
 	amt4 "github.com/filecoin-project/go-amt-ipld/v4"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	exported0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	exported2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	exported3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
@@ -26,16 +27,16 @@ import (
 	exported7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/cron"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/reward"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/cron"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/reward"
 	"github.com/post-quantumqoin/qoin-shor/core/rand"
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
 
@@ -268,7 +269,10 @@ func (t *TipSetExecutor) ApplyBlocks(ctx context.Context,
 	vmCron := partDone()
 	partDone = metrics.Timer(ctx, metrics.VMApplyFlush)
 
-	rectarr := blockadt.MakeEmptyArray(sm.ChainStore().ActorStore(ctx))
+	rectarr, err := blockadt.MakeEmptyArray(sm.ChainStore().ActorStore(ctx), builtintypes.DefaultHamtBitwidth)
+	if err != nil {
+		return cid.Undef, cid.Undef, xerrors.Errorf("failed to create receipts amt: %w", err)
+	}
 	for i, receipt := range receipts {
 		if err := rectarr.Set(uint64(i), receipt); err != nil {
 			return cid.Undef, cid.Undef, xerrors.Errorf("failed to build receipts amt: %w", err)

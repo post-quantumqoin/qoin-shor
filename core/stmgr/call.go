@@ -17,12 +17,12 @@ import (
 	"github.com/post-quantumqoin/core-types/network"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/rand"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 var ErrExpensiveFork = errors.New("refusing explicit call due to state fork at epoch")

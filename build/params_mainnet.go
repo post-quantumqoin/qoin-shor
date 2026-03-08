@@ -8,9 +8,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/network"
 	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 )

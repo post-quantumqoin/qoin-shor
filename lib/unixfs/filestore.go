@@ -20,7 +20,7 @@ import (
 	mh "github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/stores"
+	"github.com/post-quantumqoin/go-qoin-markets/stores"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 )
