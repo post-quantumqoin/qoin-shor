@@ -9,10 +9,10 @@ import (
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/crypto"
 	ffi "github.com/post-quantumqoin/qvm"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 )
 
 var ErrTemporal = errors.New("temporal error")
@@ -73,10 +73,7 @@ func AggregateSignatures(sigs []crypto.Signature) (*crypto.Signature, error) {
 }
 
 func ToMessagesArray(store blockadt.Store, cids []cid.Cid) (cid.Cid, error) {
-	arr, err := blockadt.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return cid.Undef, err
-	}
+	arr := blockadt.MakeEmptyArray(store)
 	for i, c := range cids {
 		oc := cbg.CborCid(c)
 		if err := arr.Set(uint64(i), &oc); err != nil {

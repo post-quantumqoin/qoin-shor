@@ -31,9 +31,9 @@ import (
 
 	// named msgarray here to make it clear that these are the types used by
 	// messages, regardless of specs-actors version.
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
-	builtintypes "github.com/post-quantumqoin/core-types/builtin"
-	
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
+	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
+
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
@@ -51,7 +51,7 @@ var (
 	// where the Syncer publishes candidate chain heads to be synced.
 	LocalIncoming = "incoming"
 
-	log = logging.Logger("chain")
+	log = logging.Logger("core")
 
 	concurrentSyncRequests = exchange.ShufflePeersPrefix
 	syncRequestBatchSize   = 8
@@ -226,14 +226,14 @@ func (syncer *Syncer) InformNewHead(from peer.ID, fts *store.FullTipSet) bool {
 	}
 
 	syncer.incoming.Pub(fts.TipSet().Blocks(), LocalIncoming)
-	fmt.Println("InformNewHead PersistTipsets")
+	// fmt.Println("InformNewHead PersistTipsets")
 	// TODO: IMPORTANT(GARBAGE) this needs to be put in the 'temporary' side of
 	// the blockstore
 	if err := syncer.store.PersistTipsets(ctx, []*types.TipSet{fts.TipSet()}); err != nil {
 		log.Warn("failed to persist incoming block header: ", err)
 		return false
 	}
-	fmt.Println("InformNewHead syncer.Exchange.AddPeer")
+	// fmt.Println("InformNewHead syncer.Exchange.AddPeer")
 	syncer.Exchange.AddPeer(from)
 
 	hts := syncer.store.GetHeaviestTipSet()
@@ -247,7 +247,7 @@ func (syncer *Syncer) InformNewHead(from peer.ID, fts *store.FullTipSet) bool {
 		log.Debugw("incoming tipset does not appear to be better than our best chain, ignoring for now", "miners", miners, "bestPweight", bestPweight, "bestTS", hts.Cids(), "incomingWeight", targetWeight, "incomingTS", fts.TipSet().Cids())
 		return false
 	}
-	fmt.Println("InformNewHead SetPeerHead")
+	// fmt.Println("InformNewHead SetPeerHead")
 	syncer.syncmgr.SetPeerHead(ctx, from, fts.TipSet())
 	return true
 }
@@ -420,14 +420,8 @@ func zipTipSetAndMessages(bs cbor.IpldStore, ts *types.TipSet, allbmsgs []*types
 func computeMsgMeta(bs cbor.IpldStore, bmsgCids, smsgCids []cid.Cid) (cid.Cid, error) {
 	// block headers use adt0
 	store := blockadt.WrapStore(context.TODO(), bs)
-	bmArr, err := blockadt.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return cid.Undef, err
-	}
-	smArr, err := blockadt.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return cid.Undef, err
-	}
+	bmArr := blockadt.MakeEmptyArray(store)
+	smArr := blockadt.MakeEmptyArray(store)
 
 	for i, m := range bmsgCids {
 		c := cbg.CborCid(m)

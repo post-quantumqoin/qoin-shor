@@ -34,7 +34,7 @@ import (
 	// miner0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/miner"
 	multisig0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/multisig"
 	// power0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/power"
-	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	// "github.com/post-quantumqoin/specs-contracts/contracts/migration/nv10"
 	// "github.com/post-quantumqoin/specs-contracts/contracts/migration/nv12"
 	// "github.com/post-quantumqoin/specs-contracts/contracts/migration/nv13"
@@ -44,7 +44,7 @@ import (
 	// "github.com/post-quantumqoin/specs-contracts/contracts/migration/nv3"
 	// "github.com/post-quantumqoin/specs-contracts/contracts/migration/nv4"
 	// "github.com/post-quantumqoin/specs-contracts/contracts/migration/nv7"
-	adt0 "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	adt0 "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
@@ -681,14 +681,7 @@ func splitGenesisMultisig0(ctx context.Context, em stmgr.ExecMonitor, addr addre
 		return xerrors.Errorf("getting msig unlock duration: %w", err)
 	}
 
-	mempty, err := adt0.MakeEmptyMap(store, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return xerrors.Errorf("failed to create empty map: %w", err)
-	}
-	pending, err := mempty.Root()
-	if err != nil {
-		return xerrors.Errorf("failed to create empty map root: %w", err)
-	}
+	pending, err := adt0.MakeEmptyMap(store).Root()
 
 	newIbal := big.Div(ibal, types.NewInt(portions))
 	newState := &multisig0.State{

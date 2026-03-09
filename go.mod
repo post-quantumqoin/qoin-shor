@@ -114,7 +114,7 @@ require (
 	// github.com/filecoin-project/go-fil-markets v1.28.3
 	github.com/post-quantumqoin/go-qoin-markets v0.1.0
 	github.com/post-quantumqoin/qvm v0.0.0-20260228084346-a0b85c0b3ce2
-	github.com/post-quantumqoin/specs-contracts v0.2.4
+	github.com/post-quantumqoin/specs-contracts v0.2.5
 	github.com/prometheus/client_golang v1.18.0
 	github.com/puzpuzpuz/xsync/v2 v2.4.0
 	github.com/raulk/clock v1.1.0
@@ -181,8 +181,10 @@ require (
 	github.com/drand/kyber-bls12381 v0.3.1 // indirect
 	github.com/elastic/go-windows v1.0.0 // indirect
 	github.com/etclabscore/go-jsonschema-walk v0.0.6 // indirect
+	github.com/filecoin-project/go-amt-ipld/v2 v2.1.0 // indirect
 	github.com/filecoin-project/go-ds-versioning v0.1.2 // indirect
 	github.com/filecoin-project/go-fil-commp-hashhash v0.1.0 // indirect
+	github.com/filecoin-project/go-hamt-ipld v0.1.5 // indirect
 	github.com/filecoin-project/go-hamt-ipld/v3 v3.1.0 // indirect
 	github.com/filecoin-project/go-state-types v0.11.1 // indirect
 	github.com/flynn/noise v1.1.0 // indirect

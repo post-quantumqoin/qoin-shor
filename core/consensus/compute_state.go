@@ -17,7 +17,7 @@ import (
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
 	actorstypes "github.com/post-quantumqoin/core-types/contracts"
-	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	exported0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	exported2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	exported3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
@@ -25,7 +25,7 @@ import (
 	exported5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	exported6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	exported7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
@@ -269,10 +269,7 @@ func (t *TipSetExecutor) ApplyBlocks(ctx context.Context,
 	vmCron := partDone()
 	partDone = metrics.Timer(ctx, metrics.VMApplyFlush)
 
-	rectarr, err := blockadt.MakeEmptyArray(sm.ChainStore().ActorStore(ctx), builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return cid.Undef, cid.Undef, xerrors.Errorf("failed to create receipts amt: %w", err)
-	}
+	rectarr := blockadt.MakeEmptyArray(sm.ChainStore().ActorStore(ctx))
 	for i, receipt := range receipts {
 		if err := rectarr.Set(uint64(i), receipt); err != nil {
 			return cid.Undef, cid.Undef, xerrors.Errorf("failed to build receipts amt: %w", err)

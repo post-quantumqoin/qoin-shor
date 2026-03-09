@@ -19,10 +19,10 @@ import (
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/manifest"
 	"github.com/post-quantumqoin/core-types/network"
-	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	verifreg0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/verifreg"
-	adt0 "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	adt0 "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
@@ -605,11 +605,7 @@ func MakeGenesisBlock(ctx context.Context, j journal.Journal, bs bstore.Blocksto
 	}
 
 	store := adt.WrapStore(ctx, cbor.NewCborStore(bs))
-	emptyArr, err := adt0.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return nil, xerrors.Errorf("amt build failed: %w", err)
-	}
-	emptyroot, err := emptyArr.Root()
+	emptyroot, err := adt0.MakeEmptyArray(store).Root()
 	if err != nil {
 		return nil, xerrors.Errorf("amt build failed: %w", err)
 	}

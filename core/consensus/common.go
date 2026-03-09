@@ -19,7 +19,7 @@ import (
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/network"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
@@ -251,11 +251,9 @@ func checkBlockMessages(ctx context.Context, sm *stmgr.StateManager, cs *store.C
 	// Validate message arrays in a temporary blockstore.
 	tmpbs := bstore.NewMemory()
 	tmpstore := blockadt.WrapStore(ctx, cbor.NewCborStore(tmpbs))
-
-	bmArr, err := blockadt.MakeEmptyArray(tmpstore, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return xerrors.Errorf("failed to create empty bls array: %w", err)
-	}
+	
+	
+	bmArr := blockadt.MakeEmptyArray(tmpstore)
 	for i, m := range b.BlsMessages {
 		if err := checkMsg(m); err != nil {
 			return xerrors.Errorf("block had invalid bls message at index %d: %w", i, err)
@@ -272,7 +270,7 @@ func checkBlockMessages(ctx context.Context, sm *stmgr.StateManager, cs *store.C
 		}
 	}
 
-	smArr, err := blockadt.MakeEmptyArray(tmpstore, builtintypes.DefaultHamtBitwidth)
+	smArr := blockadt.MakeEmptyArray(tmpstore)
 	if err != nil {
 		return xerrors.Errorf("failed to create empty secpk array: %w", err)
 	}
@@ -477,14 +475,8 @@ func validateMsgMeta(ctx context.Context, msg *types.BlockMsg) error {
 	// TODO there has to be a simpler way to do this without the blockstore dance
 	// block headers use adt0
 	store := blockadt.WrapStore(ctx, cbor.NewCborStore(bstore.NewMemory()))
-	bmArr, err := blockadt.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return xerrors.Errorf("make bls msg array: %w", err)
-	}
-	smArr, err := blockadt.MakeEmptyArray(store, builtintypes.DefaultHamtBitwidth)
-	if err != nil {
-		return xerrors.Errorf("make secpk msg array: %w", err)
-	}
+	bmArr := blockadt.MakeEmptyArray(store)
+	smArr := blockadt.MakeEmptyArray(store)
 
 	for i, m := range msg.BlsMessages {
 		c := cbg.CborCid(m)

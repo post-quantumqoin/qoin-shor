@@ -879,6 +879,8 @@ github.com/filecoin-project/dagstore v0.5.2/go.mod h1:mdqKzYrRBHf1pRMthYfMv3n37o
 github.com/filecoin-project/go-address v0.0.5/go.mod h1:jr8JxKsYx+lQlQZmF5i2U0Z+cGQ59wMIps/8YW/lDj8=
 github.com/filecoin-project/go-address v1.1.0 h1:ofdtUtEsNxkIxkDw67ecSmvtzaVSdcea4boAmLbnHfE=
 github.com/filecoin-project/go-address v1.1.0/go.mod h1:5t3z6qPmIADZBtuE9EIzi0EwzcRy2nVhpo0I/c1r0OA=
+github.com/filecoin-project/go-amt-ipld/v2 v2.1.0 h1:t6qDiuGYYngDqaLc2ZUvdtAg4UNxPeOYaXhBWSNsVaM=
+github.com/filecoin-project/go-amt-ipld/v2 v2.1.0/go.mod h1:nfFPoGyX0CU9SkXX8EoCcSuHN1XcbN0c6KBh7yvP5fs=
 github.com/filecoin-project/go-amt-ipld/v4 v4.0.0/go.mod h1:gF053YQ4BIpzTNDoEwHZas7U3oAwncDVGvOHyY8oDpE=
 github.com/filecoin-project/go-amt-ipld/v4 v4.2.0 h1:DQTXQwMXxaetd+lhZGODjt5qC1WYT7tMAlYrWqI/fwI=
 github.com/filecoin-project/go-amt-ipld/v4 v4.2.0/go.mod h1:0eDVF7pROvxrsxvLJx+SJZXqRaXXcEPUcgb/rG0zGU4=
@@ -898,6 +900,8 @@ github.com/filecoin-project/go-fil-commcid v0.1.0 h1:3R4ds1A9r6cr8mvZBfMYxTS88Oq
 github.com/filecoin-project/go-fil-commcid v0.1.0/go.mod h1:Eaox7Hvus1JgPrL5+M3+h7aSPHc0cVqpSxA+TxIEpZQ=
 github.com/filecoin-project/go-fil-commp-hashhash v0.1.0 h1:imrrpZWEHRnNqqv0tN7LXep5bFEVOVmQWHJvl2mgsGo=
 github.com/filecoin-project/go-fil-commp-hashhash v0.1.0/go.mod h1:73S8WSEWh9vr0fDJVnKADhfIv/d6dCbAGaAGWbdJEI8=
+github.com/filecoin-project/go-hamt-ipld v0.1.5 h1:uoXrKbCQZ49OHpsTCkrThPNelC4W3LPEk0OrS/ytIBM=
+github.com/filecoin-project/go-hamt-ipld v0.1.5/go.mod h1:6Is+ONR5Cd5R6XZoCse1CWaXZc0Hdb/JeX+EQCQzX24=
 github.com/filecoin-project/go-hamt-ipld/v3 v3.1.0 h1:rVVNq0x6RGQIzCo1iiJlGFm9AGIZzeifggxtKMU7zmI=
 github.com/filecoin-project/go-hamt-ipld/v3 v3.1.0/go.mod h1:bxmzgT8tmeVQA1/gvBwFmYdT8SOFUwB3ovSUfG1Ux0g=
 github.com/filecoin-project/go-paramfetch v0.0.4 h1:H+Me8EL8T5+79z/KHYQQcT8NVOzYVqXIi7nhb48tdm8=
@@ -1865,8 +1869,8 @@ github.com/post-quantumqoin/go-qoin-commcid v0.0.0-20260301120253-efbe8a9fa094 h
 github.com/post-quantumqoin/go-qoin-commcid v0.0.0-20260301120253-efbe8a9fa094/go.mod h1:tug2CMxHhJhPtla9skXGLkKHazBT/cgHs7NB0yd9zEI=
 github.com/post-quantumqoin/go-qoin-markets v0.1.0 h1:hkCg5vK24CAUjaCsOpMAWR7ZTXRtQOr49Vvr5BsY4UU=
 github.com/post-quantumqoin/go-qoin-markets v0.1.0/go.mod h1:tKkKbEAKMc0SKXLLwsNUSy92ylsvw3ZH35JECuA8tTg=
-github.com/post-quantumqoin/specs-contracts v0.2.4 h1:95nK9NauD0jpRv5jTfLbc3Eto5rNNrBYcUh2lnWlHxg=
-github.com/post-quantumqoin/specs-contracts v0.2.4/go.mod h1:toAVXW3cC973OjLS5llZhK5W7bmh2hfE2VL5zWhpG9k=
+github.com/post-quantumqoin/specs-contracts v0.2.5 h1:3ABZqCxYZq3jsZtPSY7mKJgSstAD4F/uzWMkbBo4UCQ=
+github.com/post-quantumqoin/specs-contracts v0.2.5/go.mod h1:TiKraRNV+wQXP0HR/yF6+PddvwbUhp9ywiriTlLKr7M=
 github.com/prometheus/client_golang v1.18.0 h1:HzFfmkOzH5Q8L8G+kSJKUx5dtG87sewO+FoDDqP5Tbk=
 github.com/prometheus/client_golang v1.18.0/go.mod h1:T+GXkCk5wSJyOqMIzVgvvjFDlkOQntgjkJWKrN5txjA=
 github.com/prometheus/client_model v0.0.0-20180712105110-5c3871d89910/go.mod h1:MbSGuTsp3dbXC40dX6PRTWyKYBIrTGTE9sqQNg2J8bo=
