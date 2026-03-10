@@ -36,7 +36,7 @@ import (
 	lcli "github.com/post-quantumqoin/qoin-shor/climd"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon/drand"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
-	"github.com/post-quantumqoin/qoin-shor/core/consensus/filcns"
+	"github.com/post-quantumqoin/qoin-shor/core/consensus/qoincns"
 	"github.com/post-quantumqoin/qoin-shor/core/index"
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
@@ -555,7 +555,7 @@ func ImportChain(ctx context.Context, r repo.Repo, fname string, snapshot bool) 
 		return xerrors.Errorf("failed to open journal: %w", err)
 	}
 
-	cst := store.NewChainStore(bs, bs, mds, filcns.Weight, j)
+	cst := store.NewChainStore(bs, bs, mds, qoincns.Weight, j)
 	defer cst.Close() //nolint:errcheck
 
 	log.Infof("importing chain from %s...", fname)
@@ -610,7 +610,7 @@ func ImportChain(ctx context.Context, r repo.Repo, fname string, snapshot bool) 
 			return xerrors.Errorf("failed to construct beacon schedule: %w", err)
 		}
 
-		stm, err := stmgr.NewStateManager(cst, consensus.NewTipSetExecutor(filcns.RewardFunc), vm.Syscalls(ffiwrapper.ProofVerifier), filcns.DefaultUpgradeSchedule(), shd, mds, index.DummyMsgIndex)
+		stm, err := stmgr.NewStateManager(cst, consensus.NewTipSetExecutor(qoincns.RewardFunc), vm.Syscalls(ffiwrapper.ProofVerifier), qoincns.DefaultUpgradeSchedule(), shd, mds, index.DummyMsgIndex)
 		if err != nil {
 			return err
 		}

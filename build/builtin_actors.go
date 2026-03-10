@@ -34,11 +34,11 @@ func init() {
 		BundleOverrides = make(map[actorstypes.Version]string)
 	}
 	for _, av := range actors.Versions {
-		path := os.Getenv(fmt.Sprintf("LOTUS_BUILTIN_ACTORS_V%d_BUNDLE", av))
+		path := os.Getenv(fmt.Sprintf("QOIN_BUILTIN_ACTORS_V%d_BUNDLE", av))
 		if path == "" {
 			continue
 		}
-		fmt.Println(fmt.Sprintf("LOTUS_BUILTIN_ACTORS_V%d_BUNDLE", av))
+		fmt.Println(fmt.Sprintf("QOIN_BUILTIN_ACTORS_V%d_BUNDLE", av))
 		BundleOverrides[actorstypes.Version(av)] = path
 	}
 	if err := loadManifests(NetworkBundle); err != nil {

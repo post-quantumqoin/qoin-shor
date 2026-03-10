@@ -54,7 +54,7 @@ func SetGenesis(lc fx.Lifecycle, mctx helpers.MetricsCtx, cs *store.ChainStore, 
 	ctx := helpers.LifecycleCtx(mctx, lc)
 	genFromRepo, err := cs.GetGenesis(ctx)
 	if err == nil {
-		if os.Getenv("LOTUS_SKIP_GENESIS_CHECK") != "_yes_" {
+		if os.Getenv("QOIN_SKIP_GENESIS_CHECK") != "_yes_" {
 			expectedGenesis, err := g()
 			if err != nil {
 				return dtypes.AfterGenesisSet{}, xerrors.Errorf("getting expected genesis failed: %w", err)

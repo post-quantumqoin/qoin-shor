@@ -27,7 +27,7 @@ var errSectorRemoved = errors.New("sector removed")
 func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface{}, uint64, error) {
 	next, processed, err := m.plan(events, user.(*SectorInfo))
 	if err != nil || next == nil {
-		if err == errSectorRemoved && os.Getenv("LOTUS_KEEP_REMOVED_FSM_ACTIVE") != "1" {
+		if err == errSectorRemoved && os.Getenv("QOIN_KEEP_REMOVED_FSM_ACTIVE") != "1" {
 			return nil, processed, statemachine.ErrTerminated
 		}
 

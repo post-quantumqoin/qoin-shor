@@ -76,10 +76,10 @@ func (m *migrationResultCache) keyForMigration(root cid.Cid) dstore.Key {
 }
 
 func init() {
-	if s := os.Getenv("LOTUS_EXEC_TRACE_CACHE_SIZE"); s != "" {
+	if s := os.Getenv("QOIN_EXEC_TRACE_CACHE_SIZE"); s != "" {
 		letc, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_EXEC_TRACE_CACHE_SIZE' env var: %s", err)
+			log.Errorf("failed to parse 'QOIN_EXEC_TRACE_CACHE_SIZE' env var: %s", err)
 		} else {
 			execTraceCacheSize = letc
 		}

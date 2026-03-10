@@ -73,7 +73,7 @@ func newTestStorage(t *testing.T) *testStorage {
 }
 
 func (t testStorage) cleanup() {
-	noCleanup := os.Getenv("LOTUS_TEST_NO_CLEANUP") != ""
+	noCleanup := os.Getenv("QOIN_TEST_NO_CLEANUP") != ""
 	for _, path := range t.StoragePaths {
 		if noCleanup {
 			fmt.Printf("Not cleaning up test storage at %s\n", path)
@@ -229,7 +229,7 @@ func TestSnapDeals(t *testing.T) {
 	require.NoError(t, err)
 
 	proofType := abi.RegisteredSealProof_StackedDrg2KiBV1
-	ptStr := os.Getenv("LOTUS_TEST_SNAP_DEALS_PROOF_TYPE")
+	ptStr := os.Getenv("QOIN_TEST_SNAP_DEALS_PROOF_TYPE")
 	switch ptStr {
 	case "2k":
 	case "8M":
@@ -241,7 +241,7 @@ func TestSnapDeals(t *testing.T) {
 	case "64G":
 		proofType = abi.RegisteredSealProof_StackedDrg64GiBV1
 	default:
-		log.Warn("Unspecified proof type, make sure to set LOTUS_TEST_SNAP_DEALS_PROOF_TYPE to '2k', '8M', '512M', '32G' or '64G'")
+		log.Warn("Unspecified proof type, make sure to set QOIN_TEST_SNAP_DEALS_PROOF_TYPE to '2k', '8M', '512M', '32G' or '64G'")
 		log.Warn("Continuing test with 2k sectors")
 	}
 
@@ -358,7 +358,7 @@ func TestSnarkPackV2(t *testing.T) {
 	require.NoError(t, err)
 
 	proofType := abi.RegisteredSealProof_StackedDrg2KiBV1
-	ptStr := os.Getenv("LOTUS_TEST_SNAP_DEALS_PROOF_TYPE")
+	ptStr := os.Getenv("QOIN_TEST_SNAP_DEALS_PROOF_TYPE")
 	switch ptStr {
 	case "2k":
 	case "8M":
@@ -370,7 +370,7 @@ func TestSnarkPackV2(t *testing.T) {
 	case "64G":
 		proofType = abi.RegisteredSealProof_StackedDrg64GiBV1
 	default:
-		log.Warn("Unspecified proof type, make sure to set LOTUS_TEST_SNAP_DEALS_PROOF_TYPE to '2k', '8M', '512M', '32G' or '64G'")
+		log.Warn("Unspecified proof type, make sure to set QOIN_TEST_SNAP_DEALS_PROOF_TYPE to '2k', '8M', '512M', '32G' or '64G'")
 		log.Warn("Continuing test with 2k sectors")
 	}
 

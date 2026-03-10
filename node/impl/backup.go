@@ -14,9 +14,9 @@ import (
 )
 
 func backup(ctx context.Context, mds dtypes.MetadataDS, fpath string) error {
-	bb, ok := os.LookupEnv("LOTUS_BACKUP_BASE_PATH")
+	bb, ok := os.LookupEnv("QOIN_BACKUP_BASE_PATH")
 	if !ok {
-		return xerrors.Errorf("LOTUS_BACKUP_BASE_PATH env var not set")
+		return xerrors.Errorf("QOIN_BACKUP_BASE_PATH env var not set")
 	}
 
 	bds, ok := mds.(*backupds.Datastore)

@@ -76,7 +76,7 @@ func (m *Manager) setupWorkTracker() {
 	for _, st := range ids {
 		wid := st.ID
 
-		if os.Getenv("LOTUS_MINER_ABORT_UNFINISHED_WORK") == "1" {
+		if os.Getenv("QOIN_MINER_ABORT_UNFINISHED_WORK") == "1" {
 			st.Status = wsDone
 		}
 

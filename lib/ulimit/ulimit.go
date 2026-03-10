@@ -38,11 +38,11 @@ func GetLimit() (uint64, uint64, error) {
 	return getLimit()
 }
 
-// userMaxFDs returns the value of LOTUS_FD_MAX
+// userMaxFDs returns the value of QOIN_FD_MAX
 func userMaxFDs() uint64 {
-	// check if the LOTUS_FD_MAX is set up and if it does
+	// check if the QOIN_FD_MAX is set up and if it does
 	// not have a valid fds number notify the user
-	val := os.Getenv("LOTUS_FD_MAX")
+	val := os.Getenv("QOIN_FD_MAX")
 	if val == "" {
 		val = os.Getenv("IPFS_FD_MAX")
 	}
@@ -50,7 +50,7 @@ func userMaxFDs() uint64 {
 	if val != "" {
 		fds, err := strconv.ParseUint(val, 10, 64)
 		if err != nil {
-			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)
+			log.Errorf("bad value for QOIN_FD_MAX: %s", err)
 			return 0
 		}
 		return fds
@@ -59,7 +59,7 @@ func userMaxFDs() uint64 {
 }
 
 // ManageFdLimit raise the current max file descriptor count
-// of the process based on the LOTUS_FD_MAX value
+// of the process based on the QOIN_FD_MAX value
 func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	if !supportsFDManagement {
 		return false, 0, nil
@@ -108,7 +108,7 @@ func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 
 		if newLimit < userLimit {
 			err = fmt.Errorf(
-				"failed to raise ulimit to LOTUS_FD_MAX (%d): set to %d",
+				"failed to raise ulimit to QOIN_FD_MAX (%d): set to %d",
 				userLimit,
 				newLimit,
 			)

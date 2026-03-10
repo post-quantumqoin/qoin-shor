@@ -1099,7 +1099,7 @@ func (a *EthModule) applyMessage(ctx context.Context, msg *types.Message, tsk ty
 	}
 
 	applyTsMessages := true
-	if os.Getenv("LOTUS_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
+	if os.Getenv("QOIN_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
 		applyTsMessages = false
 	}
 
@@ -1218,7 +1218,7 @@ func gasSearch(
 	low := msg.GasLimit
 
 	applyTsMessages := true
-	if os.Getenv("LOTUS_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
+	if os.Getenv("QOIN_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
 		applyTsMessages = false
 	}
 

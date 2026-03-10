@@ -31,7 +31,7 @@ const (
 var MaxTraversalLinks uint64 = 32 * (1 << 20)
 
 func init() {
-	if envMaxTraversal, err := strconv.ParseUint(os.Getenv("LOTUS_MAX_TRAVERSAL_LINKS"), 10, 64); err == nil {
+	if envMaxTraversal, err := strconv.ParseUint(os.Getenv("QOIN_MAX_TRAVERSAL_LINKS"), 10, 64); err == nil {
 		MaxTraversalLinks = envMaxTraversal
 	}
 }

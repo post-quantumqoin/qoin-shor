@@ -40,7 +40,7 @@ func BuildTypeString() string {
 const BuildVersion = "1.0.0"
 
 func UserVersion() string {
-	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {
+	if os.Getenv("QOIN_VERSION_IGNORE_COMMIT") == "1" {
 		return BuildVersion
 	}
 

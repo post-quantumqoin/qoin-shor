@@ -34,7 +34,7 @@ func main() {
 	doc := docgen_openrpc.NewLotusOpenRPCDocument(Comments, GroupDocs)
 
 	i, _, _ := docgen.GetAPIType(os.Args[2], os.Args[3])
-	doc.RegisterReceiverName("Filecoin", i)
+	doc.RegisterReceiverName("Qoin", i)
 
 	out, err := doc.Discover()
 	if err != nil {

@@ -29,7 +29,7 @@ var rcmgrMetricsOnce sync.Once
 func ResourceManager(connMgrHi uint) func(lc fx.Lifecycle, repo repo.LockedRepo) (network.ResourceManager, error) {
 	return func(lc fx.Lifecycle, repo repo.LockedRepo) (network.ResourceManager, error) {
 		isFullNode := repo.RepoType().Type() == "FullNode"
-		envvar := os.Getenv("LOTUS_RCMGR")
+		envvar := os.Getenv("QOIN_RCMGR")
 		if (isFullNode && envvar == "0") || // only set NullResourceManager if envvar is explicitly "0"
 			(!isFullNode && envvar != "1") { // set NullResourceManager *unless* envvar is explicitly "1"
 			log.Info("libp2p resource manager is disabled")
@@ -124,7 +124,7 @@ func ResourceManager(connMgrHi uint) func(lc fx.Lifecycle, repo repo.LockedRepo)
 		// Metrics
 		opts = append(opts, rcmgr.WithMetrics(rcmgrMetrics{}), rcmgr.WithTraceReporter(str))
 
-		if os.Getenv("LOTUS_DEBUG_RCMGR") != "" {
+		if os.Getenv("QOIN_DEBUG_RCMGR") != "" {
 			debugPath := filepath.Join(repoPath, "debug")
 			if err := os.MkdirAll(debugPath, 0755); err != nil {
 				return nil, fmt.Errorf("error creating debug directory: %w", err)

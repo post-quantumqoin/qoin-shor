@@ -45,10 +45,10 @@ import (
 var pubsubMsgsSyncEpochs = 10
 
 func init() {
-	if s := os.Getenv("LOTUS_MSGS_SYNC_EPOCHS"); s != "" {
+	if s := os.Getenv("QOIN_MSGS_SYNC_EPOCHS"); s != "" {
 		val, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse LOTUS_MSGS_SYNC_EPOCHS: %s", err)
+			log.Errorf("failed to parse QOIN_MSGS_SYNC_EPOCHS: %s", err)
 			return
 		}
 		pubsubMsgsSyncEpochs = val

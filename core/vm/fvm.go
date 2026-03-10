@@ -392,7 +392,7 @@ func NewDebugFVM(ctx context.Context, opts *VMOpts) (*FVM, error) {
 		return nil, xerrors.Errorf("error determining actors version for network version %d: %w", opts.NetworkVersion, err)
 	}
 
-	debugBundlePath := os.Getenv(fmt.Sprintf("LOTUS_FVM_DEBUG_BUNDLE_V%d", av))
+	debugBundlePath := os.Getenv(fmt.Sprintf("QOIN_FVM_DEBUG_BUNDLE_V%d", av))
 	if debugBundlePath != "" {
 		if err := createMapping(debugBundlePath); err != nil {
 			log.Errorf("failed to create v%d debug mapping", av)

@@ -19,10 +19,10 @@ import (
 var DefaultChainIndexCacheSize = 1 << 15
 
 func init() {
-	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
+	if s := os.Getenv("QOIN_CHAIN_INDEX_CACHE"); s != "" {
 		lcic, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
+			log.Errorf("failed to parse 'QOIN_CHAIN_INDEX_CACHE' env var: %s", err)
 		}
 		DefaultChainIndexCacheSize = lcic
 	}

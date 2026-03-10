@@ -16,7 +16,7 @@ import (
 	chain "github.com/post-quantumqoin/qoin-shor/core"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
-	"github.com/post-quantumqoin/qoin-shor/core/consensus/filcns"
+	"github.com/post-quantumqoin/qoin-shor/core/consensus/qoincns"
 	"github.com/post-quantumqoin/qoin-shor/core/exchange"
 	"github.com/post-quantumqoin/qoin-shor/core/gen/slashfilter"
 	"github.com/post-quantumqoin/qoin-shor/core/index"
@@ -181,7 +181,7 @@ func NewSlashFilter(ds dtypes.MetadataDS) *slashfilter.SlashFilter {
 }
 
 func UpgradeSchedule() stmgr.UpgradeSchedule {
-	return filcns.DefaultUpgradeSchedule()
+	return qoincns.DefaultUpgradeSchedule()
 }
 
 func EnableStoringEvents(cs *store.ChainStore) {

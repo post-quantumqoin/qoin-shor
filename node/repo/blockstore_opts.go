@@ -47,12 +47,12 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 
 	opts.ReadOnly = readonly
 
-	// Envvar LOTUS_CHAIN_BADGERSTORE_COMPACTIONWORKERNUM
+	// Envvar QOIN_CHAIN_BADGERSTORE_COMPACTIONWORKERNUM
 	// Allows the number of compaction workers used by BadgerDB to be adjusted
 	// Unset - leaves the default number of compaction workers (4)
 	// "0" - disables compaction
 	// Positive integer - enables that number of compaction workers
-	if badgerNumCompactors, badgerNumCompactorsSet := os.LookupEnv("LOTUS_CHAIN_BADGERSTORE_COMPACTIONWORKERNUM"); badgerNumCompactorsSet {
+	if badgerNumCompactors, badgerNumCompactorsSet := os.LookupEnv("QOIN_CHAIN_BADGERSTORE_COMPACTIONWORKERNUM"); badgerNumCompactorsSet {
 		if numWorkers, err := strconv.Atoi(badgerNumCompactors); err == nil && numWorkers >= 0 {
 			opts.NumCompactors = numWorkers
 		}

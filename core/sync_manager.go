@@ -2,7 +2,7 @@ package chain
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"os"
 	"sort"
 	"strconv"
@@ -31,12 +31,12 @@ var (
 )
 
 func init() {
-	coalesceTipsets = os.Getenv("LOTUS_SYNC_FORMTS_PEND") == "yes"
+	coalesceTipsets = os.Getenv("QOIN_SYNC_FORMTS_PEND") == "yes"
 
-	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
+	if bootstrapPeerThreshold := os.Getenv("QOIN_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
 		threshold, err := strconv.Atoi(bootstrapPeerThreshold)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
+			log.Errorf("failed to parse 'QOIN_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
 		} else {
 			BootstrapPeerThreshold = threshold
 		}

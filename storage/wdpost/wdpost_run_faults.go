@@ -26,11 +26,11 @@ import (
 var RecoveringSectorLimit uint64 = 0
 
 func init() {
-	if rcl := os.Getenv("LOTUS_RECOVERING_SECTOR_LIMIT"); rcl != "" {
+	if rcl := os.Getenv("QOIN_RECOVERING_SECTOR_LIMIT"); rcl != "" {
 		var err error
 		RecoveringSectorLimit, err = strconv.ParseUint(rcl, 10, 64)
 		if err != nil {
-			log.Errorw("parsing LOTUS_RECOVERING_SECTOR_LIMIT", "error", err)
+			log.Errorw("parsing QOIN_RECOVERING_SECTOR_LIMIT", "error", err)
 		}
 	}
 }

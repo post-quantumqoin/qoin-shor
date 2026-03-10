@@ -311,7 +311,7 @@ func MinerGetBaseInfo(ctx context.Context, sm *StateManager, bcs beacon.Schedule
 
 	prev, err := sm.ChainStore().GetLatestBeaconEntry(ctx, ts)
 	if err != nil {
-		if os.Getenv("LOTUS_IGNORE_DRAND") != "_yes_" {
+		if os.Getenv("QOIN_IGNORE_DRAND") != "_yes_" {
 			return nil, xerrors.Errorf("failed to get latest beacon entry: %w", err)
 		}
 

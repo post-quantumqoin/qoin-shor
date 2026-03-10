@@ -50,7 +50,7 @@ func GeneratePanicReport(persistPath, repoPath, label string) {
 	}
 	panicLog.Warnf("generating panic report at %s", reportPath)
 
-	tl := os.Getenv("LOTUS_PANIC_JOURNAL_LOOKBACK")
+	tl := os.Getenv("QOIN_PANIC_JOURNAL_LOOKBACK")
 	if tl != "" && PanicReportJournalTail == defaultJournalTail {
 		i, err := strconv.Atoi(tl)
 		if err == nil {

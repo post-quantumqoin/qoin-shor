@@ -19,11 +19,11 @@ var log = logging.Logger("tracing")
 
 const (
 	// environment variable names
-	envCollectorEndpoint = "LOTUS_JAEGER_COLLECTOR_ENDPOINT"
-	envAgentHost         = "LOTUS_JAEGER_AGENT_HOST"
-	envAgentPort         = "LOTUS_JAEGER_AGENT_PORT"
-	envJaegerUser        = "LOTUS_JAEGER_USERNAME"
-	envJaegerCred        = "LOTUS_JAEGER_PASSWORD"
+	envCollectorEndpoint = "QOIN_JAEGER_COLLECTOR_ENDPOINT"
+	envAgentHost         = "QOIN_JAEGER_AGENT_HOST"
+	envAgentPort         = "QOIN_JAEGER_AGENT_PORT"
+	envJaegerUser        = "QOIN_JAEGER_USERNAME"
+	envJaegerCred        = "QOIN_JAEGER_PASSWORD"
 )
 
 // When sending directly to the collector, agent options are ignored.
