@@ -11,8 +11,8 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/address"
-	"github.com/post-quantumqoin/core-types/builtin"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	// "github.com/post-quantumqoin/core-types/builtin"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
@@ -74,7 +74,7 @@ func (cs *ChainStore) GetSignedMessage(ctx context.Context, c cid.Cid) (*types.S
 func (cs *ChainStore) readAMTCids(root cid.Cid) ([]cid.Cid, error) {
 	ctx := context.TODO()
 	// block headers use adt0, for now.
-	a, err := blockadt.AsArray(cs.ActorStore(ctx), root, builtin.DefaultHamtBitwidth)
+	a, err := blockadt.AsArray(cs.ActorStore(ctx), root)
 	if err != nil {
 		return nil, xerrors.Errorf("amt load: %w", err)
 	}
@@ -256,7 +256,7 @@ func (cs *ChainStore) ReadMsgMetaCids(ctx context.Context, mmc cid.Cid) ([]cid.C
 }
 
 func (cs *ChainStore) ReadReceipts(ctx context.Context, root cid.Cid) ([]types.MessageReceipt, error) {
-	a, err := blockadt.AsArray(cs.ActorStore(ctx), root, builtin.DefaultHamtBitwidth)
+	a, err := blockadt.AsArray(cs.ActorStore(ctx), root)
 	if err != nil {
 		return nil, err
 	}
@@ -310,7 +310,7 @@ func (cs *ChainStore) SecpkMessagesForBlock(ctx context.Context, b *types.BlockH
 
 func (cs *ChainStore) GetParentReceipt(ctx context.Context, b *types.BlockHeader, i int) (*types.MessageReceipt, error) {
 	// block headers use adt0, for now.
-	a, err := blockadt.AsArray(cs.ActorStore(ctx), b.ParentMessageReceipts, builtin.DefaultHamtBitwidth)
+	a, err := blockadt.AsArray(cs.ActorStore(ctx), b.ParentMessageReceipts)
 	if err != nil {
 		return nil, xerrors.Errorf("amt load: %w", err)
 	}

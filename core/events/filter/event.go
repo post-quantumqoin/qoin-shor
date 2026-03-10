@@ -14,8 +14,8 @@ import (
 	amt4 "github.com/filecoin-project/go-amt-ipld/v4"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	"github.com/post-quantumqoin/core-types/builtin"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	// "github.com/post-quantumqoin/core-types/builtin"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	cstore "github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
@@ -433,7 +433,7 @@ func (m *EventFilterManager) loadExecutedMessages(ctx context.Context, msgTs, rc
 
 	st := m.ChainStore.ActorStore(ctx)
 
-	arr, err := blockadt.AsArray(st, rctTs.Blocks()[0].ParentMessageReceipts, builtin.DefaultHamtBitwidth)
+	arr, err := blockadt.AsArray(st, rctTs.Blocks()[0].ParentMessageReceipts)
 	if err != nil {
 		return nil, xerrors.Errorf("load receipts amt: %w", err)
 	}

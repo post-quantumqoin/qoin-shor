@@ -31,8 +31,8 @@ import (
 	amt4 "github.com/filecoin-project/go-amt-ipld/v4"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	"github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
-	"github.com/post-quantumqoin/core-types/builtin"
+	"github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
+	// "github.com/post-quantumqoin/core-types/builtin"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
@@ -409,7 +409,7 @@ func resolveOnce(bs blockstore.Blockstore, tse stmgr.Executor) func(ctx context.
 		}
 
 			if strings.HasPrefix(names[0], "@H:") {
-				h, err := adt.AsMap(store, nd.Cid(), builtin.DefaultHamtBitwidth)
+			h, err := adt.AsMap(store, nd.Cid())
 			if err != nil {
 				return nil, nil, xerrors.Errorf("resolving hamt link: %w", err)
 			}
@@ -451,7 +451,7 @@ func resolveOnce(bs blockstore.Blockstore, tse stmgr.Executor) func(ctx context.
 		}
 
 		if strings.HasPrefix(names[0], "@A:") {
-			a, err := adt.AsArray(store, nd.Cid(), builtin.DefaultHamtBitwidth)
+			a, err := adt.AsArray(store, nd.Cid())
 			if err != nil {
 				return nil, nil, xerrors.Errorf("load amt: %w", err)
 			}

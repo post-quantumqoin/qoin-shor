@@ -198,7 +198,7 @@ func (sm *syncManager) scheduler() {
 
 func (sm *syncManager) handlePeerHead(head peerHead) {
 	log.Debugf("new peer head: %s %s", head.p, head.ts)
-	fmt.Println("handlePeerHead sm.nextWorker")
+	// fmt.Println("handlePeerHead sm.nextWorker")
 	// have we started syncing yet?
 	if sm.nextWorker == 0 {
 		// track the peer head until we start syncing
@@ -222,7 +222,7 @@ func (sm *syncManager) handlePeerHead(head peerHead) {
 		sm.spawnWorker(target)
 		return
 	}
-	fmt.Println("handlePeerHead addSyncTarget")
+	// fmt.Println("handlePeerHead addSyncTarget")
 	// we have started syncing, add peer head to the queue if applicable and maybe spawn a worker
 	// if there is work to do (possibly in a fork)
 	target, work, err := sm.addSyncTarget(head.ts)
