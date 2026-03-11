@@ -1,3 +1,7 @@
 [submodule "ext/qvm"]
 	path = ext/qvm
 	url = https://github.com/post-quantumqoin/qvm
+
+[submodule "lib/go-commp-tools"]
+path = lib/go-commp-tools
+url = https://github.com/post-quantumqoin/go-commp-tools

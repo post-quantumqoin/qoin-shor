@@ -488,39 +488,39 @@ func StagingGraphsync(parallelTransfersForStorage uint64, parallelTransfersForSt
 	}
 }
 
-func SetupBlockPqcProducer(lc fx.Lifecycle, mctx helpers.MetricsCtx, ds dtypes.MetadataDS, api v1api.FullNode, sf *slashfilter.SlashFilter, j journal.Journal) (*lotusminer.PqcMiner, error) {
-	ctx := helpers.LifecycleCtx(mctx, lc)
-	// minerAddr, err := api.WalletDefaultAddress(ctx)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// var maddr address.Address
-	addrbye, err := ds.Get(ctx, datastore.NewKey("miner-address"))
-	if err != nil {
-		return nil, err
-	}
+// func SetupBlockPqcProducer(lc fx.Lifecycle, mctx helpers.MetricsCtx, ds dtypes.MetadataDS, api v1api.FullNode, sf *slashfilter.SlashFilter, j journal.Journal) (*lotusminer.PqcMiner, error) {
+// 	ctx := helpers.LifecycleCtx(mctx, lc)
+// 	// minerAddr, err := api.WalletDefaultAddress(ctx)
+// 	// if err != nil {
+// 	// 	return nil, err
+// 	// }
+// 	// var maddr address.Address
+// 	addrbye, err := ds.Get(ctx, datastore.NewKey("miner-address"))
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	minerAddr, err := address.NewFromBytes(addrbye)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Printf("SetupBlockPqcProducer minerAddr:", minerAddr)
-	m := lotusminer.NewPqcMiner(api, minerAddr, sf, j)
+// 	minerAddr, err := address.NewFromBytes(addrbye)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	fmt.Printf("SetupBlockPqcProducer minerAddr:", minerAddr)
+// 	m := lotusminer.NewPqcMiner(api, minerAddr, sf, j)
 
-	lc.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
-			if err := m.Start(ctx); err != nil {
-				return err
-			}
-			return nil
-		},
-		OnStop: func(ctx context.Context) error {
-			return m.Stop(ctx)
-		},
-	})
+// 	lc.Append(fx.Hook{
+// 		OnStart: func(ctx context.Context) error {
+// 			if err := m.Start(ctx); err != nil {
+// 				return err
+// 			}
+// 			return nil
+// 		},
+// 		OnStop: func(ctx context.Context) error {
+// 			return m.Stop(ctx)
+// 		},
+// 	})
 
-	return m, nil
-}
+// 	return m, nil
+// }
 
 func SetupBlockProducer(lc fx.Lifecycle, ds dtypes.MetadataDS, api v1api.FullNode, epp gen.WinningPoStProver, sf *slashfilter.SlashFilter, j journal.Journal) (*lotusminer.Miner, error) {
 	minerAddr, err := minerAddrFromDS(ds)

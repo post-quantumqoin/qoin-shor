@@ -1,4 +1,4 @@
-package miner
+package pqcminer
 
 import (
 	"bytes"
@@ -31,6 +31,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/shake3"
+	"github.com/post-quantumqoin/qoin-shor/pqcpow/pqc"
 	"github.com/post-quantumqoin/qoin-shor/pqcpow"
 )
 
@@ -677,8 +678,8 @@ func (m *PqcMiner) mineOne(ctx context.Context, base *MiningBase) (minedBlock *t
 		parentMiners[i] = header.Miner
 	}
 
-	log.Infow("pqcpow.GetNbit")
-	nbit, err := pqcpow.GetNbit(ctx, m.api, minedBlock)
+	log.Infow("pqc.GetNbit")
+	nbit, err := pqc.GetNbit(ctx, m.api, minedBlock)
 	if err != nil {
 		err = xerrors.Errorf("failed GetNbit: %w", err)
 		return nil, err
@@ -696,12 +697,12 @@ func (m *PqcMiner) mineOne(ctx context.Context, base *MiningBase) (minedBlock *t
 	proofStart := uint64(build.Clock.Now().Unix())
 	PqcPowProof, err := computePqcPowProof(ctx, nbit, minedBlock, m.api)
 	if err != nil {
-		if err == pqcpow.ErrXFoundOutTime {
+		if err == pqc.ErrXFoundOutTime {
 			log.Warnf("compute pqc pow proof: %+v", err)
 			return nil, nil
 		}
 
-		if err == pqcpow.NewBlockheads {
+		if err == pqc.NewBlockheads {
 			log.Warnf("compute pqc pow proof: %+v", err)
 			return nil, nil
 		}
@@ -766,10 +767,10 @@ func (m *PqcMiner) computeTicket(ctx context.Context, brand *types.BeaconEntry, 
 	}, nil
 }
 
-// func computePqcPowProofV0(ctx context.Context, seed []byte, nbit []byte, minedBlock *types.BlockMsg, p pqcpow.PqcPowAPI) (*types.PqcPowProof, error) {
+// func computePqcPowProofV0(ctx context.Context, seed []byte, nbit []byte, minedBlock *types.BlockMsg, p pqc.PqcPowAPI) (*types.PqcPowProof, error) {
 // }
 
-func computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.BlockMsg, p pqcpow.PqcPowAPI) (*types.PqcPowProof, error) {
+func computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.BlockMsg, p pqc.PqcPowAPI) (*types.PqcPowProof, error) {
 	var seedProof []byte
 	nbitProof := nbit
 
@@ -790,9 +791,9 @@ func computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.Bloc
 		log.Infow("computePqcPowProof", " seedBuf:", seedBuf)
 
 		qproof, err := pqcpow.PqcPowProof(ctx, seedBuf, nbitProof, p, tm)
-		if err == pqcpow.ErrXNotFound {
+		if err == pqc.ErrXNotFound {
 			log.Infow("computePqcPowProof RefreshNbit")
-			nbitProof = pqcpow.RefreshNbit(nbitProof) //
+			nbitProof = pqc.RefreshNbit(nbitProof) //
 
 			minedBlock.Header.PqcPowProof.Nbit = nbitProof
 
@@ -821,7 +822,7 @@ func computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.Bloc
 
 	// seedBuf := shake3.Shake256XOF(seedProof, 72)
 	// log.Infow("computePqcPowProof", " seedBuf:", seedBuf)
-	// qproof, err := pqcpow.PqcPowProof(ctx, seedBuf, nbitProof, p)
+	// qproof, err := pqc.PqcPowProof(ctx, seedBuf, nbitProof, p)
 	// if err != nil {
 	// 	return nil, err
 	// }

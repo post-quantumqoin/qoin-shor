@@ -17,7 +17,7 @@ import (
 	"golang.org/x/xerrors"
 
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
-	pqcminer "github.com/post-quantumqoin/qoin-shor/miner"
+	// pqcminer "github.com/post-quantumqoin/qoin-shor/miner"
 )
 
 const (
@@ -216,18 +216,18 @@ var startCmd = &cli.Command{
 		// 	}
 		// }
 
-		if err := minerInit(ctx, cctx, api, r, gasPrice); err != nil {
-			log.Errorf("Failed to initialize shor-miner: %+v", err)
-			// path, err := homedir.Expand(repoPath)
-			// if err != nil {
-			// 	return err
-			// }
-			// log.Infof("Cleaning up %s after attempt...", path)
-			// if err := os.RemoveAll(path); err != nil {
-			// 	log.Errorf("Failed to clean up failed storage repo: %s", err)
-			// }
-			return xerrors.Errorf("Shor miner init failed")
-		}
+		// if err := minerInit(ctx, cctx, api, r, gasPrice); err != nil {
+		// 	log.Errorf("Failed to initialize shor-miner: %+v", err)
+		// 	// path, err := homedir.Expand(repoPath)
+		// 	// if err != nil {
+		// 	// 	return err
+		// 	// }
+		// 	// log.Infof("Cleaning up %s after attempt...", path)
+		// 	// if err := os.RemoveAll(path); err != nil {
+		// 	// 	log.Errorf("Failed to clean up failed storage repo: %s", err)
+		// 	// }
+		// 	return xerrors.Errorf("Shor miner init failed")
+		// }
 
 		// TODO: Point to setting storage price, maybe do it interactively or something
 		// log.Info("Miner successfully created, you can now start it with 'lotus-miner run'")
@@ -353,85 +353,85 @@ var getMinerCmd = &cli.Command{
 	},
 }
 
-func minerInit(ctx context.Context, cctx *cli.Context, api v1api.FullNode, r repo.Repo, gasPrice types.BigInt) error {
-	lr, err := r.Lock(repo.StorageMiner)
-	if err != nil {
-		return err
-	}
-	defer lr.Close() //nolint:errcheck
-	mds, err := lr.Datastore(ctx, "/metadata")
-	if err != nil {
-		return err
+// func minerInit(ctx context.Context, cctx *cli.Context, api v1api.FullNode, r repo.Repo, gasPrice types.BigInt) error {
+// 	lr, err := r.Lock(repo.StorageMiner)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer lr.Close() //nolint:errcheck
+// 	mds, err := lr.Datastore(ctx, "/metadata")
+// 	if err != nil {
+// 		return err
 
-	}
-	if ad := cctx.String("miner-address"); ad == "" {
-		return xerrors.Errorf("address is null")
-	}
+// 	}
+// 	if ad := cctx.String("miner-address"); ad == "" {
+// 		return xerrors.Errorf("address is null")
+// 	}
 
-	a, err := address.NewFromString(cctx.String("miner-address"))
+// 	a, err := address.NewFromString(cctx.String("miner-address"))
 
-	if err := mds.Put(ctx, datastore.NewKey("miner-address"), a.Bytes()); err != nil {
-		return err
-	}
+// 	if err := mds.Put(ctx, datastore.NewKey("miner-address"), a.Bytes()); err != nil {
+// 		return err
+// 	}
 
-	// mid, err := address.IDFromAddress(a)
-	// if err != nil {
-	// 	return xerrors.Errorf("getting id address: %w", err)
-	// }
+// 	// mid, err := address.IDFromAddress(a)
+// 	// if err != nil {
+// 	// 	return xerrors.Errorf("getting id address: %w", err)
+// 	// }
 
-	// sa, err := modules.StorageAuth(ctx, api)
-	// if err != nil {
-	// 	return err
-	// }
+// 	// sa, err := modules.StorageAuth(ctx, api)
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
 
-	// wsts := statestore.New(namespace.Wrap(mds, modules.WorkerCallsPrefix))
-	// smsts := statestore.New(namespace.Wrap(mds, modules.ManagerWorkPrefix))
+// 	// wsts := statestore.New(namespace.Wrap(mds, modules.WorkerCallsPrefix))
+// 	// smsts := statestore.New(namespace.Wrap(mds, modules.ManagerWorkPrefix))
 
-	// si := paths.NewMemIndex(nil)
+// 	// si := paths.NewMemIndex(nil)
 
-	// lstor, err := paths.NewLocal(ctx, lr, si, nil)
-	// if err != nil {
-	// 	return err
-	// }
-	// stor := paths.NewRemote(lstor, si, http.Header(sa), 10, &paths.DefaultPartialFileHandler{})
+// 	// lstor, err := paths.NewLocal(ctx, lr, si, nil)
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
+// 	// stor := paths.NewRemote(lstor, si, http.Header(sa), 10, &paths.DefaultPartialFileHandler{})
 
-	// smgr, err := sealer.New(ctx, lstor, stor, lr, si, config.SealerConfig{
-	// 	ParallelFetchLimit:       10,
-	// 	AllowAddPiece:            true,
-	// 	AllowPreCommit1:          true,
-	// 	AllowPreCommit2:          true,
-	// 	AllowCommit:              true,
-	// 	AllowUnseal:              true,
-	// 	AllowReplicaUpdate:       true,
-	// 	AllowProveReplicaUpdate2: true,
-	// 	AllowRegenSectorKey:      true,
-	// }, config.ProvingConfig{}, wsts, smsts)
-	// if err != nil {
-	// 	return err
-	// }
+// 	// smgr, err := sealer.New(ctx, lstor, stor, lr, si, config.SealerConfig{
+// 	// 	ParallelFetchLimit:       10,
+// 	// 	AllowAddPiece:            true,
+// 	// 	AllowPreCommit1:          true,
+// 	// 	AllowPreCommit2:          true,
+// 	// 	AllowCommit:              true,
+// 	// 	AllowUnseal:              true,
+// 	// 	AllowReplicaUpdate:       true,
+// 	// 	AllowProveReplicaUpdate2: true,
+// 	// 	AllowRegenSectorKey:      true,
+// 	// }, config.ProvingConfig{}, wsts, smsts)
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
 
-	// epp, err := storage.NewWinningPoStProver(api, smgr, ffiwrapper.ProofVerifier, dtypes.MinerID(mid))
-	// if err != nil {
-	// 	return err
-	// }
+// 	// epp, err := storage.NewWinningPoStProver(api, smgr, ffiwrapper.ProofVerifier, dtypes.MinerID(mid))
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
 
-	j, err := fsjournal.OpenFSJournal(lr, journal.EnvDisabledEvents())
-	if err != nil {
-		return fmt.Errorf("failed to open filesystem journal: %w", err)
-	}
-	m := pqcminer.NewPqcMiner(api, a, slashfilter.New(mds), j)
-	{
-		if err := m.Start(ctx); err != nil {
-			return xerrors.Errorf("failed to start up genesis miner: %w", err)
-		}
+// 	j, err := fsjournal.OpenFSJournal(lr, journal.EnvDisabledEvents())
+// 	if err != nil {
+// 		return fmt.Errorf("failed to open filesystem journal: %w", err)
+// 	}
+// 	m := pqcminer.NewPqcMiner(api, a, slashfilter.New(mds), j)
+// 	{
+// 		if err := m.Start(ctx); err != nil {
+// 			return xerrors.Errorf("failed to start up genesis miner: %w", err)
+// 		}
 
-		if err := m.Stop(ctx); err != nil {
-			log.Error("failed to shut down miner: ", err)
-		}
+// 		if err := m.Stop(ctx); err != nil {
+// 			log.Error("failed to shut down miner: ", err)
+// 		}
 
-	}
-	return nil
-}
+// 	}
+// 	return nil
+// }
 
 // func storageMinerInit(ctx context.Context, cctx *cli.Context, api v1api.FullNode, r repo.Repo, ssize abi.SectorSize, gasPrice types.BigInt) error {
 // 	lr, err := r.Lock(repo.StorageMiner)

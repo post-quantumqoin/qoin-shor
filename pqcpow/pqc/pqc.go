@@ -1,4 +1,4 @@
-package pqcpow
+package pqc
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/shake3"
 )
 
-var log = logging.Logger("pqcpow")
+var log = logging.Logger("pqc")
 
 var (
 	ErrXNotFound     = errors.New("x not found")
@@ -261,30 +261,6 @@ func GetNbit(ctx context.Context, p PqcPowAPI, minedBlock *types.BlockMsg) ([]by
 	return newNbit, nil
 }
 
-func PqcPowProof(ctx context.Context, seed []byte, nbit []byte, p PqcPowAPI, tm *time.Ticker) ([]byte, error) {
-	m := int(nbit[0]) + EquationsOffset
-	n := m + VariablesN
-	mh := mqphash.CreateMQP(seed, m, n)
-	fmt.Println("PqcPowProof seed len: nbit: m: n: len(mh.Seed):", len(seed), nbit, m, n, len(mh.Seed))
-	whichXWidth := WhichXWidth
-	c, err := NewController(mh, nbit, whichXWidth)
-	if err != nil {
-		return nil, err
-	}
-	ts, err := p.ChainHead(ctx)
-	if err != nil {
-		return nil, err
-	}
-	notifs, err := p.ChainNotify(ctx)
-	if err != nil {
-		return nil, err
-	}
-	x, err := c.Run(notifs, ts.Height(), tm)
-	if err != nil {
-		return nil, err
-	}
-	return x, nil
-}
 
 func getDifficultyByNbit(nbit []byte) float64 {
 	exponent := float64(nbit[0])

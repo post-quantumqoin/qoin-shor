@@ -1,4 +1,4 @@
-package pqcpow
+package pqc
 
 import (
 	"encoding/hex"
@@ -153,7 +153,7 @@ func (f *fix) FixOneEquation(fixString string, coefficientByByte string, unwante
 
 }
 
-func (f *fix) fixBack(x64 string, fixStr string) []byte {
+func (f *fix) FixBack(x64 string, fixStr string) []byte {
 	if len(x64) != 64 {
 		return nil
 	}
@@ -176,3 +176,10 @@ func (f *fix) fixBack(x64 string, fixStr string) []byte {
 
 	return xBuf
 }
+
+// Exported accessor methods for fields required by callers in other packages.
+func (f *fix) NewN() int { return f.newN }
+func (f *fix) NewCoe() int { return f.newCoe }
+func (f *fix) NewCoeByte() int { return f.newCoeByte }
+func (f *fix) UnwantedNewCoeBit() int { return f.unwantedNewCoeBit }
+

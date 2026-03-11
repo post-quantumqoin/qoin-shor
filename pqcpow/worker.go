@@ -11,12 +11,15 @@ import (
 	"sync"
 	"time"
 
+	logging "github.com/ipfs/go-log/v2"
+	"github.com/post-quantumqoin/qoin-shor/pqcpow/pqc"
+	"github.com/post-quantumqoin/qoin-shor/pqcpow/kernel"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/mqphash"
 )
-
+var log = logging.Logger("pqcpow")
 var devslk []*sync.Mutex
 
 const maxN = 63 //If bigger then fix it.
@@ -35,12 +38,12 @@ type controller struct {
 
 func NewController(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int) (*controller, error) {
 	c := &controller{}
-	c.numOfEquations = int(nbit[0]) + EquationsOffset
-	c.numOfVariables = c.numOfEquations + VariablesN
+	c.numOfEquations = int(nbit[0]) + pqc.EquationsOffset
+	c.numOfVariables = c.numOfEquations + pqc.VariablesN
 
 	c.fixIndex = 0
 
-	c.size = int(GetDeviceCount()) // get Device number.
+	c.size = int(kernel.GetDeviceCount()) // get Device number.
 	fmt.Println("c.size:", c.size)
 	if c.size <= 1 { // set fixnumber.
 		c.fixNumber = 0
@@ -103,6 +106,31 @@ func getDevs(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int, c *controll
 	return devs, nil
 }
 
+func PqcPowProof(ctx context.Context, seed []byte, nbit []byte, p pqc.PqcPowAPI, tm *time.Ticker) ([]byte, error) {
+	m := int(nbit[0]) + pqc.EquationsOffset
+	n := m + pqc.VariablesN
+	mh := mqphash.CreateMQP(seed, m, n)
+	fmt.Println("PqcPowProof seed len: nbit: m: n: len(mh.Seed):", len(seed), nbit, m, n, len(mh.Seed))
+	whichXWidth := pqc.WhichXWidth
+	c, err := NewController(mh, nbit, whichXWidth)
+	if err != nil {
+		return nil, err
+	}
+	ts, err := p.ChainHead(ctx)
+	if err != nil {
+		return nil, err
+	}
+	notifs, err := p.ChainNotify(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x, err := c.Run(notifs, ts.Height(), tm)
+	if err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
 func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm *time.Ticker) ([]byte, error) {
 	//Receive blocks generated from devices
 	result := make(chan []byte)
@@ -122,7 +150,7 @@ func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm
 		case r := <-result:
 			if len(r) == 0 {
 				log.Warnf("run x not found")
-				return nil, ErrXNotFound
+				return nil, pqc.ErrXNotFound
 			}
 			// stopch <- true
 			stop()
@@ -132,7 +160,7 @@ func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm
 			log.Warnf("Run out time")
 			// stopch <- true
 			stop()
-			return nil, ErrXFoundOutTime
+			return nil, pqc.ErrXFoundOutTime
 			// }
 		case n := <-notifs:
 			for _, change := range n {
@@ -145,7 +173,7 @@ func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm
 					log.Infow("new chain notify ", "now time:", build.Clock.Now(), "head MinTimestamp:", time.Unix(int64(change.Val.MinTimestamp()), 0))
 					// stopch <- true
 					stop()
-					return nil, NewBlockheads
+					return nil, pqc.NewBlockheads
 				}
 
 				log.Infow("new chain ", "hgt:", hgt, "Height:", change.Val.Height())
@@ -194,8 +222,8 @@ func NewDev(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int, ctr *control
 		controller:  ctr,
 		lk:          dlk,
 	}
-	d.m = int(nbit[0]) + EquationsOffset
-	d.n = d.m + VariablesN
+	d.m = int(nbit[0]) + pqc.EquationsOffset
+	d.n = d.m + pqc.VariablesN
 	d.startSMCount = 0
 	return d
 }
@@ -290,7 +318,7 @@ func (d *dev) GetX(devID int, startSMCount int, results chan []byte, ctx context
 		}
 		fmt.Println("VerifyPoW seed: nbit: ", len(d.mqphash.Seed), d.nbit)
 		//Proof of generation passes validation
-		if VerifyPoW(d.mqphash.Seed, d.nbit, d.xbuf) {
+		if pqc.VerifyPoW(d.mqphash.Seed, d.nbit, d.xbuf) {
 			verify = true
 		}
 		//check that the results channel is closed
@@ -378,22 +406,22 @@ func (d *dev) calculate(fix string) ([]byte, string, error) {
 
 	var rs rxresult
 	if len(fix) != 0 {
-		mf := NewFix(d.mqphash, len(fix))
+		mf := pqc.NewFix(d.mqphash, len(fix))
 		for _, equation := range d.mqphash.Equations {
 			eq, _, _, _ := mf.FixOneEquation(fix, hex.EncodeToString(equation), d.mqphash.UnwantedCoefficientBit)
 			equations = append(equations, hex.EncodeToString(eq))
 		}
 		// fmt.Println("calculate CudaGetX fix:", fix)
 
-		fmt.Println("calculate  d.deviceID, fix d.m, mf.newN, d.whichXWidth, uint64(d.startSMCount), mf.newCoe", d.deviceID, fix, d.m, mf.newN, d.whichXWidth, uint64(d.startSMCount), mf.newCoe)
+		fmt.Println("calculate  d.deviceID, fix d.m, mf.NewN(), d.whichXWidth, uint64(d.startSMCount), mf.NewCoe()", d.deviceID, fix, d.m, mf.NewN(), d.whichXWidth, uint64(d.startSMCount), mf.NewCoe())
 		// for i, eq := range equations {
 		// 	fmt.Printf("calculate fix:%s Equations:%s len:%d  index:%d \n", fix, eq, len(eq), i)
 		// }
-		rx := CudaGetX(d.deviceID, d.m, mf.newN, d.whichXWidth, uint64(d.startSMCount), mf.newCoe, equations)
+		rx := kernel.CudaGetX(d.deviceID, d.m, mf.NewN(), d.whichXWidth, uint64(d.startSMCount), mf.NewCoe(), equations)
 		// CudaGetX(deviceID int, m int, n int, whichXWidth int, startSMCount uint64, coefficientBit int, xIn []string)
 		srx := strings.Split(rx, "x found:")
 		if len(srx) <= 1 {
-			return nil, "", ErrXNotFound
+			return nil, "", pqc.ErrXNotFound
 		}
 		// fmt.Println("calculate CudaGetX fix: srx[1]:", fix, srx[1])
 		if err := json.Unmarshal([]byte(srx[1]), &rs); err != nil {
@@ -406,7 +434,7 @@ func (d *dev) calculate(fix string) ([]byte, string, error) {
 		}
 		d.smCount = num
 		fmt.Println("calculate  d.deviceID: fix:  rs.SmCount:", d.deviceID, fix, rs.SmCount)
-		d.xbuf = mf.fixBack(rs.X, fix)
+		d.xbuf = mf.FixBack(rs.X, fix)
 		// fmt.Println("calculate fix: fixBack:", fix, hex.EncodeToString(d.xbuf))
 		return d.xbuf, "", nil
 	} else {
@@ -419,13 +447,13 @@ func (d *dev) calculate(fix string) ([]byte, string, error) {
 	// for i, equation := range equations {
 	// 	fmt.Println("calculate  i: equation:", i, equation)
 	// }
-	rx := CudaGetX(d.deviceID, d.m, d.n, d.whichXWidth, uint64(d.startSMCount), coefficientBit, equations)
+	rx := kernel.CudaGetX(d.deviceID, d.m, d.n, d.whichXWidth, uint64(d.startSMCount), coefficientBit, equations)
 	srx := strings.Split(rx, "x found:")
 	for _, val := range srx {
 		fmt.Println(val)
 	}
 	if len(srx) <= 1 {
-		return nil, "", ErrXNotFound
+		return nil, "", pqc.ErrXNotFound
 	}
 	if err := json.Unmarshal([]byte(srx[1]), &rs); err != nil {
 		return nil, rx, err

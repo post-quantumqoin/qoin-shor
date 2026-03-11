@@ -36,7 +36,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/mqphash"
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/shake3"
-	"github.com/post-quantumqoin/qoin-shor/pqcpow"
+	"github.com/post-quantumqoin/qoin-shor/pqcpow/pqc"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/ffiwrapper"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/storiface"
 	"github.com/post-quantumqoin/specs-contracts/contracts/runtime/proof"
@@ -229,11 +229,11 @@ func (qcs *QoinCons) ValidateBlock(ctx context.Context, b *types.FullBlock) (err
 		log.Infow("pqcPowCheck VerifyPoW", "seed:", seed)
 
 		nbit := h.PqcPowProof.Nbit
-		m := int(nbit[0]) + pqcpow.EquationsOffset
-		n := m + pqcpow.VariablesN
+		m := int(nbit[0]) + pqc.EquationsOffset
+		n := m + pqc.VariablesN
 		mh := mqphash.CreateMQP(seed, m, n)
 		log.Infow("pqcPowCheck VerifyPoW", "nbit:", nbit, " m: ", m, "n:", n, "mh.Seed:", len(mh.Seed), "h.PqcPowProof.PowProof:", h.PqcPowProof.PowProof)
-		if !pqcpow.VerifyPoW(mh.Seed, nbit, h.PqcPowProof.PowProof) {
+		if !pqc.VerifyPoW(mh.Seed, nbit, h.PqcPowProof.PowProof) {
 			return xerrors.Errorf("PowProof Verify fail ")
 		}
 
@@ -540,7 +540,7 @@ func (qcs *QoinCons) nbitIsValid(ctx context.Context, h *types.BlockHeader, base
 	lastTipSet := baseTs
 	lastNbit := lastTipSet.PqcPowProof().Nbit
 
-	if lastTipSet.Height() != 0 && lastTipSet.Height()%pqcpow.NbitSampleRate == 0 {
+	if lastTipSet.Height() != 0 && lastTipSet.Height()%pqc.NbitSampleRate == 0 {
 		// sampleTipSet, err := qcs.store.LoadTipSet(ctx, lastTipSet.Parents())
 		// if err != nil {
 		// 	return err
@@ -562,7 +562,7 @@ func (qcs *QoinCons) nbitIsValid(ctx context.Context, h *types.BlockHeader, base
 		log.Infow("GetNbit ", "lastNbit:", lastNbit, "lastTipSet.Height: ",
 			lastTipSet.Height(), "startTime:", time.Unix(int64(startTime), 0),
 			"endTime:", time.Unix(int64(endTime), 0))
-		newNbit = pqcpow.FixCalculateNbit(pqcpow.ReferenceSeconds, lastNbit, pqcpow.NbitSampleRate, startTime, endTime, int(nulls))
+		newNbit = pqc.FixCalculateNbit(pqc.ReferenceSeconds, lastNbit, pqc.NbitSampleRate, startTime, endTime, int(nulls))
 		cuTsNbit = h.PqcPowProof.Nbit[:3]
 		// } else if build.UpgradeYellowStoneHeight >= 0 && lastTipSet.Height() == build.UpgradeYellowStoneHeight {
 		// 	newNbit = append(newNbit, 0x04)
@@ -571,7 +571,7 @@ func (qcs *QoinCons) nbitIsValid(ctx context.Context, h *types.BlockHeader, base
 		// 	cuTsNbit = h.PqcPowProof.Nbit[:3]
 		// } else {
 		// 	var referenceSeconds uint64 = 15000 //15s
-		// 	newNbit = pqcpow.CalculateNbit(referenceSeconds, lastNbit, pqcpow.NbitSampleRate, startTime, endTime)
+		// 	newNbit = pqc.CalculateNbit(referenceSeconds, lastNbit, pqc.NbitSampleRate, startTime, endTime)
 		// 	cuTsNbit = h.PqcPowProof.Nbit
 		// }
 	} else {

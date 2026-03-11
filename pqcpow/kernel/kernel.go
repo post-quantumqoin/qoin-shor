@@ -1,4 +1,4 @@
-package pqcpow
+package kernel
 
 /*
 #include <stdlib.h>
@@ -7,7 +7,7 @@ package pqcpow
 char* cudaGetX(int deviceID, int m, int n, int whichXWidth, unsigned long long int startSMCount, int coefficientBit, char **eqs);
 int cudaGetDevCount();
 unsigned long long int cudaGetNumOfExecution(int n, int m);
-#cgo LDFLAGS:-L${SRCDIR}/kernel -lgpuworker -lcommon  -lstdc++  -L/usr/local/cuda/lib64 -lcudart -lnvidia-ml
+#cgo LDFLAGS:-L${SRCDIR} -lgpuworker -lcommon  -lstdc++  -L/usr/local/cuda/lib64 -lcudart -lnvidia-ml
 */
 import "C"
 import (
