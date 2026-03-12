@@ -11,12 +11,13 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/address"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	// "github.com/post-quantumqoin/core-types/builtin"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 type storable interface {

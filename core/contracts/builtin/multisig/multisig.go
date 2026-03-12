@@ -10,18 +10,18 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	msig13 "github.com/post-quantumqoin/core-types/builtin/v13/multisig"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
-	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
@@ -59,26 +59,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	switch act.Code {
 
-	case builtin0.MultisigActorCodeID:
-		return load0(store, act.Head)
+	// case builtin0.MultisigActorCodeID:
+	// 	return load0(store, act.Head)
 
-	case builtin2.MultisigActorCodeID:
-		return load2(store, act.Head)
+	// case builtin2.MultisigActorCodeID:
+	// 	return load2(store, act.Head)
 
-	case builtin3.MultisigActorCodeID:
-		return load3(store, act.Head)
+	// case builtin3.MultisigActorCodeID:
+	// 	return load3(store, act.Head)
 
-	case builtin4.MultisigActorCodeID:
-		return load4(store, act.Head)
+	// case builtin4.MultisigActorCodeID:
+	// 	return load4(store, act.Head)
 
-	case builtin5.MultisigActorCodeID:
-		return load5(store, act.Head)
+	// case builtin5.MultisigActorCodeID:
+	// 	return load5(store, act.Head)
 
-	case builtin6.MultisigActorCodeID:
-		return load6(store, act.Head)
+	// case builtin6.MultisigActorCodeID:
+	// 	return load6(store, act.Head)
 
-	case builtin7.MultisigActorCodeID:
-		return load7(store, act.Head)
+	// case builtin7.MultisigActorCodeID:
+	// 	return load7(store, act.Head)
 
 	}
 
@@ -88,26 +88,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 func MakeState(store adt.Store, av actorstypes.Version, signers []address.Address, threshold uint64, startEpoch abi.ChainEpoch, unlockDuration abi.ChainEpoch, initialBalance abi.TokenAmount) (State, error) {
 	switch av {
 
-	case actorstypes.Version0:
-		return make0(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+	// case actorstypes.Version0:
+	// 	return make0(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
 
-	case actorstypes.Version2:
-		return make2(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+	// case actorstypes.Version2:
+	// 	return make2(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
 
-	case actorstypes.Version3:
-		return make3(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+	// case actorstypes.Version3:
+	// 	return make3(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
 
-	case actorstypes.Version4:
-		return make4(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+	// case actorstypes.Version4:
+	// 	return make4(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
 
-	case actorstypes.Version5:
-		return make5(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+	// case actorstypes.Version5:
+	// 	return make5(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
 
-	case actorstypes.Version6:
-		return make6(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+	// case actorstypes.Version6:
+	// 	return make6(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
 
-	case actorstypes.Version7:
-		return make7(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+	// case actorstypes.Version7:
+	// 	return make7(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
 
 	case actorstypes.Version8:
 		return make8(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
@@ -251,13 +251,13 @@ func txnParams(id uint64, data *ProposalHashData) ([]byte, error) {
 
 func AllCodes() []cid.Cid {
 	return []cid.Cid{
-		(&state0{}).Code(),
-		(&state2{}).Code(),
-		(&state3{}).Code(),
-		(&state4{}).Code(),
-		(&state5{}).Code(),
-		(&state6{}).Code(),
-		(&state7{}).Code(),
+		// (&state0{}).Code(),
+		// (&state2{}).Code(),
+		// (&state3{}).Code(),
+		// (&state4{}).Code(),
+		// (&state5{}).Code(),
+		// (&state6{}).Code(),
+		// (&state7{}).Code(),
 		(&state8{}).Code(),
 		(&state9{}).Code(),
 		(&state10{}).Code(),

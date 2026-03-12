@@ -12,13 +12,11 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
-	"github.com/post-quantumqoin/qoin-shor/blockstore/splitstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	chain "github.com/post-quantumqoin/qoin-shor/core"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
-	"github.com/post-quantumqoin/qoin-shor/core/consensus/filcns"
+	"github.com/post-quantumqoin/qoin-shor/core/consensus/qoincns"
 	"github.com/post-quantumqoin/qoin-shor/core/exchange"
 	"github.com/post-quantumqoin/qoin-shor/core/gen/slashfilter"
 	"github.com/post-quantumqoin/qoin-shor/core/index"
@@ -26,6 +24,8 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
+	"github.com/post-quantumqoin/qoin-shor/dbstore/splitstore"
 	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/helpers"
@@ -181,7 +181,7 @@ func NewSlashFilter(ds dtypes.MetadataDS) *slashfilter.SlashFilter {
 }
 
 func UpgradeSchedule() stmgr.UpgradeSchedule {
-	return filcns.DefaultUpgradeSchedule()
+	return qoincns.DefaultUpgradeSchedule()
 }
 
 func EnableStoringEvents(cs *store.ChainStore) {

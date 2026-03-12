@@ -76,10 +76,10 @@ func (m *migrationResultCache) keyForMigration(root cid.Cid) dstore.Key {
 }
 
 func init() {
-	if s := os.Getenv("LOTUS_EXEC_TRACE_CACHE_SIZE"); s != "" {
+	if s := os.Getenv("QOIN_EXEC_TRACE_CACHE_SIZE"); s != "" {
 		letc, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_EXEC_TRACE_CACHE_SIZE' env var: %s", err)
+			log.Errorf("failed to parse 'QOIN_EXEC_TRACE_CACHE_SIZE' env var: %s", err)
 		} else {
 			execTraceCacheSize = letc
 		}
@@ -301,7 +301,7 @@ func (sm *StateManager) ResolveToDeterministicAddress(ctx context.Context, addr 
 	switch addr.Protocol() {
 	case address.BLS, address.SECP256K1, address.Delegated, address.PQC:
 		return addr, nil
-	case address.Actor:
+	case address.Contract:
 		return address.Undef, xerrors.New("cannot resolve actor address to key address")
 	default:
 	}
@@ -344,7 +344,7 @@ func (sm *StateManager) ResolveToDeterministicAddressAtFinality(ctx context.Cont
 	switch addr.Protocol() {
 	case address.BLS, address.SECP256K1, address.Delegated, address.PQC:
 		return addr, nil
-	case address.Actor:
+	case address.Contract:
 		return address.Undef, xerrors.New("cannot resolve actor address to key address")
 	default:
 	}

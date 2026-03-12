@@ -5,13 +5,13 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	init13 "github.com/post-quantumqoin/core-types/builtin/v13/init"
 	multisig13 "github.com/post-quantumqoin/core-types/builtin/v13/multisig"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
 	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )

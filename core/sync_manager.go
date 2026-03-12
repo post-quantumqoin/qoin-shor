@@ -2,7 +2,7 @@ package chain
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"os"
 	"sort"
 	"strconv"
@@ -31,12 +31,12 @@ var (
 )
 
 func init() {
-	coalesceTipsets = os.Getenv("LOTUS_SYNC_FORMTS_PEND") == "yes"
+	coalesceTipsets = os.Getenv("QOIN_SYNC_FORMTS_PEND") == "yes"
 
-	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
+	if bootstrapPeerThreshold := os.Getenv("QOIN_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
 		threshold, err := strconv.Atoi(bootstrapPeerThreshold)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
+			log.Errorf("failed to parse 'QOIN_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
 		} else {
 			BootstrapPeerThreshold = threshold
 		}
@@ -198,7 +198,7 @@ func (sm *syncManager) scheduler() {
 
 func (sm *syncManager) handlePeerHead(head peerHead) {
 	log.Debugf("new peer head: %s %s", head.p, head.ts)
-	fmt.Println("handlePeerHead sm.nextWorker")
+	// fmt.Println("handlePeerHead sm.nextWorker")
 	// have we started syncing yet?
 	if sm.nextWorker == 0 {
 		// track the peer head until we start syncing
@@ -222,7 +222,7 @@ func (sm *syncManager) handlePeerHead(head peerHead) {
 		sm.spawnWorker(target)
 		return
 	}
-	fmt.Println("handlePeerHead addSyncTarget")
+	// fmt.Println("handlePeerHead addSyncTarget")
 	// we have started syncing, add peer head to the queue if applicable and maybe spawn a worker
 	// if there is work to do (possibly in a fork)
 	target, work, err := sm.addSyncTarget(head.ts)

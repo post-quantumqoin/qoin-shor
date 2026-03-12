@@ -14,8 +14,8 @@ import (
 	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/node/config"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/fsutil"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/storiface"

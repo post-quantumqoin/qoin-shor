@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	cliutil "github.com/post-quantumqoin/qoin-shor/cli/util"
+	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
 )
 
 var log = logging.Logger("cli")

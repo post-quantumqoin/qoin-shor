@@ -2,28 +2,28 @@ package miner
 
 import (
 	"github.com/ipfs/go-cid"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/big"
+	"github.com/post-quantumqoin/core-types/network"
+	"https://github.com/post-quantumqoin/qoin-shor/core/contracts"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/proof"
+	"github.com/post-quantumqoin/bitset"
+	"github.com/post-quantumqoin/core-types/abi"
+	"github.com/post-quantumqoin/core-types/cbor"
+	"github.com/post-quantumqoin/core-types/dline"
+	"github.com/post-quantumqoin/core-types/proof"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"
-	minertypes13 "github.com/filecoin-project/go-state-types/builtin/v13/miner"
-	minertypes "github.com/filecoin-project/go-state-types/builtin/v9/miner"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
+	minertypes13 "github.com/post-quantumqoin/core-types/builtin/v13/miner"
+	minertypes "github.com/post-quantumqoin/core-types/builtin/v9/miner"
+	"github.com/post-quantumqoin/core-types/manifest"
 
 {{range .versions}}
     {{if (le . 7)}}
-	    builtin{{.}} "github.com/filecoin-project/specs-actors{{import .}}actors/builtin"
+	    builtin{{.}} "github.com/post-quantumqoin/specs-contracts{{import .}}actors/builtin"
     {{end}}
 {{end}}
 )

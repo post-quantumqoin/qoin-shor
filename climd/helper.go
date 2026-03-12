@@ -46,7 +46,7 @@ func RunApp(app *ufcli.App) {
 	}()
 
 	if err := app.Run(os.Args); err != nil {
-		if os.Getenv("LOTUS_DEV") != "" {
+		if os.Getenv("QOIN_DEV") != "" {
 			log.Warnf("%+v", err)
 		} else {
 			fmt.Fprintf(os.Stderr, "ERROR: %s\n\n", err) // nolint:errcheck

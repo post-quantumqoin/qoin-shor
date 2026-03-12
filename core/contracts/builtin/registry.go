@@ -8,7 +8,6 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/builtin"
 	account10 "github.com/post-quantumqoin/core-types/builtin/v10/account"
 	cron10 "github.com/post-quantumqoin/core-types/builtin/v10/cron"
@@ -98,6 +97,7 @@ import (
 	system9 "github.com/post-quantumqoin/core-types/builtin/v9/system"
 	verifreg9 "github.com/post-quantumqoin/core-types/builtin/v9/verifreg"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 	rtt "github.com/post-quantumqoin/core-types/rt"
 

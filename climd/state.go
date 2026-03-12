@@ -27,17 +27,16 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/exitcode"
 	"github.com/post-quantumqoin/core-types/network"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	cliutil "github.com/post-quantumqoin/qoin-shor/cli/util"
+	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
@@ -45,6 +44,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	blockstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 var StateCmd = &cli.Command{

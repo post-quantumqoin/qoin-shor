@@ -4,15 +4,15 @@ import (
     "fmt"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"https://github.com/post-quantumqoin/qoin-shor/core/contracts"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/manifest"
 
 {{if (le .v 7)}}
-	cron{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/builtin/cron"
+	cron{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/builtin/cron"
 {{else}}
-	cron{{.v}} "github.com/filecoin-project/go-state-types/builtin{{.import}}cron"
+	cron{{.v}} "github.com/post-quantumqoin/core-types/builtin{{.import}}cron"
 {{end}}
 )
 

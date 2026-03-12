@@ -19,17 +19,17 @@ import (
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/network"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/lib/async"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
@@ -251,7 +251,8 @@ func checkBlockMessages(ctx context.Context, sm *stmgr.StateManager, cs *store.C
 	// Validate message arrays in a temporary blockstore.
 	tmpbs := bstore.NewMemory()
 	tmpstore := blockadt.WrapStore(ctx, cbor.NewCborStore(tmpbs))
-
+	
+	
 	bmArr := blockadt.MakeEmptyArray(tmpstore)
 	for i, m := range b.BlsMessages {
 		if err := checkMsg(m); err != nil {
@@ -270,6 +271,9 @@ func checkBlockMessages(ctx context.Context, sm *stmgr.StateManager, cs *store.C
 	}
 
 	smArr := blockadt.MakeEmptyArray(tmpstore)
+	if err != nil {
+		return xerrors.Errorf("failed to create empty secpk array: %w", err)
+	}
 	for i, m := range b.SecpkMessages {
 		if nv >= network.Version14 && !IsValidSecpkSigType(nv, m.Signature.Type) {
 			return xerrors.Errorf("block had invalid signed message at index %d: %w", i, err)

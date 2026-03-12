@@ -99,11 +99,11 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 		if err := ent.UnmarshalCBOR(bp); err != nil {
 			switch err {
 			case io.EOF, io.ErrUnexpectedEOF:
-				if os.Getenv("LOTUS_ALLOW_TRUNCATED_LOG") == "1" {
+				if os.Getenv("QOIN_ALLOW_TRUNCATED_LOG") == "1" {
 					log.Errorw("log entry potentially truncated")
 					return false, nil
 				}
-				return false, xerrors.Errorf("log entry potentially truncated, set LOTUS_ALLOW_TRUNCATED_LOG=1 to proceed: %w", err)
+				return false, xerrors.Errorf("log entry potentially truncated, set QOIN_ALLOW_TRUNCATED_LOG=1 to proceed: %w", err)
 			default:
 				return false, xerrors.Errorf("unmarshaling log entry: %w", err)
 			}

@@ -3,17 +3,18 @@ package paych
 import (
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	builtin11 "github.com/filecoin-project/go-state-types/builtin"
-	init11 "github.com/filecoin-project/go-state-types/builtin/v11/init"
-	paych11 "github.com/filecoin-project/go-state-types/builtin/v11/paych"
-	paychtypes "github.com/filecoin-project/go-state-types/builtin/v8/paych"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
+	builtin11 "github.com/post-quantumqoin/core-types/builtin"
+	init11 "github.com/post-quantumqoin/core-types/builtin/v11/init"
+	paych11 "github.com/post-quantumqoin/core-types/builtin/v11/paych"
+	paychtypes "github.com/post-quantumqoin/core-types/builtin/v8/paych"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/types"
+	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
+
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
 type message11 struct{ from address.Address }

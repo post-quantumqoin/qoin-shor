@@ -7,16 +7,16 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/discovery"
-	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/post-quantumqoin/go-qoin-markets/discovery"
+	discoveryimpl "github.com/post-quantumqoin/go-qoin-markets/discovery/impl"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	chain "github.com/post-quantumqoin/qoin-shor/core"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
-	"github.com/post-quantumqoin/qoin-shor/core/consensus/filcns"
+	"github.com/post-quantumqoin/qoin-shor/core/consensus/qoincns"
 	"github.com/post-quantumqoin/qoin-shor/core/events"
 	"github.com/post-quantumqoin/qoin-shor/core/events/filter"
 	"github.com/post-quantumqoin/qoin-shor/core/exchange"
@@ -78,9 +78,9 @@ var ChainNode = Options(
 
 	// Consensus: Chain storage/access
 	Override(new(chain.Genesis), chain.LoadGenesis),
-	Override(new(store.WeightFunc), filcns.Weight),
-	Override(new(stmgr.Executor), consensus.NewTipSetExecutor(filcns.PqcRewardFunc)),
-	Override(new(consensus.Consensus), filcns.NewFilecoinExpectedConsensus),
+	Override(new(store.WeightFunc), qoincns.Weight),
+	Override(new(stmgr.Executor), consensus.NewTipSetExecutor(qoincns.PqcRewardFunc)),
+	Override(new(consensus.Consensus), qoincns.NewQoinExpectedConsensus),
 	Override(new(*store.ChainStore), modules.ChainStore),
 	Override(new(*stmgr.StateManager), modules.StateManager),
 	Override(new(dtypes.ChainBitswap), modules.ChainBitswap),
@@ -221,7 +221,7 @@ func ConfigFullNode(c interface{}) Option {
 		Override(new(dtypes.ChainBlockstore), From(new(dtypes.BasicChainBlockstore))),
 		Override(new(dtypes.StateBlockstore), From(new(dtypes.BasicStateBlockstore))),
 
-		If(os.Getenv("LOTUS_ENABLE_CHAINSTORE_FALLBACK") == "1",
+		If(os.Getenv("QOIN_ENABLE_CHAINSTORE_FALLBACK") == "1",
 			Override(new(dtypes.ChainBlockstore), modules.FallbackChainBlockstore),
 			Override(new(dtypes.StateBlockstore), modules.FallbackStateBlockstore),
 			Override(SetupFallbackBlockstoresKey, modules.InitFallbackBlockstores),

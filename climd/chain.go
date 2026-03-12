@@ -27,18 +27,19 @@ import (
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/account"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/market"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/miner"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/power"
-	"github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	"github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 

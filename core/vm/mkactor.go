@@ -7,8 +7,8 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/post-quantumqoin/address"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/exitcode"
 	"github.com/post-quantumqoin/core-types/network"
 	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
@@ -20,10 +20,10 @@ import (
 	builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/aerrors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/account"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/aerrors"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/account"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
@@ -92,7 +92,7 @@ func makeAccountActor(ver actorstypes.Version, addr address.Address) (*types.Act
 		return newAccountActor(ver, addr), nil
 	case address.ID:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no actor with given ID: %s", addr)
-	case address.Actor:
+	case address.Contract:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no such actor: %s", addr)
 	default:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "address has unsupported protocol: %d", addr.Protocol())

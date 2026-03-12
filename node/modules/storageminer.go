@@ -27,16 +27,16 @@ import (
 	dtimpl "github.com/filecoin-project/go-data-transfer/v2/impl"
 	dtnet "github.com/filecoin-project/go-data-transfer/v2/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/v2/transport/graphsync"
-	piecefilestore "github.com/filecoin-project/go-fil-markets/filestore"
-	piecestoreimpl "github.com/filecoin-project/go-fil-markets/piecestore/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
-	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
-	"github.com/filecoin-project/go-fil-markets/shared"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
-	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
-	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
+	piecefilestore "github.com/post-quantumqoin/go-qoin-markets/filestore"
+	piecestoreimpl "github.com/post-quantumqoin/go-qoin-markets/piecestore/impl"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	retrievalimpl "github.com/post-quantumqoin/go-qoin-markets/retrievalmarket/impl"
+	rmnet "github.com/post-quantumqoin/go-qoin-markets/retrievalmarket/network"
+	"github.com/post-quantumqoin/go-qoin-markets/shared"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
+	storageimpl "github.com/post-quantumqoin/go-qoin-markets/storagemarket/impl"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket/impl/storedask"
+	smnet "github.com/post-quantumqoin/go-qoin-markets/storagemarket/network"
 	"github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-statestore"
 	"github.com/post-quantumqoin/address"
@@ -47,13 +47,13 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
 	"github.com/post-quantumqoin/qoin-shor/api/v1api"
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/miner"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/miner"
 	"github.com/post-quantumqoin/qoin-shor/core/events"
 	"github.com/post-quantumqoin/qoin-shor/core/gen"
 	"github.com/post-quantumqoin/qoin-shor/core/gen/slashfilter"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	blockstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/markets"
 	"github.com/post-quantumqoin/qoin-shor/markets/dagstore"
@@ -488,39 +488,39 @@ func StagingGraphsync(parallelTransfersForStorage uint64, parallelTransfersForSt
 	}
 }
 
-func SetupBlockPqcProducer(lc fx.Lifecycle, mctx helpers.MetricsCtx, ds dtypes.MetadataDS, api v1api.FullNode, sf *slashfilter.SlashFilter, j journal.Journal) (*lotusminer.PqcMiner, error) {
-	ctx := helpers.LifecycleCtx(mctx, lc)
-	// minerAddr, err := api.WalletDefaultAddress(ctx)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// var maddr address.Address
-	addrbye, err := ds.Get(ctx, datastore.NewKey("miner-address"))
-	if err != nil {
-		return nil, err
-	}
+// func SetupBlockPqcProducer(lc fx.Lifecycle, mctx helpers.MetricsCtx, ds dtypes.MetadataDS, api v1api.FullNode, sf *slashfilter.SlashFilter, j journal.Journal) (*lotusminer.PqcMiner, error) {
+// 	ctx := helpers.LifecycleCtx(mctx, lc)
+// 	// minerAddr, err := api.WalletDefaultAddress(ctx)
+// 	// if err != nil {
+// 	// 	return nil, err
+// 	// }
+// 	// var maddr address.Address
+// 	addrbye, err := ds.Get(ctx, datastore.NewKey("miner-address"))
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	minerAddr, err := address.NewFromBytes(addrbye)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Printf("SetupBlockPqcProducer minerAddr:", minerAddr)
-	m := lotusminer.NewPqcMiner(api, minerAddr, sf, j)
+// 	minerAddr, err := address.NewFromBytes(addrbye)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	fmt.Printf("SetupBlockPqcProducer minerAddr:", minerAddr)
+// 	m := lotusminer.NewPqcMiner(api, minerAddr, sf, j)
 
-	lc.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
-			if err := m.Start(ctx); err != nil {
-				return err
-			}
-			return nil
-		},
-		OnStop: func(ctx context.Context) error {
-			return m.Stop(ctx)
-		},
-	})
+// 	lc.Append(fx.Hook{
+// 		OnStart: func(ctx context.Context) error {
+// 			if err := m.Start(ctx); err != nil {
+// 				return err
+// 			}
+// 			return nil
+// 		},
+// 		OnStop: func(ctx context.Context) error {
+// 			return m.Stop(ctx)
+// 		},
+// 	})
 
-	return m, nil
-}
+// 	return m, nil
+// }
 
 func SetupBlockProducer(lc fx.Lifecycle, ds dtypes.MetadataDS, api v1api.FullNode, epp gen.WinningPoStProver, sf *slashfilter.SlashFilter, j journal.Journal) (*lotusminer.Miner, error) {
 	minerAddr, err := minerAddrFromDS(ds)
@@ -1262,7 +1262,7 @@ func migrateDealStaging(oldPath, newPath string) error {
 			continue
 		}
 		// the FileStore from fil-storage-market creates temporary staged deal files with the pattern "fstmp"
-		// https://github.com/filecoin-project/go-fil-markets/blob/00ff81e477d846ac0cb58a0c7d1c2e9afb5ee1db/filestore/filestore.go#L69
+		// https://github.com/post-quantumqoin/go-qoin-markets/blob/00ff81e477d846ac0cb58a0c7d1c2e9afb5ee1db/filestore/filestore.go#L69
 		name := entry.Name()
 		if strings.Contains(name, "fstmp") {
 			// from the miner repo

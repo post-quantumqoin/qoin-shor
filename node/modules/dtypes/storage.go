@@ -8,11 +8,11 @@ import (
 
 	datatransfer "github.com/filecoin-project/go-data-transfer/v2"
 	dtnet "github.com/filecoin-project/go-data-transfer/v2/network"
-	"github.com/filecoin-project/go-fil-markets/piecestore"
-	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"
+	"github.com/post-quantumqoin/go-qoin-markets/piecestore"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket/impl/requestvalidation"
 	"github.com/filecoin-project/go-statestore"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/node/repo/imports"
 )
 

@@ -8,12 +8,12 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	adt13 "github.com/post-quantumqoin/core-types/builtin/v13/util/adt"
 	verifreg13 "github.com/post-quantumqoin/core-types/builtin/v13/verifreg"
 	verifreg9 "github.com/post-quantumqoin/core-types/builtin/v9/verifreg"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"

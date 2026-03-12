@@ -29,9 +29,9 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	builtinactors "github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	builtinevm "github.com/post-quantumqoin/qoin-shor/core/actors/builtin/evm"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	builtinactors "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	builtinevm "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/evm"
 	"github.com/post-quantumqoin/qoin-shor/core/ethhashlookup"
 	"github.com/post-quantumqoin/qoin-shor/core/events/filter"
 	"github.com/post-quantumqoin/qoin-shor/core/messagepool"
@@ -1099,7 +1099,7 @@ func (a *EthModule) applyMessage(ctx context.Context, msg *types.Message, tsk ty
 	}
 
 	applyTsMessages := true
-	if os.Getenv("LOTUS_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
+	if os.Getenv("QOIN_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
 		applyTsMessages = false
 	}
 
@@ -1218,7 +1218,7 @@ func gasSearch(
 	low := msg.GasLimit
 
 	applyTsMessages := true
-	if os.Getenv("LOTUS_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
+	if os.Getenv("QOIN_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
 		applyTsMessages = false
 	}
 

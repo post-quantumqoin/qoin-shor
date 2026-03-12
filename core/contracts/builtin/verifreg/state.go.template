@@ -2,34 +2,34 @@ package verifreg
 
 import (
     "fmt"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	"github.com/filecoin-project/go-state-types/manifest"
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/manifest"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"https://github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 	"golang.org/x/xerrors"
 
 {{if (le .v 7)}}
     {{if (ge .v 3)}}
-        builtin{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/builtin"
+        builtin{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/builtin"
     {{end}}
-    verifreg{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/builtin/verifreg"
-	adt{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/util/adt"
+    verifreg{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/builtin/verifreg"
+	adt{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/util/adt"
 {{else}}
-	verifreg{{.v}} "github.com/filecoin-project/go-state-types/builtin{{.import}}verifreg"
-	adt{{.v}} "github.com/filecoin-project/go-state-types/builtin{{.import}}util/adt"
-	builtin{{.v}} "github.com/filecoin-project/go-state-types/builtin"
+	verifreg{{.v}} "github.com/post-quantumqoin/core-types/builtin{{.import}}verifreg"
+	adt{{.v}} "github.com/post-quantumqoin/core-types/builtin{{.import}}util/adt"
+	builtin{{.v}} "github.com/post-quantumqoin/core-types/builtin"
 {{end}}
 {{if (ge .v 9)}}
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/post-quantumqoin/core-types/big"
 {{if (gt .v 9)}}
-    verifreg9 "github.com/filecoin-project/go-state-types/builtin/v9/verifreg"
+    verifreg9 "github.com/post-quantumqoin/core-types/builtin/v9/verifreg"
 {{end}}
 {{else}}
-    verifreg9 "github.com/filecoin-project/go-state-types/builtin/v9/verifreg"
+    verifreg9 "github.com/post-quantumqoin/core-types/builtin/v9/verifreg"
 {{end}}
 )
 

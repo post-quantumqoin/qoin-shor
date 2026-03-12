@@ -4,17 +4,17 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	"github.com/filecoin-project/go-state-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/cbor"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"
+	"https://github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 
-	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/core-types/exitcode"
+	"github.com/post-quantumqoin/core-types/manifest"
 
-	builtin{{.latestVersion}} "github.com/filecoin-project/go-state-types/builtin"
+	builtin{{.latestVersion}} "github.com/post-quantumqoin/core-types/builtin"
 )
 
 var Methods = builtin{{.latestVersion}}.MethodsEVM

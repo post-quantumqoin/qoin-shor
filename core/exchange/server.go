@@ -137,7 +137,7 @@ func (s *server) serviceRequest(ctx context.Context, req *validatedRequest) (*Re
 
 	chain, err := collectChainSegment(ctx, s.cs, req)
 	if err != nil {
-		log.Warn("block sync request: collectChainSegment failed: ", err)
+		log.Warn("block sync request collectChainSegment failed: ", err)
 		return &Response{
 			Status:       InternalError,
 			ErrorMessage: err.Error(),

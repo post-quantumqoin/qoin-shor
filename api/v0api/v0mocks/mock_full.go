@@ -19,10 +19,10 @@ import (
 	protocol "github.com/libp2p/go-libp2p/core/protocol"
 
 	address "github.com/post-quantumqoin/address"
-	bitfield "github.com/filecoin-project/go-bitfield"
+	bitfield "github.com/post-quantumqoin/bitset"
 	datatransfer "github.com/filecoin-project/go-data-transfer/v2"
-	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
+	retrievalmarket "github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	storagemarket "github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 	auth "github.com/post-quantumqoin/go-jsonrpc/auth"
 	abi "github.com/post-quantumqoin/core-types/abi"
 	big "github.com/post-quantumqoin/core-types/big"

@@ -5,12 +5,12 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	system10 "github.com/filecoin-project/go-state-types/builtin/v10/system"
-	"github.com/filecoin-project/go-state-types/manifest"
+	system10 "github.com/post-quantumqoin/core-types/builtin/v10/system"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/manifest"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 )
 
 var _ State = (*state10)(nil)

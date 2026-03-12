@@ -9,18 +9,18 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-bitfield"
-	rle "github.com/filecoin-project/go-bitfield/rle"
-	"github.com/filecoin-project/go-state-types/abi"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	builtin12 "github.com/filecoin-project/go-state-types/builtin"
-	miner12 "github.com/filecoin-project/go-state-types/builtin/v12/miner"
-	adt12 "github.com/filecoin-project/go-state-types/builtin/v12/util/adt"
-	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/bitset"
+	rle "github.com/post-quantumqoin/bitset/rle"
+	"github.com/post-quantumqoin/core-types/abi"
+	builtin12 "github.com/post-quantumqoin/core-types/builtin"
+	miner12 "github.com/post-quantumqoin/core-types/builtin/v12/miner"
+	adt12 "github.com/post-quantumqoin/core-types/builtin/v12/util/adt"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/dline"
+	"github.com/post-quantumqoin/core-types/manifest"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 )
 
 var _ State = (*state12)(nil)

@@ -31,14 +31,15 @@ import (
 	amt4 "github.com/filecoin-project/go-amt-ipld/v4"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	"github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	"github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
+	// "github.com/post-quantumqoin/core-types/builtin"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/lib/oldpath"
 	"github.com/post-quantumqoin/qoin-shor/lib/oldpath/oldresolver"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
@@ -407,7 +408,7 @@ func resolveOnce(bs blockstore.Blockstore, tse stmgr.Executor) func(ctx context.
 			names[0] = "@H:" + ik.Key()
 		}
 
-		if strings.HasPrefix(names[0], "@H:") {
+			if strings.HasPrefix(names[0], "@H:") {
 			h, err := adt.AsMap(store, nd.Cid())
 			if err != nil {
 				return nil, nil, xerrors.Errorf("resolving hamt link: %w", err)

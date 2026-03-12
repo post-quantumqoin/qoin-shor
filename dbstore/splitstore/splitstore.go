@@ -73,11 +73,11 @@ const (
 )
 
 func init() {
-	if os.Getenv("LOTUS_SPLITSTORE_DEBUG_LOG") == "1" {
+	if os.Getenv("QOIN_SPLITSTORE_DEBUG_LOG") == "1" {
 		enableDebugLog = true
 	}
 
-	if os.Getenv("LOTUS_SPLITSTORE_DEBUG_LOG_WRITE_TRACES") == "1" {
+	if os.Getenv("QOIN_SPLITSTORE_DEBUG_LOG_WRITE_TRACES") == "1" {
 		enableDebugLogWriteTraces = true
 	}
 }

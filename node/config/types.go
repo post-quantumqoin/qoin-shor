@@ -108,8 +108,8 @@ type DAGStoreConfig struct {
 	//  - ./indices: stores shard indices.
 	//  - ./datastore: holds the KV store tracking the state of every shard
 	//    known to the DAG store.
-	// Default value: <LOTUS_MARKETS_PATH>/dagstore (split deployment) or
-	// <LOTUS_MINER_PATH>/dagstore (monolith deployment)
+	// Default value: <QOIN_MARKETS_PATH>/dagstore (split deployment) or
+	// <QOIN_MINER_PATH>/dagstore (monolith deployment)
 	RootDir string
 
 	// The maximum amount of indexing jobs that can run simultaneously.

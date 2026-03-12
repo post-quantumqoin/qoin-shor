@@ -12,7 +12,7 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/network"
 	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 
@@ -100,27 +100,27 @@ func init() {
 		return def
 	}
 
-	UpgradeBreezeHeight = getUpgradeHeight("LOTUS_BREEZE_HEIGHT", UpgradeBreezeHeight)
-	UpgradeSmokeHeight = getUpgradeHeight("LOTUS_SMOKE_HEIGHT", UpgradeSmokeHeight)
-	UpgradeIgnitionHeight = getUpgradeHeight("LOTUS_IGNITION_HEIGHT", UpgradeIgnitionHeight)
-	UpgradeRefuelHeight = getUpgradeHeight("LOTUS_REFUEL_HEIGHT", UpgradeRefuelHeight)
-	UpgradeTapeHeight = getUpgradeHeight("LOTUS_TAPE_HEIGHT", UpgradeTapeHeight)
-	UpgradeAssemblyHeight = getUpgradeHeight("LOTUS_ACTORSV2_HEIGHT", UpgradeAssemblyHeight)
-	UpgradeLiftoffHeight = getUpgradeHeight("LOTUS_LIFTOFF_HEIGHT", UpgradeLiftoffHeight)
-	UpgradeKumquatHeight = getUpgradeHeight("LOTUS_KUMQUAT_HEIGHT", UpgradeKumquatHeight)
-	UpgradeCalicoHeight = getUpgradeHeight("LOTUS_CALICO_HEIGHT", UpgradeCalicoHeight)
-	UpgradePersianHeight = getUpgradeHeight("LOTUS_PERSIAN_HEIGHT", UpgradePersianHeight)
-	UpgradeOrangeHeight = getUpgradeHeight("LOTUS_ORANGE_HEIGHT", UpgradeOrangeHeight)
-	UpgradeClausHeight = getUpgradeHeight("LOTUS_CLAUS_HEIGHT", UpgradeClausHeight)
-	UpgradeTrustHeight = getUpgradeHeight("LOTUS_ACTORSV3_HEIGHT", UpgradeTrustHeight)
-	UpgradeNorwegianHeight = getUpgradeHeight("LOTUS_NORWEGIAN_HEIGHT", UpgradeNorwegianHeight)
-	UpgradeTurboHeight = getUpgradeHeight("LOTUS_ACTORSV4_HEIGHT", UpgradeTurboHeight)
-	UpgradeHyperdriveHeight = getUpgradeHeight("LOTUS_HYPERDRIVE_HEIGHT", UpgradeHyperdriveHeight)
-	UpgradeChocolateHeight = getUpgradeHeight("LOTUS_CHOCOLATE_HEIGHT", UpgradeChocolateHeight)
-	UpgradeOhSnapHeight = getUpgradeHeight("LOTUS_OHSNAP_HEIGHT", UpgradeOhSnapHeight)
-	UpgradeSkyrHeight = getUpgradeHeight("LOTUS_SKYR_HEIGHT", UpgradeSkyrHeight)
-	UpgradeSharkHeight = getUpgradeHeight("LOTUS_SHARK_HEIGHT", UpgradeSharkHeight)
-	UpgradeHyggeHeight = getUpgradeHeight("LOTUS_HYGGE_HEIGHT", UpgradeHyggeHeight)
+	UpgradeBreezeHeight = getUpgradeHeight("QOIN_BREEZE_HEIGHT", UpgradeBreezeHeight)
+	UpgradeSmokeHeight = getUpgradeHeight("QOIN_SMOKE_HEIGHT", UpgradeSmokeHeight)
+	UpgradeIgnitionHeight = getUpgradeHeight("QOIN_IGNITION_HEIGHT", UpgradeIgnitionHeight)
+	UpgradeRefuelHeight = getUpgradeHeight("QOIN_REFUEL_HEIGHT", UpgradeRefuelHeight)
+	UpgradeTapeHeight = getUpgradeHeight("QOIN_TAPE_HEIGHT", UpgradeTapeHeight)
+	UpgradeAssemblyHeight = getUpgradeHeight("QOIN_ACTORSV2_HEIGHT", UpgradeAssemblyHeight)
+	UpgradeLiftoffHeight = getUpgradeHeight("QOIN_LIFTOFF_HEIGHT", UpgradeLiftoffHeight)
+	UpgradeKumquatHeight = getUpgradeHeight("QOIN_KUMQUAT_HEIGHT", UpgradeKumquatHeight)
+	UpgradeCalicoHeight = getUpgradeHeight("QOIN_CALICO_HEIGHT", UpgradeCalicoHeight)
+	UpgradePersianHeight = getUpgradeHeight("QOIN_PERSIAN_HEIGHT", UpgradePersianHeight)
+	UpgradeOrangeHeight = getUpgradeHeight("QOIN_ORANGE_HEIGHT", UpgradeOrangeHeight)
+	UpgradeClausHeight = getUpgradeHeight("QOIN_CLAUS_HEIGHT", UpgradeClausHeight)
+	UpgradeTrustHeight = getUpgradeHeight("QOIN_ACTORSV3_HEIGHT", UpgradeTrustHeight)
+	UpgradeNorwegianHeight = getUpgradeHeight("QOIN_NORWEGIAN_HEIGHT", UpgradeNorwegianHeight)
+	UpgradeTurboHeight = getUpgradeHeight("QOIN_ACTORSV4_HEIGHT", UpgradeTurboHeight)
+	UpgradeHyperdriveHeight = getUpgradeHeight("QOIN_HYPERDRIVE_HEIGHT", UpgradeHyperdriveHeight)
+	UpgradeChocolateHeight = getUpgradeHeight("QOIN_CHOCOLATE_HEIGHT", UpgradeChocolateHeight)
+	UpgradeOhSnapHeight = getUpgradeHeight("QOIN_OHSNAP_HEIGHT", UpgradeOhSnapHeight)
+	UpgradeSkyrHeight = getUpgradeHeight("QOIN_SKYR_HEIGHT", UpgradeSkyrHeight)
+	UpgradeSharkHeight = getUpgradeHeight("QOIN_SHARK_HEIGHT", UpgradeSharkHeight)
+	UpgradeHyggeHeight = getUpgradeHeight("QOIN_HYGGE_HEIGHT", UpgradeHyggeHeight)
 
 	BuildType |= BuildInteropnet
 	SetAddressNetwork(address.Testnet)

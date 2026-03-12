@@ -8,17 +8,18 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	builtin11 "github.com/filecoin-project/go-state-types/builtin"
-	init11 "github.com/filecoin-project/go-state-types/builtin/v11/init"
-	adt11 "github.com/filecoin-project/go-state-types/builtin/v11/util/adt"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
+	builtin11 "github.com/post-quantumqoin/core-types/builtin"
+	init11 "github.com/post-quantumqoin/core-types/builtin/v11/init"
+	adt11 "github.com/post-quantumqoin/core-types/builtin/v11/util/adt"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/manifest"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
 )
 
 var _ State = (*state11)(nil)

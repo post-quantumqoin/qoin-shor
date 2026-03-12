@@ -8,9 +8,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/network"
 	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 )
@@ -129,11 +129,11 @@ var MinerRetentionTimeSecs = uint64(4)
 var EquivocationDelaySecs = uint64(2)
 
 func init() {
-	if os.Getenv("LOTUS_USE_TEST_ADDRESSES") != "1" {
+	if os.Getenv("QOIN_USE_TEST_ADDRESSES") != "1" {
 		SetAddressNetwork(address.Mainnet)
 	}
 	// fmt.Println("params_mainnet.go SetAddressNetwork:", address.Mainnet)
-	if os.Getenv("LOTUS_DISABLE_DRAGON") == "1" {
+	if os.Getenv("QOIN_DISABLE_DRAGON") == "1" {
 		UpgradeDragonHeight = math.MaxInt64 - 1
 		UpgradePhoenixHeight = math.MaxInt64
 	}

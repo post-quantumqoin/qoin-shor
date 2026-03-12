@@ -10,15 +10,15 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	init13 "github.com/post-quantumqoin/core-types/builtin/v13/init"
 	adt13 "github.com/post-quantumqoin/core-types/builtin/v13/util/adt"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
 )
 
 var _ State = (*state13)(nil)

@@ -9,9 +9,10 @@ import (
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
+	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/crypto"
 	ffi "github.com/post-quantumqoin/qvm"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 )
 
 var ErrTemporal = errors.New("temporal error")

@@ -14,7 +14,6 @@ import (
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	power11 "github.com/post-quantumqoin/core-types/builtin/v11/power"
@@ -22,27 +21,28 @@ import (
 	markettypes "github.com/post-quantumqoin/core-types/builtin/v9/market"
 	miner9 "github.com/post-quantumqoin/core-types/builtin/v9/miner"
 	smoothing9 "github.com/post-quantumqoin/core-types/builtin/v9/util/smoothing"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/network"
 	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 	miner0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/miner"
 	power0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/power"
-	power2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/power"
+	// power2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/power"
 	power4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/power"
 	reward0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/reward"
 	reward2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/reward"
 	reward4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/reward"
 	runtime7 "github.com/post-quantumqoin/specs-contracts/contracts/runtime"
 
-	"github.com/post-quantumqoin/qoin-shor/core/actors/adt"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/market"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/miner"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/power"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/reward"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/market"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/miner"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/power"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/reward"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
 	lrand "github.com/post-quantumqoin/qoin-shor/core/rand"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
@@ -145,14 +145,14 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sys vm.Syscal
 		{
 			var params []byte
 			if nv <= network.Version10 {
-				constructorParams := &power2.CreateMinerParams{
-					Owner:         m.Owner,
-					Worker:        m.Worker,
-					Peer:          []byte(m.PeerId),
-					SealProofType: spt,
-				}
+				// constructorParams := &power2.CreateMinerParams{
+				// 	Owner:         m.Owner,
+				// 	Worker:        m.Worker,
+				// 	Peer:          []byte(m.PeerId),
+				// 	SealProofType: spt,
+				// }
 
-				params = mustEnc(constructorParams)
+				// params = mustEnc(constructorParams)
 			} else {
 				ppt, err := spt.RegisteredWindowPoStProofByNetworkVersion(nv)
 				fmt.Println("spt.RegisteredWindowPoStProofByNetworkVersion nv: ppt:", nv, ppt)
@@ -480,13 +480,13 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sys vm.Syscal
 				}
 
 				log.Info("Commit sectors currentTotalPower minerInfos[i].maddr: tpow:", minerInfos[i].maddr, tpow)
-				pcd := miner9.PreCommitDepositForPower(smoothing9.FilterEstimate(rewardSmoothed), smoothing9.FilterEstimate(*tpow.QualityAdjPowerSmoothed), miner9.QAPowerMax(m.SectorSize))
+				pcd := miner9.PreCommitDepositForPower(smoothing9.FilterEstimate(rewardSmoothed), smoothing9.FilterEstimate(tpow.QualityAdjPowerSmoothed), miner9.QAPowerMax(m.SectorSize))
 
 				pledge := miner9.InitialPledgeForPower(
 					sectorWeight,
 					baselinePower,
 					smoothing9.FilterEstimate(rewardSmoothed),
-					smoothing9.FilterEstimate(*tpow.QualityAdjPowerSmoothed),
+					smoothing9.FilterEstimate(tpow.QualityAdjPowerSmoothed),
 					big.Zero(),
 				)
 
@@ -670,7 +670,7 @@ func currentEpochBlockReward(ctx context.Context, vm vm.Interface, maddr address
 			return big.Zero(), builtin.FilterEstimate{}, err
 		}
 
-		return epochReward.ThisEpochBaselinePower, builtin.FilterEstimate(*epochReward.ThisEpochRewardSmoothed), nil
+		return epochReward.ThisEpochBaselinePower, builtin.FilterEstimate(epochReward.ThisEpochRewardSmoothed), nil
 	case actorstypes.Version2:
 		var epochReward reward2.ThisEpochRewardReturn
 

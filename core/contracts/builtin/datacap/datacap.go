@@ -6,9 +6,9 @@ import (
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"

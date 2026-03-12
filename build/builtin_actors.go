@@ -18,14 +18,14 @@ import (
 	"github.com/ipld/go-car"
 	"golang.org/x/xerrors"
 
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
-//go:embed actors/*.tar.zst
+//go:embed contracts/*.tar.zst
 var embeddedBuiltinActorReleases embed.FS
 
 func init() {
@@ -34,11 +34,11 @@ func init() {
 		BundleOverrides = make(map[actorstypes.Version]string)
 	}
 	for _, av := range actors.Versions {
-		path := os.Getenv(fmt.Sprintf("LOTUS_BUILTIN_ACTORS_V%d_BUNDLE", av))
+		path := os.Getenv(fmt.Sprintf("QOIN_BUILTIN_ACTORS_V%d_BUNDLE", av))
 		if path == "" {
 			continue
 		}
-		fmt.Println(fmt.Sprintf("LOTUS_BUILTIN_ACTORS_V%d_BUNDLE", av))
+		fmt.Println(fmt.Sprintf("QOIN_BUILTIN_ACTORS_V%d_BUNDLE", av))
 		BundleOverrides[actorstypes.Version(av)] = path
 	}
 	if err := loadManifests(NetworkBundle); err != nil {

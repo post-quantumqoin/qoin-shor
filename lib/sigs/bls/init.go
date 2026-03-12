@@ -4,9 +4,9 @@ import (
 	"crypto/rand"
 	"fmt"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/crypto"
+	ffi "github.com/post-quantumqoin/qvm"
 
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"
 )

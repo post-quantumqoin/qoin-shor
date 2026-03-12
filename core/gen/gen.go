@@ -26,13 +26,12 @@ import (
 	proof7 "github.com/post-quantumqoin/specs-contracts/contracts/runtime/proof"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/cmd/shor-seed/seed"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
-	"github.com/post-quantumqoin/qoin-shor/core/consensus/filcns"
+	"github.com/post-quantumqoin/qoin-shor/core/consensus/qoincns"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
 	genesis2 "github.com/post-quantumqoin/qoin-shor/core/gen/genesis"
 	"github.com/post-quantumqoin/qoin-shor/core/index"
 	"github.com/post-quantumqoin/qoin-shor/core/rand"
@@ -41,6 +40,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/vm"
 	"github.com/post-quantumqoin/qoin-shor/core/wallet"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/genesis"
 	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"
@@ -234,7 +234,7 @@ func NewGeneratorWithSectorsAndUpgradeSchedule(numSectors int, us stmgr.UpgradeS
 		return nil, xerrors.Errorf("make genesis block failed: %w", err)
 	}
 
-	cs := store.NewChainStore(bs, bs, ds, filcns.Weight, j)
+	cs := store.NewChainStore(bs, bs, ds, qoincns.Weight, j)
 
 	genfb := &types.FullBlock{Header: genb.Genesis}
 	gents := store.NewFullTipSet([]*types.FullBlock{genfb})
@@ -256,7 +256,7 @@ func NewGeneratorWithSectorsAndUpgradeSchedule(numSectors int, us stmgr.UpgradeS
 	//return nil, xerrors.Errorf("creating drand beacon: %w", err)
 	//}
 
-	sm, err := stmgr.NewStateManager(cs, consensus.NewTipSetExecutor(filcns.RewardFunc), sys, us, beac, ds, index.DummyMsgIndex)
+	sm, err := stmgr.NewStateManager(cs, consensus.NewTipSetExecutor(qoincns.RewardFunc), sys, us, beac, ds, index.DummyMsgIndex)
 	if err != nil {
 		return nil, xerrors.Errorf("initing stmgr: %w", err)
 	}
@@ -290,7 +290,7 @@ func NewGenerator() (*ChainGen, error) {
 }
 
 func NewGeneratorWithSectors(numSectors int) (*ChainGen, error) {
-	return NewGeneratorWithSectorsAndUpgradeSchedule(numSectors, filcns.DefaultUpgradeSchedule())
+	return NewGeneratorWithSectorsAndUpgradeSchedule(numSectors, qoincns.DefaultUpgradeSchedule())
 }
 
 func NewGeneratorWithUpgradeSchedule(us stmgr.UpgradeSchedule) (*ChainGen, error) {
@@ -506,7 +506,7 @@ func (cg *ChainGen) makeBlock(parents *types.TipSet, m address.Address, vrfticke
 		ts = parents.MinTimestamp() + uint64(height-parents.Height())*build.BlockDelaySecs
 	}
 
-	fblk, err := filcns.NewFilecoinExpectedConsensus(cg.sm, nil, nil, nil).CreateBlock(context.TODO(), cg.w, &api.BlockTemplate{
+	fblk, err := qoincns.NewQoinExpectedConsensus(cg.sm, nil, nil, nil).CreateBlock(context.TODO(), cg.w, &api.BlockTemplate{
 		Miner:            m,
 		Parents:          parents.Key(),
 		Ticket:           vrfticket,

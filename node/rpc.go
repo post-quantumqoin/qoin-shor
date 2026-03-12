@@ -27,7 +27,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
 	"github.com/post-quantumqoin/qoin-shor/api/v1api"
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/lib/rpcenc"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 	"github.com/post-quantumqoin/qoin-shor/metrics/proxy"
@@ -75,9 +75,9 @@ func FullNodeHandler(a v1api.FullNode, permissioned bool, opts ...jsonrpc.Server
 	m := mux.NewRouter()
 
 	serveRpc := func(path string, hnd interface{}) {
-		rpcServer := jsonrpc.NewServer(append(opts, jsonrpc.WithReverseClient[api.EthSubscriberMethods]("Filecoin"), jsonrpc.WithServerErrors(api.RPCErrors))...)
-		rpcServer.Register("Filecoin", hnd)
-		rpcServer.AliasMethod("rpc.discover", "Filecoin.Discover")
+		rpcServer := jsonrpc.NewServer(append(opts, jsonrpc.WithReverseClient[api.EthSubscriberMethods]("Qoin"), jsonrpc.WithServerErrors(api.RPCErrors))...)
+		rpcServer.Register("Qoin", hnd)
+		rpcServer.AliasMethod("rpc.discover", "Qoin.Discover")
 
 		api.CreateEthRPCAliases(rpcServer)
 
@@ -147,8 +147,8 @@ func MinerHandler(a api.StorageMiner, permissioned bool) (http.Handler, error) {
 
 	readerHandler, readerServerOpt := rpcenc.ReaderParamDecoder()
 	rpcServer := jsonrpc.NewServer(jsonrpc.WithServerErrors(api.RPCErrors), readerServerOpt)
-	rpcServer.Register("Filecoin", mapi)
-	rpcServer.AliasMethod("rpc.discover", "Filecoin.Discover")
+	rpcServer.Register("Qoin", mapi)
+	rpcServer.AliasMethod("rpc.discover", "Qoin.Discover")
 
 	rootMux := mux.NewRouter()
 

@@ -9,11 +9,11 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p/core/peer"
 
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/post-quantumqoin/bitset"
 	datatransfer "github.com/filecoin-project/go-data-transfer/v2"
-	"github.com/filecoin-project/go-fil-markets/piecestore"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/post-quantumqoin/go-qoin-markets/piecestore"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
@@ -321,7 +321,7 @@ type StorageMiner interface {
 
 	// CreateBackup creates node backup onder the specified file name. The
 	// method requires that the lotus-miner is running with the
-	// LOTUS_BACKUP_BASE_PATH environment variable set to some path, and that
+	// QOIN_BACKUP_BASE_PATH environment variable set to some path, and that
 	// the path specified when calling CreateBackup is within the base path
 	CreateBackup(ctx context.Context, fpath string) error //perm:admin
 

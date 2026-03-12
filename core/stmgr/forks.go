@@ -31,7 +31,7 @@ import (
 )
 
 // EnvDisablePreMigrations when set to '1' stops pre-migrations from running
-const EnvDisablePreMigrations = "LOTUS_DISABLE_PRE_MIGRATIONS"
+const EnvDisablePreMigrations = "QOIN_DISABLE_PRE_MIGRATIONS"
 
 // MigrationCache can be used to cache information used by a migration. This is primarily useful to
 // "pre-compute" some migration state ahead of time, and make it accessible in the migration itself.
@@ -481,7 +481,7 @@ func MakeKeyAddr(splitAddr address.Address, count uint64) (address.Address, erro
 		return address.Undef, xerrors.Errorf("writing fork name into a buffer: %w", err)
 	}
 
-	addr, err := address.NewActorAddress(b.Bytes())
+	addr, err := address.NewContractAddress(b.Bytes())
 	if err != nil {
 		return address.Undef, xerrors.Errorf("create actor address: %w", err)
 	}

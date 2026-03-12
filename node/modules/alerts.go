@@ -112,7 +112,7 @@ func LegacyMarketsEOL(al *alerting.Alerting) {
 
 func CheckFvmConcurrency() func(al *alerting.Alerting) {
 	return func(al *alerting.Alerting) {
-		fvmConcurrency, ok := os.LookupEnv("LOTUS_FVM_CONCURRENCY")
+		fvmConcurrency, ok := os.LookupEnv("QOIN_QVM_CONCURRENCY")
 		if !ok {
 			return
 		}
@@ -121,17 +121,17 @@ func CheckFvmConcurrency() func(al *alerting.Alerting) {
 		if err != nil {
 			alert := al.AddAlertType("process", "fvm-concurrency")
 			al.Raise(alert, map[string]string{
-				"message": "LOTUS_FVM_CONCURRENCY is not an integer",
+				"message": "QOIN_QVM_CONCURRENCY is not an integer",
 				"error":   err.Error(),
 			})
 			return
 		}
 
-		// Raise alert if LOTUS_FVM_CONCURRENCY is set to a high value
+		// Raise alert if QOIN_QVM_CONCURRENCY is set to a high value
 		if fvmConcurrencyVal > 24 {
 			alert := al.AddAlertType("process", "fvm-concurrency")
 			al.Raise(alert, map[string]interface{}{
-				"message":     "LOTUS_FVM_CONCURRENCY is set to a high value that can cause chain sync panics on network migrations/upgrades",
+				"message":     "QOIN_QVM_CONCURRENCY is set to a high value that can cause chain sync panics on network migrations/upgrades",
 				"set_value":   fvmConcurrencyVal,
 				"recommended": "24 or less during network upgrades",
 			})

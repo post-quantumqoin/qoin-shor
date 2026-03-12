@@ -6,15 +6,15 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	paych0 "github.com/filecoin-project/specs-actors/actors/builtin/paych"
-	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
-	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 	"github.com/post-quantumqoin/core-types/abi"
+	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	miner0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/miner"
+	miner2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/miner"
+	paych0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/paych"
+	paych2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/paych"
+	verifreg0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/verifreg"
+	verifreg2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/verifreg"
 )
 
 func TestSupportedProofTypes(t *testing.T) {

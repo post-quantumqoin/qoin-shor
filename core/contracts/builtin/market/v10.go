@@ -8,21 +8,23 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
-	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
-	"github.com/filecoin-project/go-state-types/abi"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	"github.com/filecoin-project/go-state-types/builtin"
-	market10 "github.com/filecoin-project/go-state-types/builtin/v10/market"
-	adt10 "github.com/filecoin-project/go-state-types/builtin/v10/util/adt"
-	markettypes "github.com/filecoin-project/go-state-types/builtin/v9/market"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"github.com/post-quantumqoin/bitset"
+	rlepluslazy "github.com/post-quantumqoin/bitset/rle"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
+	"github.com/post-quantumqoin/core-types/builtin"
+	market10 "github.com/post-quantumqoin/core-types/builtin/v10/market"
+	adt10 "github.com/post-quantumqoin/core-types/builtin/v10/util/adt"
+	markettypes "github.com/post-quantumqoin/core-types/builtin/v9/market"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/core-types/manifest"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	verifregtypes "github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
-	"github.com/filecoin-project/lotus/chain/types"
+	verifregtypes "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/verifreg"
+
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
 var _ State = (*state10)(nil)

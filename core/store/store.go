@@ -30,10 +30,10 @@ import (
 	"github.com/post-quantumqoin/core-types/abi"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	bstore "github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	bstore "github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/journal"
 	"github.com/post-quantumqoin/qoin-shor/metrics"
 )
@@ -52,18 +52,18 @@ var DefaultMsgMetaCacheSize = 2048
 var ErrNotifeeDone = errors.New("notifee is done and should be removed")
 
 func init() {
-	if s := os.Getenv("LOTUS_CHAIN_TIPSET_CACHE"); s != "" {
+	if s := os.Getenv("QOIN_CHAIN_TIPSET_CACHE"); s != "" {
 		tscs, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_CHAIN_TIPSET_CACHE' env var: %s", err)
+			log.Errorf("failed to parse 'QOIN_CHAIN_TIPSET_CACHE' env var: %s", err)
 		}
 		DefaultTipSetCacheSize = tscs
 	}
 
-	if s := os.Getenv("LOTUS_CHAIN_MSGMETA_CACHE"); s != "" {
+	if s := os.Getenv("QOIN_CHAIN_MSGMETA_CACHE"); s != "" {
 		mmcs, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_CHAIN_MSGMETA_CACHE' env var: %s", err)
+			log.Errorf("failed to parse 'QOIN_CHAIN_MSGMETA_CACHE' env var: %s", err)
 		}
 		DefaultMsgMetaCacheSize = mmcs
 	}
@@ -1358,7 +1358,7 @@ func (cs *ChainStore) GetLatestBeaconEntry(ctx context.Context, ts *types.TipSet
 		cur = next
 	}
 
-	if os.Getenv("LOTUS_IGNORE_DRAND") == "_yes_" {
+	if os.Getenv("QOIN_IGNORE_DRAND") == "_yes_" {
 		return &types.BeaconEntry{
 			Data: []byte{9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
 		}, nil

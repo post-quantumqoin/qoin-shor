@@ -15,7 +15,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"
 )
 
-var ErrModuleDisabled = errors.New("module disabled, enable with Fevm.EnableEthRPC / LOTUS_FEVM_ENABLEETHRPC")
+var ErrModuleDisabled = errors.New("module disabled, enable with Fevm.EnableEthRPC / QOIN_FEVM_ENABLEETHRPC")
 
 type EthModuleDummy struct{}
 

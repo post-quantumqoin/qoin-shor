@@ -13,6 +13,7 @@ import (
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/gen"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/types/mock"
@@ -21,7 +22,6 @@ import (
 	_ "github.com/post-quantumqoin/qoin-shor/lib/sigs/bls"
 	_ "github.com/post-quantumqoin/qoin-shor/lib/sigs/delegated"
 	_ "github.com/post-quantumqoin/qoin-shor/lib/sigs/secp"
-	"github.com/post-quantumqoin/specs-contracts/contracts/policy"
 )
 
 func init() {

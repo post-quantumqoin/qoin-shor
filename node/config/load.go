@@ -91,7 +91,7 @@ func FromReader(reader io.Reader, def interface{}, opts ...LoadCfgOpt) (interfac
 		}
 	}
 
-	err = envconfig.Process("LOTUS", cfg)
+	err = envconfig.Process("QOIN", cfg)
 	if err != nil {
 		return nil, fmt.Errorf("processing env vars overrides: %s", err)
 	}
@@ -367,7 +367,7 @@ func ConfigUpdate(cfgCur, cfgDef interface{}, opts ...UpdateCfgOpt) ([]byte, err
 					}
 
 					if !updateOpts.noEnv {
-						outLines = append(outLines, pad+"# env var: LOTUS_"+strings.ToUpper(strings.ReplaceAll(section, ".", "_"))+"_"+strings.ToUpper(lf[0]))
+						outLines = append(outLines, pad+"# env var: QOIN_"+strings.ToUpper(strings.ReplaceAll(section, ".", "_"))+"_"+strings.ToUpper(lf[0]))
 					}
 				}
 			}

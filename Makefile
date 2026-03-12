@@ -21,7 +21,7 @@ MODULES:=
 CLEAN:=
 BINS:=
 
-ldflags=-X=github.com/filecoin-project/lotus/build.CurrentCommit=+git.$(subst -,.,$(shell git describe --always --match=NeVeRmAtCh --dirty 2>/dev/null || git rev-parse --short HEAD 2>/dev/null))
+ldflags=-X=github.com/post-quantumqoin/qoin-shor/build.CurrentCommit=+git.$(subst -,.,$(shell git describe --always --match=NeVeRmAtCh --dirty 2>/dev/null || git rev-parse --short HEAD 2>/dev/null))
 ifneq ($(strip $(LDFLAGS)),)
 	ldflags+=-extldflags=$(LDFLAGS)
 endif
@@ -35,15 +35,15 @@ FFI_PATH:=ext/qvm/
 FFI_DEPS:=.install-filcrypto
 FFI_DEPS:=$(addprefix $(FFI_PATH),$(FFI_DEPS))
 
-$(FFI_DEPS): build/.filecoin-install;
+$(FFI_DEPS): build/.qoin-install;
 
-build/.filecoin-install: $(FFI_PATH)
+build/.qoin-install: $(FFI_PATH)
 	$(MAKE) -C $(FFI_PATH) $(FFI_DEPS:$(FFI_PATH)%=%)
 	@touch $@
 
 MODULES+=$(FFI_PATH)
-BUILD_DEPS+=build/.filecoin-install
-CLEAN+=build/.filecoin-install
+BUILD_DEPS+=build/.qoin-install
+CLEAN+=build/.qoin-install
 
 ffi-version-check:
 	@[[ "$$(awk '/const Version/{print $$5}' ext/qvm/version.go)" -eq 3 ]] || (echo "FFI version mismatch, update submodules"; exit 1)
@@ -103,7 +103,7 @@ shor-provider: $(BUILD_DEPS)
 BINS+=shor-provider
 
 lp2k: GOFLAGS+=-tags=2k
-lp2k: lotus-provider
+lp2k: shor-provider
 
 shor-worker: $(BUILD_DEPS)
 	rm -f shor-worker
@@ -179,7 +179,7 @@ benchmarks:
 shor-fountain:
 	rm -f shor-fountain
 	$(GOCC) build $(GOFLAGS) -o shor-fountain ./cmd/shor-fountain
-	$(GOCC) run github.com/GeertJohan/go.rice/rice append --exec shor-fountain -i ./cmd/lotus-fountain -i ./build
+	$(GOCC) run github.com/GeertJohan/go.rice/rice append --exec shor-fountain -i ./cmd/shor-fountain -i ./build
 .PHONY: shor-fountain
 BINS+=shor-fountain
 
@@ -241,27 +241,27 @@ BINS+=shor-sim
 
 install-daemon-service: install-daemon
 	mkdir -p /etc/systemd/system
-	mkdir -p /var/log/lotus
-	install -C -m 0644 ./scripts/lotus-daemon.service /etc/systemd/system/lotus-daemon.service
+	mkdir -p /var/log/shor
+	install -C -m 0644 ./scripts/shor-daemon.service /etc/systemd/system/shor-daemon.service
 	systemctl daemon-reload
 	@echo
-	@echo "lotus-daemon service installed. Don't forget to run 'sudo systemctl start lotus-daemon' to start it and 'sudo systemctl enable lotus-daemon' for it to be enabled on startup."
+	@echo "shor-daemon service installed. Don't forget to run 'sudo systemctl start shor-daemon' to start it and 'sudo systemctl enable shor-daemon' for it to be enabled on startup."
 
 install-miner-service: install-miner install-daemon-service
 	mkdir -p /etc/systemd/system
-	mkdir -p /var/log/lotus
-	install -C -m 0644 ./scripts/lotus-miner.service /etc/systemd/system/lotus-miner.service
+	mkdir -p /var/log/shor
+	install -C -m 0644 ./scripts/shor-miner.service /etc/systemd/system/shor-miner.service
 	systemctl daemon-reload
 	@echo
-	@echo "lotus-miner service installed. Don't forget to run 'sudo systemctl start lotus-miner' to start it and 'sudo systemctl enable lotus-miner' for it to be enabled on startup."
+	@echo "shor-miner service installed. Don't forget to run 'sudo systemctl start shor-miner' to start it and 'sudo systemctl enable shor-miner' for it to be enabled on startup."
 
 install-provider-service: install-provider install-daemon-service
 	mkdir -p /etc/systemd/system
-	mkdir -p /var/log/lotus
-	install -C -m 0644 ./scripts/lotus-provider.service /etc/systemd/system/lotus-provider.service
+	mkdir -p /var/log/shor
+	install -C -m 0644 ./scripts/shor-provider.service /etc/systemd/system/shor-provider.service
 	systemctl daemon-reload
 	@echo
-	@echo "lotus-provider service installed. Don't forget to run 'sudo systemctl start lotus-provider' to start it and 'sudo systemctl enable lotus-provider' for it to be enabled on startup."
+	@echo "shor-provider service installed. Don't forget to run 'sudo systemctl start shor-provider' to start it and 'sudo systemctl enable shor-provider' for it to be enabled on startup."
 
 install-main-services: install-miner-service
 
@@ -270,21 +270,21 @@ install-all-services: install-main-services
 install-services: install-main-services
 
 clean-daemon-service: clean-miner-service
-	-systemctl stop lotus-daemon
-	-systemctl disable lotus-daemon
-	rm -f /etc/systemd/system/lotus-daemon.service
+	-systemctl stop shor-daemon
+	-systemctl disable shor-daemon
+	rm -f /etc/systemd/system/shor-daemon.service
 	systemctl daemon-reload
 
 clean-miner-service:
-	-systemctl stop lotus-miner
-	-systemctl disable lotus-miner
-	rm -f /etc/systemd/system/lotus-miner.service
+	-systemctl stop shor-miner
+	-systemctl disable shor-miner
+	rm -f /etc/systemd/system/shor-miner.service
 	systemctl daemon-reload
 
 clean-provider-service:
-	-systemctl stop lotus-provider
-	-systemctl disable lotus-provider
-	rm -f /etc/systemd/system/lotus-provider.service
+	-systemctl stop shor-provider
+	-systemctl disable shor-provider
+	rm -f /etc/systemd/system/shor-provider.service
 	systemctl daemon-reload
 
 clean-main-services: clean-daemon-service
@@ -299,8 +299,8 @@ buildall: $(BINS)
 
 install-completions:
 	mkdir -p /usr/share/bash-completion/completions /usr/local/share/zsh/site-functions/
-	install -C ./scripts/bash-completion/lotus /usr/share/bash-completion/completions/lotus
-	install -C ./scripts/zsh-completion/lotus /usr/local/share/zsh/site-functions/_lotus
+	install -C ./scripts/bash-completion/shor /usr/share/bash-completion/completions/shor
+	install -C ./scripts/zsh-completion/shor /usr/local/share/zsh/site-functions/_shor
 
 clean:
 	rm -rf $(CLEAN) $(BINS)
@@ -341,13 +341,13 @@ api-gen:
 cfgdoc-gen:
 	$(GOCC) run ./node/config/cfgdocgen > ./node/config/doc_gen.go
 
-appimage: lotus
+appimage: shor
 	rm -rf appimage-builder-cache || true
-	rm AppDir/io.filecoin.lotus.desktop || true
+	rm AppDir/io.filecoin.shor.desktop || true
 	rm AppDir/icon.svg || true
 	rm Appdir/AppRun || true
 	mkdir -p AppDir/usr/bin
-	cp ./lotus AppDir/usr/bin/
+	cp ./shor AppDir/usr/bin/
 	appimage-builder
 
 docsgen: docsgen-md docsgen-openrpc fiximports
@@ -392,16 +392,16 @@ gen: actors-code-gen type-gen cfgdoc-gen docsgen api-gen circleci
 
 jen: gen
 
-snap: lotus lotus-miner lotus-worker lotus-provider
+snap: shor shor-miner shor-worker shor-provider
 	snapcraft
-	# snapcraft upload ./lotus_*.snap
+	# snapcraft upload ./shor_*.snap
 
 # separate from gen because it needs binaries
-docsgen-cli: lotus lotus-miner lotus-worker lotus-provider
-	python3 ./scripts/generate-lotus-cli.py
-	./lotus config default > documentation/en/default-lotus-config.toml
-	./lotus-miner config default > documentation/en/default-lotus-miner-config.toml
-	./lotus-provider config default > documentation/en/default-lotus-provider-config.toml
+docsgen-cli: shor shor-miner shor-worker shor-provider
+	python3 ./scripts/generate-shor-cli.py
+	./shor config default > documentation/en/default-shor-config.toml
+	./shor-miner config default > documentation/en/default-shor-miner-config.toml
+	./shor-provider config default > documentation/en/default-shor-provider-config.toml
 .PHONY: docsgen-cli
 
 print-%:

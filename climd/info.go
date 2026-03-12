@@ -14,7 +14,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 	"github.com/post-quantumqoin/core-types/big"
 
 	"github.com/post-quantumqoin/qoin-shor/api/v1api"

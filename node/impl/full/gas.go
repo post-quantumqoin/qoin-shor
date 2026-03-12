@@ -276,7 +276,7 @@ func gasEstimateCallWithGas(
 	}
 
 	applyTsMessages := true
-	if os.Getenv("LOTUS_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
+	if os.Getenv("QOIN_SKIP_APPLY_TS_MESSAGE_CALL_WITH_GAS") == "1" {
 		applyTsMessages = false
 	}
 

@@ -24,13 +24,13 @@ import (
 	"go.opencensus.io/stats"
 	"golang.org/x/xerrors"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"
 	lps "github.com/filecoin-project/pubsub"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/network"
+	ffi "github.com/post-quantumqoin/qvm"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"

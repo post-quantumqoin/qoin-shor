@@ -93,7 +93,7 @@ func init() {
 	InitialFilReserved = big.NewInt(int64(FilReserved))
 	InitialFilReserved = InitialFilReserved.Mul(InitialFilReserved, big.NewInt(int64(FilecoinPrecision)))
 
-	if os.Getenv("LOTUS_ADDRESS_TYPE") == AddressMainnetEnvVar {
+	if os.Getenv("QOIN_ADDRESS_TYPE") == AddressMainnetEnvVar {
 		SetAddressNetwork(address.Mainnet)
 	}
 	// fmt.Println("params_shared_vals.go SetAddressNetwork:", address.Mainnet)

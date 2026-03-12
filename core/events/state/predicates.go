@@ -10,13 +10,13 @@ import (
 	"github.com/post-quantumqoin/core-types/big"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
-	"github.com/post-quantumqoin/qoin-shor/chain/types"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/adt"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
 	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/market"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/miner"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/paych"
+	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 )
 
 // UserData is the data returned from the DiffTipSetKeyFunc

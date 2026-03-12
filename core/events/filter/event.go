@@ -14,7 +14,8 @@ import (
 	amt4 "github.com/filecoin-project/go-amt-ipld/v4"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	// "github.com/post-quantumqoin/core-types/builtin"
+	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	cstore "github.com/post-quantumqoin/qoin-shor/core/store"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
@@ -208,7 +209,7 @@ func (f *eventFilter) matchKeys(ees []types.EventEntry) bool {
 		return true
 	}
 	// TODO: optimize this naive algorithm
-	// tracked in https://github.com/filecoin-project/lotus/issues/9987
+	// tracked in https://github.com/post-quantumqoin/qoin-shor/issues/9987
 
 	// Note keys names may be repeated so we may have multiple opportunities to match
 

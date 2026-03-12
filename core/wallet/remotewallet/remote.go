@@ -8,7 +8,7 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/client"
-	cliutil "github.com/post-quantumqoin/qoin-shor/cli/util"
+	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
 	"github.com/post-quantumqoin/qoin-shor/node/modules/helpers"
 )
 

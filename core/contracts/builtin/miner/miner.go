@@ -7,22 +7,22 @@ import (
 
 	bitfield "github.com/post-quantumqoin/bitset"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
 	minertypes13 "github.com/post-quantumqoin/core-types/builtin/v13/miner"
 	minertypes "github.com/post-quantumqoin/core-types/builtin/v9/miner"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/dline"
 	"github.com/post-quantumqoin/core-types/manifest"
 	"github.com/post-quantumqoin/core-types/network"
 	"github.com/post-quantumqoin/core-types/proof"
-	builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
-	builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
+	// builtin7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin"
 
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
@@ -60,26 +60,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	switch act.Code {
 
-	case builtin0.StorageMinerActorCodeID:
-		return load0(store, act.Head)
+	// case builtin0.StorageMinerActorCodeID:
+	// 	return load0(store, act.Head)
 
-	case builtin2.StorageMinerActorCodeID:
-		return load2(store, act.Head)
+	// case builtin2.StorageMinerActorCodeID:
+	// 	return load2(store, act.Head)
 
-	case builtin3.StorageMinerActorCodeID:
-		return load3(store, act.Head)
+	// case builtin3.StorageMinerActorCodeID:
+	// 	return load3(store, act.Head)
 
-	case builtin4.StorageMinerActorCodeID:
-		return load4(store, act.Head)
+	// case builtin4.StorageMinerActorCodeID:
+	// 	return load4(store, act.Head)
 
-	case builtin5.StorageMinerActorCodeID:
-		return load5(store, act.Head)
+	// case builtin5.StorageMinerActorCodeID:
+	// 	return load5(store, act.Head)
 
-	case builtin6.StorageMinerActorCodeID:
-		return load6(store, act.Head)
+	// case builtin6.StorageMinerActorCodeID:
+	// 	return load6(store, act.Head)
 
-	case builtin7.StorageMinerActorCodeID:
-		return load7(store, act.Head)
+	// case builtin7.StorageMinerActorCodeID:
+	// 	return load7(store, act.Head)
 
 	}
 
@@ -89,26 +89,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 func MakeState(store adt.Store, av actors.Version) (State, error) {
 	switch av {
 
-	case actors.Version0:
-		return make0(store)
+	// case actors.Version0:
+	// 	return make0(store)
 
-	case actors.Version2:
-		return make2(store)
+	// case actors.Version2:
+	// 	return make2(store)
 
-	case actors.Version3:
-		return make3(store)
+	// case actors.Version3:
+	// 	return make3(store)
 
-	case actors.Version4:
-		return make4(store)
+	// case actors.Version4:
+	// 	return make4(store)
 
-	case actors.Version5:
-		return make5(store)
+	// case actors.Version5:
+	// 	return make5(store)
 
-	case actors.Version6:
-		return make6(store)
+	// case actors.Version6:
+	// 	return make6(store)
 
-	case actors.Version7:
-		return make7(store)
+	// case actors.Version7:
+	// 	return make7(store)
 
 	case actors.Version8:
 		return make8(store)
@@ -377,13 +377,13 @@ func (lf LockedFunds) TotalLockedFunds() abi.TokenAmount {
 
 func AllCodes() []cid.Cid {
 	return []cid.Cid{
-		(&state0{}).Code(),
-		(&state2{}).Code(),
-		(&state3{}).Code(),
-		(&state4{}).Code(),
-		(&state5{}).Code(),
-		(&state6{}).Code(),
-		(&state7{}).Code(),
+		// (&state0{}).Code(),
+		// (&state2{}).Code(),
+		// (&state3{}).Code(),
+		// (&state4{}).Code(),
+		// (&state5{}).Code(),
+		// (&state6{}).Code(),
+		// (&state7{}).Code(),
 		(&state8{}).Code(),
 		(&state9{}).Code(),
 		(&state10{}).Code(),

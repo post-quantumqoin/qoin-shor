@@ -156,7 +156,7 @@ func init() {
 	var err error
 
 	available := DefaultAvailableExecutionLanes
-	if concurrency := os.Getenv("LOTUS_FVM_CONCURRENCY"); concurrency != "" {
+	if concurrency := os.Getenv("QOIN_FVM_CONCURRENCY"); concurrency != "" {
 		available, err = strconv.Atoi(concurrency)
 		if err != nil {
 			panic(err)
@@ -164,7 +164,7 @@ func init() {
 	}
 
 	priority := DefaultPriorityExecutionLanes
-	if reserved := os.Getenv("LOTUS_FVM_CONCURRENCY_RESERVED"); reserved != "" {
+	if reserved := os.Getenv("QOIN_FVM_CONCURRENCY_RESERVED"); reserved != "" {
 		priority, err = strconv.Atoi(reserved)
 		if err != nil {
 			panic(err)

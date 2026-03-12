@@ -13,7 +13,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/api/v0api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	cliutil "github.com/post-quantumqoin/qoin-shor/cli/util"
+	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 

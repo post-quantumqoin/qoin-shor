@@ -15,7 +15,7 @@ var (
 // EnvMaximumHeap is name of the environment variable with which the user can
 // specify a maximum heap size to abide by. The value of the env variable should
 // be in bytes, or in SI bytes (e.g. 32GiB).
-const EnvMaximumHeap = "LOTUS_MAX_HEAP"
+const EnvMaximumHeap = "QOIN_MAX_HEAP"
 
 // MemoryConstraints represents resource constraints that Lotus and the go
 // runtime should abide by. It is a singleton object that's populated on
@@ -23,7 +23,7 @@ const EnvMaximumHeap = "LOTUS_MAX_HEAP"
 // (e.g. caches).
 type MemoryConstraints struct {
 	// MaxHeapMem is the maximum heap memory that has been set by the user
-	// through the LOTUS_MAX_HEAP env variable. If zero, there is no max heap
+	// through the QOIN_MAX_HEAP env variable. If zero, there is no max heap
 	// limit set.
 	MaxHeapMem uint64
 

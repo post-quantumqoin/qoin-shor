@@ -9,7 +9,7 @@ import (
 
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/specs-contracts/contracts/builtin/market"
-	"github.com/post-quantumqoin/specs-contracts/contracts/util/adt"
+	"github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 )
 
 func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {

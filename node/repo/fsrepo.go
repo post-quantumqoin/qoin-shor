@@ -20,13 +20,13 @@ import (
 	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
-	badgerbs "github.com/post-quantumqoin/qoin-shor/blockstore/badger"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
+	badgerbs "github.com/post-quantumqoin/qoin-shor/dbstore/badger"
 	"github.com/post-quantumqoin/qoin-shor/node/config"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/fsutil"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/storiface"
-	"github.com/post-quantumqoin/qoin-shor/system"
+	"github.com/post-quantumqoin/qoin-shor/sys"
 )
 
 const (
@@ -527,7 +527,7 @@ func (fsr *fsLockedRepo) Blockstore(ctx context.Context, domain BlockstoreDomain
 			return
 		}
 
-		if system.BadgerFsyncDisable {
+		if sys.BadgerFsyncDisable {
 			opts.SyncWrites = false
 		}
 

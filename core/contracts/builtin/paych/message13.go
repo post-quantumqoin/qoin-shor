@@ -3,14 +3,14 @@ package paych
 import (
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	builtin13 "github.com/post-quantumqoin/core-types/builtin"
 	init13 "github.com/post-quantumqoin/core-types/builtin/v13/init"
 	paych13 "github.com/post-quantumqoin/core-types/builtin/v13/paych"
 	paychtypes "github.com/post-quantumqoin/core-types/builtin/v8/paych"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 
 	init_ "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/init"
 	"github.com/post-quantumqoin/qoin-shor/core/types"

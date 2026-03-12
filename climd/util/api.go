@@ -365,7 +365,7 @@ func GetFullNodeAPIV1(ctx *cli.Context, opts ...GetFullNodeOption) (v1api.FullNo
 
 	var rpcOpts []jsonrpc.Option
 	if options.ethSubHandler != nil {
-		rpcOpts = append(rpcOpts, jsonrpc.WithClientHandler("Filecoin", options.ethSubHandler), jsonrpc.WithClientHandlerAlias("eth_subscription", "Filecoin.EthSubscription"))
+		rpcOpts = append(rpcOpts, jsonrpc.WithClientHandler("Qoin", options.ethSubHandler), jsonrpc.WithClientHandlerAlias("eth_subscription", "Filecoin.EthSubscription"))
 	}
 
 	heads, err := GetRawAPIMulti(ctx, repo.FullNode, "v1")
@@ -427,7 +427,7 @@ func GetFullNodeAPIV1LotusProvider(ctx *cli.Context, ainfoCfg []string, opts ...
 
 	var rpcOpts []jsonrpc.Option
 	if options.ethSubHandler != nil {
-		rpcOpts = append(rpcOpts, jsonrpc.WithClientHandler("Filecoin", options.ethSubHandler), jsonrpc.WithClientHandlerAlias("eth_subscription", "Filecoin.EthSubscription"))
+		rpcOpts = append(rpcOpts, jsonrpc.WithClientHandler("Qoin", options.ethSubHandler), jsonrpc.WithClientHandlerAlias("eth_subscription", "Filecoin.EthSubscription"))
 	}
 
 	heads, err := GetRawAPIMultiV2(ctx, ainfoCfg, "v1")

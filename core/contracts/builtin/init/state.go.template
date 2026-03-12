@@ -4,28 +4,28 @@ import (
     "crypto/sha256"
     "fmt"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/go-state-types/manifest"
+	"https://github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
+	"github.com/post-quantumqoin/qoin-shor/node/modules/dtypes"
+	"github.com/post-quantumqoin/core-types/manifest"
 
 {{if (le .v 7)}}
     {{if (ge .v 3)}}
-        builtin{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/builtin"
+        builtin{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/builtin"
     {{end}}
-	init{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/builtin/init"
-	adt{{.v}} "github.com/filecoin-project/specs-actors{{.import}}actors/util/adt"
+	init{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/builtin/init"
+	adt{{.v}} "github.com/post-quantumqoin/specs-contracts{{.import}}actors/util/adt"
 {{else}}
-	init{{.v}} "github.com/filecoin-project/go-state-types/builtin{{.import}}init"
-	adt{{.v}} "github.com/filecoin-project/go-state-types/builtin{{.import}}util/adt"
-	builtin{{.v}} "github.com/filecoin-project/go-state-types/builtin"
+	init{{.v}} "github.com/post-quantumqoin/core-types/builtin{{.import}}init"
+	adt{{.v}} "github.com/post-quantumqoin/core-types/builtin{{.import}}util/adt"
+	builtin{{.v}} "github.com/post-quantumqoin/core-types/builtin"
 {{end}}
 )
 

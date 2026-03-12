@@ -18,10 +18,10 @@ import (
 	"github.com/post-quantumqoin/address"
 	bitfield "github.com/post-quantumqoin/bitset"
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	"github.com/post-quantumqoin/core-types/big"
 	market12 "github.com/post-quantumqoin/core-types/builtin/v12/market"
 	"github.com/post-quantumqoin/core-types/cbor"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/dline"
 	"github.com/post-quantumqoin/core-types/network"
@@ -30,18 +30,18 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/datacap"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/market"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/miner"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/multisig"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/power"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/reward"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/builtin/verifreg"
-	"github.com/post-quantumqoin/qoin-shor/core/actors/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/beacon"
 	"github.com/post-quantumqoin/qoin-shor/core/consensus"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/datacap"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/market"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/miner"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/multisig"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/power"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/reward"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/verifreg"
+	"github.com/post-quantumqoin/qoin-shor/core/contracts/policy"
 	"github.com/post-quantumqoin/qoin-shor/core/state"
 	"github.com/post-quantumqoin/qoin-shor/core/stmgr"
 	"github.com/post-quantumqoin/qoin-shor/core/store"
@@ -973,8 +973,8 @@ func (a *StateAPI) StateComputeDataCID(ctx context.Context, maddr address.Addres
 func (a *StateAPI) stateComputeDataCIDv1(ctx context.Context, maddr address.Address, sectorType abi.RegisteredSealProof, deals []abi.DealID, tsk types.TipSetKey) (cid.Cid, error) {
 	var err error
 	ccparams, err := actors.SerializeParams(&market2.ComputeDataCommitmentParams{
-		DealIDs:    deals,
-		SectorType: sectorType,
+		// DealIDs:    deals,
+		// SectorType: sectorType,
 	})
 
 	if err != nil {

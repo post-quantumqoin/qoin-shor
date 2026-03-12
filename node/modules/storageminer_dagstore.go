@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	EnvDAGStoreCopyConcurrency = "LOTUS_DAGSTORE_COPY_CONCURRENCY"
+	EnvDAGStoreCopyConcurrency = "QOIN_DAGSTORE_COPY_CONCURRENCY"
 	DefaultDAGStoreDir         = "dagstore"
 )
 
@@ -29,7 +29,7 @@ func NewMinerAPI(cfg config.DAGStoreConfig) func(fx.Lifecycle, repo.LockedRepo, 
 	return func(lc fx.Lifecycle, r repo.LockedRepo, pieceStore dtypes.ProviderPieceStore, sa mdagstore.SectorAccessor) (mdagstore.MinerAPI, error) {
 		// caps the amount of concurrent calls to the storage, so that we don't
 		// spam it during heavy processes like bulk migration.
-		if v, ok := os.LookupEnv("LOTUS_DAGSTORE_MOUNT_CONCURRENCY"); ok {
+		if v, ok := os.LookupEnv("QOIN_DAGSTORE_MOUNT_CONCURRENCY"); ok {
 			concurrency, err := strconv.Atoi(v)
 			if err == nil {
 				cfg.MaxConcurrencyStorageCalls = concurrency

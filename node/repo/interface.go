@@ -7,8 +7,8 @@ import (
 	"github.com/ipfs/go-datastore"
 	"github.com/multiformats/go-multiaddr"
 
-	"github.com/post-quantumqoin/qoin-shor/blockstore"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/dbstore"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/fsutil"
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/storiface"
 )

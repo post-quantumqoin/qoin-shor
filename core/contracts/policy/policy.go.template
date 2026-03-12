@@ -1,34 +1,34 @@
 package policy
 
 import (
-	actorstypes "github.com/filecoin-project/go-state-types/actors"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/post-quantumqoin/core-types/big"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/post-quantumqoin/core-types/abi"
+	"github.com/post-quantumqoin/core-types/network"
 
 	{{range .versions}}
 	{{if (ge . 8)}}
-        builtin{{.}} "github.com/filecoin-project/go-state-types/builtin"
-        miner{{.}} "github.com/filecoin-project/go-state-types/builtin{{import .}}miner"
-        market{{.}} "github.com/filecoin-project/go-state-types/builtin{{import .}}market"
-        verifreg{{.}} "github.com/filecoin-project/go-state-types/builtin{{import .}}verifreg"
+        builtin{{.}} "github.com/post-quantumqoin/core-types/builtin"
+        miner{{.}} "github.com/post-quantumqoin/core-types/builtin{{import .}}miner"
+        market{{.}} "github.com/post-quantumqoin/core-types/builtin{{import .}}market"
+        verifreg{{.}} "github.com/post-quantumqoin/core-types/builtin{{import .}}verifreg"
 	{{else}}
         {{if (ge . 2)}}
-            builtin{{.}} "github.com/filecoin-project/specs-actors{{import .}}actors/builtin"
+            builtin{{.}} "github.com/post-quantumqoin/specs-contracts{{import .}}actors/builtin"
         {{end}}
-        market{{.}} "github.com/filecoin-project/specs-actors{{import .}}actors/builtin/market"
-        miner{{.}} "github.com/filecoin-project/specs-actors{{import .}}actors/builtin/miner"
-        verifreg{{.}} "github.com/filecoin-project/specs-actors{{import .}}actors/builtin/verifreg"
+        market{{.}} "github.com/post-quantumqoin/specs-contracts{{import .}}actors/builtin/market"
+        miner{{.}} "github.com/post-quantumqoin/specs-contracts{{import .}}actors/builtin/miner"
+        verifreg{{.}} "github.com/post-quantumqoin/specs-contracts{{import .}}actors/builtin/verifreg"
         {{if (eq . 0)}}
-            power{{.}} "github.com/filecoin-project/specs-actors{{import .}}actors/builtin/power"
+            power{{.}} "github.com/post-quantumqoin/specs-contracts{{import .}}actors/builtin/power"
         {{end}}
 	{{end}}
 	{{end}}
 
-	paych{{.latestVersion}} "github.com/filecoin-project/go-state-types/builtin{{import .latestVersion}}paych"
+	paych{{.latestVersion}} "github.com/post-quantumqoin/core-types/builtin{{import .latestVersion}}paych"
 
 )
 

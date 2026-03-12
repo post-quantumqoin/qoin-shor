@@ -4,13 +4,13 @@ import (
 	"fmt"
 
 	"github.com/ipfs/go-cid"
-	"github.com/post-quantumqoin/qoin-shor/core/actors"
+	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 
 	"github.com/post-quantumqoin/core-types/abi"
-	actorstypes "github.com/post-quantumqoin/core-types/actors"
 	miner13 "github.com/post-quantumqoin/core-types/builtin/v13/miner"
 	reward13 "github.com/post-quantumqoin/core-types/builtin/v13/reward"
 	smoothing13 "github.com/post-quantumqoin/core-types/builtin/v13/util/smoothing"
+	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	"github.com/post-quantumqoin/core-types/manifest"
 
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/adt"

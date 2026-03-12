@@ -44,7 +44,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/node/modules/testing"
 	"github.com/post-quantumqoin/qoin-shor/node/repo"
 	"github.com/post-quantumqoin/qoin-shor/storage/paths"
-	"github.com/post-quantumqoin/qoin-shor/system"
+	"github.com/post-quantumqoin/qoin-shor/sys"
 )
 
 //nolint:deadcode,varcheck
@@ -174,7 +174,7 @@ func defaults() []Option {
 		Override(CheckFvmConcurrency, modules.CheckFvmConcurrency()),
 		Override(CheckUDPBufferSize, modules.CheckUDPBufferSize(2048*1024)),
 
-		Override(new(system.MemoryConstraints), modules.MemoryConstraints),
+		Override(new(sys.MemoryConstraints), modules.MemoryConstraints),
 		Override(InitMemoryWatchdog, modules.MemoryWatchdog),
 
 		Override(new(helpers.MetricsCtx), func() context.Context {
