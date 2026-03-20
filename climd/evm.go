@@ -518,7 +518,7 @@ var EvmGetBytecode = &cli.Command{
 		defer closer()
 		ctx := ReqContext(cctx)
 
-		code, err := api.EthGetCode(ctx, "", ethtypes.NewEthBlockNumberOrHashFromPredefined("latest"))
+		code, err := api.EthGetCode(ctx, contractAddr, ethtypes.NewEthBlockNumberOrHashFromPredefined("latest"))
 		if err != nil {
 			return err
 		}

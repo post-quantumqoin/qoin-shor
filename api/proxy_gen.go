@@ -263,7 +263,7 @@ type FullNodeMethods struct {
 
 	EthGasPrice func(p0 context.Context) (ethtypes.EthBigInt, error) `perm:"read"`
 
-	EthGetBalance func(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) `perm:"read"`
+	EthGetBalance func(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) `perm:"read"`
 
 	EthGetBlockByHash func(p0 context.Context, p1 ethtypes.EthHash, p2 bool) (ethtypes.EthBlock, error) `perm:"read"`
 
@@ -273,7 +273,7 @@ type FullNodeMethods struct {
 
 	EthGetBlockTransactionCountByNumber func(p0 context.Context, p1 ethtypes.EthUint64) (ethtypes.EthUint64, error) `perm:"read"`
 
-	EthGetCode func(p0 context.Context, p1 string, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) `perm:"read"`
+	EthGetCode func(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) `perm:"read"`
 
 	EthGetFilterChanges func(p0 context.Context, p1 ethtypes.EthFilterID) (*ethtypes.EthFilterResult, error) `perm:"read"`
 
@@ -293,13 +293,13 @@ type FullNodeMethods struct {
 
 	EthGetTransactionByHashLimited func(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*ethtypes.EthTx, error) `perm:"read"`
 
-	EthGetTransactionCount func(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) `perm:"read"`
+	EthGetTransactionCount func(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) `perm:"read"`
 
 	EthGetTransactionHashByCid func(p0 context.Context, p1 cid.Cid) (*ethtypes.EthHash, error) `perm:"read"`
 
-	EthGetTransactionReceipt func(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) `perm:"read"`
+	EthGetTransactionReceipt func(p0 context.Context, p1 ethtypes.EthHash) (*EthTxReceipt, error) `perm:"read"`
 
-	EthGetTransactionReceiptLimited func(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) `perm:"read"`
+	EthGetTransactionReceiptLimited func(p0 context.Context, p1 ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) `perm:"read"`
 
 	EthMaxPriorityFeePerGas func(p0 context.Context) (ethtypes.EthBigInt, error) `perm:"read"`
 
@@ -311,7 +311,7 @@ type FullNodeMethods struct {
 
 	EthProtocolVersion func(p0 context.Context) (ethtypes.EthUint64, error) `perm:"read"`
 
-	EthSendRawTransaction func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) `perm:"read"`
+	EthSendRawTransaction func(p0 context.Context, p1 ethtypes.EthBytes) (ethtypes.EthHash, error) `perm:"read"`
 
 	EthGetMessageCid func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) `perm:"read"`
 
@@ -701,7 +701,7 @@ type GatewayMethods struct {
 
 	EthGasPrice func(p0 context.Context) (ethtypes.EthBigInt, error) ``
 
-	EthGetBalance func(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) ``
+	EthGetBalance func(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) ``
 
 	EthGetBlockByHash func(p0 context.Context, p1 ethtypes.EthHash, p2 bool) (ethtypes.EthBlock, error) ``
 
@@ -711,7 +711,7 @@ type GatewayMethods struct {
 
 	EthGetBlockTransactionCountByNumber func(p0 context.Context, p1 ethtypes.EthUint64) (ethtypes.EthUint64, error) ``
 
-	EthGetCode func(p0 context.Context, p1 string, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) ``
+	EthGetCode func(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) ``
 
 	EthGetFilterChanges func(p0 context.Context, p1 ethtypes.EthFilterID) (*ethtypes.EthFilterResult, error) ``
 
@@ -727,13 +727,13 @@ type GatewayMethods struct {
 
 	EthGetTransactionByHashLimited func(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*ethtypes.EthTx, error) ``
 
-	EthGetTransactionCount func(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) ``
+	EthGetTransactionCount func(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) ``
 
 	EthGetTransactionHashByCid func(p0 context.Context, p1 cid.Cid) (*ethtypes.EthHash, error) ``
 
-	EthGetTransactionReceipt func(p0 context.Context, p1  cid.Cid) (*EthTxReceipt, error) ``
+	EthGetTransactionReceipt func(p0 context.Context, p1  ethtypes.EthHash) (*EthTxReceipt, error) ``
 
-	EthGetTransactionReceiptLimited func(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) ``
+	EthGetTransactionReceiptLimited func(p0 context.Context, p1 ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) ``
 
 	EthMaxPriorityFeePerGas func(p0 context.Context) (ethtypes.EthBigInt, error) ``
 
@@ -745,7 +745,7 @@ type GatewayMethods struct {
 
 	EthProtocolVersion func(p0 context.Context) (ethtypes.EthUint64, error) ``
 
-	EthSendRawTransaction func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) ``
+	EthSendRawTransaction func(p0 context.Context, p1 ethtypes.EthBytes) (ethtypes.EthHash, error) ``
 
 	EthGetMessageCid func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) ``
 
@@ -2202,14 +2202,14 @@ func (s *FullNodeStub) EthGasPrice(p0 context.Context) (ethtypes.EthBigInt, erro
 	return *new(ethtypes.EthBigInt), ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetBalance(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
+func (s *FullNodeStruct) EthGetBalance(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
 	if s.Internal.EthGetBalance == nil {
 		return *new(ethtypes.EthBigInt), ErrNotSupported
 	}
 	return s.Internal.EthGetBalance(p0, p1, p2)
 }
 
-func (s *FullNodeStub) EthGetBalance(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
+func (s *FullNodeStub) EthGetBalance(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
 	return *new(ethtypes.EthBigInt), ErrNotSupported
 }
 
@@ -2257,14 +2257,14 @@ func (s *FullNodeStub) EthGetBlockTransactionCountByNumber(p0 context.Context, p
 	return *new(ethtypes.EthUint64), ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetCode(p0 context.Context, p1 string, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
+func (s *FullNodeStruct) EthGetCode(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	if s.Internal.EthGetCode == nil {
 		return *new(ethtypes.EthBytes), ErrNotSupported
 	}
 	return s.Internal.EthGetCode(p0, p1, p2)
 }
 
-func (s *FullNodeStub) EthGetCode(p0 context.Context, p1 string, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
+func (s *FullNodeStub) EthGetCode(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	return *new(ethtypes.EthBytes), ErrNotSupported
 }
 
@@ -2367,7 +2367,7 @@ func (s *FullNodeStub) EthGetTransactionByHashLimited(p0 context.Context, p1 *et
 	return nil, ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetTransactionCount(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
+func (s *FullNodeStruct) EthGetTransactionCount(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
 	if s.Internal.EthGetTransactionCount == nil {
 		return *new(ethtypes.EthUint64), ErrNotSupported
 	}
@@ -2389,25 +2389,25 @@ func (s *FullNodeStub) EthGetTransactionHashByCid(p0 context.Context, p1 cid.Cid
 	return nil, ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *FullNodeStruct) EthGetTransactionReceipt(p0 context.Context, p1 ethtypes.EthHash) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceipt == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceipt(p0, p1)
 }
 
-func (s *FullNodeStub) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *FullNodeStub) EthGetTransactionReceipt(p0 context.Context, p1 ethtypes.EthHash) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *FullNodeStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceiptLimited == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceiptLimited(p0, p1, p2)
 }
 
-func (s *FullNodeStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *FullNodeStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
@@ -2466,15 +2466,15 @@ func (s *FullNodeStub) EthProtocolVersion(p0 context.Context) (ethtypes.EthUint6
 	return *new(ethtypes.EthUint64), ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
+func (s *FullNodeStruct) EthSendRawTransaction(p0 context.Context, p1 ethtypes.EthBytes) (ethtypes.EthHash, error) {
 	if s.Internal.EthSendRawTransaction == nil {
-		return nil, ErrNotSupported
+		return *new(ethtypes.EthHash), ErrNotSupported
 	}
 	return s.Internal.EthSendRawTransaction(p0, p1)
 }
 
-func (s *FullNodeStub) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
-	return nil, ErrNotSupported
+func (s *FullNodeStub) EthSendRawTransaction(p0 context.Context, p1 ethtypes.EthBytes) (ethtypes.EthHash, error){
+	return *new(ethtypes.EthHash), ErrNotSupported
 }
 
 func (s *FullNodeStub) EthGetMessageCid(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
@@ -4548,14 +4548,14 @@ func (s *GatewayStub) EthGasPrice(p0 context.Context) (ethtypes.EthBigInt, error
 	return *new(ethtypes.EthBigInt), ErrNotSupported
 }
 
-func (s *GatewayStruct) EthGetBalance(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
+func (s *GatewayStruct) EthGetBalance(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
 	if s.Internal.EthGetBalance == nil {
 		return *new(ethtypes.EthBigInt), ErrNotSupported
 	}
 	return s.Internal.EthGetBalance(p0, p1, p2)
 }
 
-func (s *GatewayStub) EthGetBalance(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
+func (s *GatewayStub) EthGetBalance(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
 	return *new(ethtypes.EthBigInt), ErrNotSupported
 }
 
@@ -4603,14 +4603,14 @@ func (s *GatewayStub) EthGetBlockTransactionCountByNumber(p0 context.Context, p1
 	return *new(ethtypes.EthUint64), ErrNotSupported
 }
 
-func (s *GatewayStruct) EthGetCode(p0 context.Context, p1 string, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
+func (s *GatewayStruct) EthGetCode(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	if s.Internal.EthGetCode == nil {
 		return *new(ethtypes.EthBytes), ErrNotSupported
 	}
 	return s.Internal.EthGetCode(p0, p1, p2)
 }
 
-func (s *GatewayStub) EthGetCode(p0 context.Context, p1 string, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
+func (s *GatewayStub) EthGetCode(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	return *new(ethtypes.EthBytes), ErrNotSupported
 }
 
@@ -4691,14 +4691,14 @@ func (s *GatewayStub) EthGetTransactionByHashLimited(p0 context.Context, p1 *eth
 	return nil, ErrNotSupported
 }
 
-func (s *GatewayStruct) EthGetTransactionCount(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
+func (s *GatewayStruct) EthGetTransactionCount(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
 	if s.Internal.EthGetTransactionCount == nil {
 		return *new(ethtypes.EthUint64), ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionCount(p0, p1, p2)
 }
 
-func (s *GatewayStub) EthGetTransactionCount(p0 context.Context, p1 address.Address, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
+func (s *GatewayStub) EthGetTransactionCount(p0 context.Context, p1 ethtypes.EthAddress, p2 ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
 	return *new(ethtypes.EthUint64), ErrNotSupported
 }
 
@@ -4713,25 +4713,25 @@ func (s *GatewayStub) EthGetTransactionHashByCid(p0 context.Context, p1 cid.Cid)
 	return nil, ErrNotSupported
 }
 
-func (s *GatewayStruct) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *GatewayStruct) EthGetTransactionReceipt(p0 context.Context, p1 ethtypes.EthHash) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceipt == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceipt(p0, p1)
 }
 
-func (s *GatewayStub) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *GatewayStub) EthGetTransactionReceipt(p0 context.Context, p1  ethtypes.EthHash) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
-func (s *GatewayStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *GatewayStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceiptLimited == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceiptLimited(p0, p1, p2)
 }
 
-func (s *GatewayStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *GatewayStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
@@ -4790,15 +4790,15 @@ func (s *GatewayStub) EthProtocolVersion(p0 context.Context) (ethtypes.EthUint64
 	return *new(ethtypes.EthUint64), ErrNotSupported
 }
 
-func (s *GatewayStruct) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
+func (s *GatewayStruct) EthSendRawTransaction(p0 context.Context, p1 ethtypes.EthBytes) (ethtypes.EthHash, error) {
 	if s.Internal.EthSendRawTransaction == nil {
-		return nil, ErrNotSupported
+		return *new(ethtypes.EthHash), ErrNotSupported
 	}
 	return s.Internal.EthSendRawTransaction(p0, p1)
 }
 
-func (s *GatewayStub) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
-	return nil, ErrNotSupported
+func (s *GatewayStub) EthSendRawTransaction(p0 context.Context, p1 ethtypes.EthBytes) (ethtypes.EthHash, error) {
+	return *new(ethtypes.EthHash), ErrNotSupported
 }
 
 func (s *GatewayStruct) EthGetMessageCid(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
