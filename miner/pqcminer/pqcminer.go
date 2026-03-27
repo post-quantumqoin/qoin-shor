@@ -3,6 +3,8 @@ package pqcminer
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
+	"encoding/binary"
 	"fmt"
 	"os"
 	"sync"
@@ -12,6 +14,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
+	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
@@ -35,12 +38,12 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/pqcpow"
 )
 
-// var log = logging.Logger("miner")
+var log = logging.Logger("pqcminer")
 
 // Journal event types.
-// const (
-// 	evtTypeBlockMined = iota
-// )
+const (
+	evtTypeBlockMined = iota
+)
 
 // waitFunc is expected to pace block mining at the configured network rate.
 //
@@ -49,15 +52,15 @@ import (
 //
 // Upon each mining loop iteration, the returned callback is called reporting
 // whether we mined a block in this round or not.
-// type waitFunc func(ctx context.Context, baseTime uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error)
+type waitFunc func(ctx context.Context, baseTime uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error)
 
-// func randTimeOffset(width time.Duration) time.Duration {
-// 	buf := make([]byte, 8)
-// 	rand.Reader.Read(buf) //nolint:errcheck
-// 	val := time.Duration(binary.BigEndian.Uint64(buf) % uint64(width))
+func randTimeOffset(width time.Duration) time.Duration {
+	buf := make([]byte, 8)
+	rand.Reader.Read(buf) //nolint:errcheck
+	val := time.Duration(binary.BigEndian.Uint64(buf) % uint64(width))
 
-// 	return val - (width / 2)
-// }
+	return val - (width / 2)
+}
 
 // NewMiner instantiates a miner with a concrete WinningPoStProver and a miner
 // address (which can be different from the worker's address).
@@ -408,11 +411,11 @@ minerLoop:
 
 // MiningBase is the tipset on top of which we plan to construct our next block.
 // Refer to godocs on GetBestMiningCandidate.
-// type MiningBase struct {
-// 	TipSet      *types.TipSet
-// 	ComputeTime time.Time
-// 	NullRounds  abi.ChainEpoch
-// }
+type MiningBase struct {
+	TipSet      *types.TipSet
+	ComputeTime time.Time
+	NullRounds  abi.ChainEpoch
+}
 
 // GetBestMiningCandidate implements the fork choice rule from a miner's
 // perspective.
@@ -698,7 +701,7 @@ func (m *PqcMiner) mineOne(ctx context.Context, base *MiningBase) (minedBlock *t
 	PqcPowProof, err := computePqcPowProof(ctx, nbit, minedBlock, m.api)
 	if err != nil {
 		if err == pqc.ErrXFoundOutTime {
-			log.Warnf("compute pqc pow proof: %+v", err)
+			log.Warnf("compute pqc pow proof out time: %+v", err)
 			return nil, nil
 		}
 

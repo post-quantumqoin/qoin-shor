@@ -4,13 +4,16 @@ package main
 #include <stdlib.h>
 char* cudaGetX(int deviceID, int m, int n, int whichXWidth, unsigned long long int startSMCount, int coefficientBit, char **eqs);
 int cudaGetDevCount();
+void abortCalc();
 unsigned long long int cudaGetNumOfExecution(int n, int m);
-#cgo LDFLAGS:-L${SRCDIR} -lgpuworker -lcommon  -lstdc++  -L/usr/local/cuda/lib64 -lcudart -lnvidia-ml
+#cgo LDFLAGS:-L${SRCDIR}/.. -lgpuworker -lcommon  -lstdc++  -L/usr/local/cuda/lib64 -lcudart -lnvidia-ml
 
 */
 import "C"
 import (
 	"fmt"
+	"time"
+	"sync"
 	"unsafe"
 )
 
@@ -101,17 +104,31 @@ func main() {
 	// 2 0 16 21 1000 0 232
 	deviceID = 0
 	m = 16
-	n = 21
+	n = 42
 	whichXWidth = 1000
 	coefficientBit = 232
 	startSMCount = 0
-	gxstr := CudaGetX(deviceID, m, n, whichXWidth, startSMCount, coefficientBit)
-	fmt.Printf("cuda CudaGetX:%s\n", gxstr) // 支持格式化输出
 
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		gxstr := CudaGetX(deviceID, m, n, whichXWidth, startSMCount, coefficientBit) // blocks this goroutine only
+		fmt.Printf("cuda CudaGetX:%s\n", gxstr)
+	}()
+	// 另一 goroutine 请求中断（延迟以确保内核正在运行）
+	go func() {
+		defer wg.Done()
+		time.Sleep(2 * time.Second)
+		C.abortCalc()
+		fmt.Printf("cuda Abort Calculation\n")
+	}()
 	// var devcunt = GetDeviceCount()
 	// fmt.Println("devcunt:%d",devcunt)
 
 	// var NumOfE = GetNumOfExecution(21, 16)
 	// fmt.Println("NumOfE:%d",NumOfE)
 
+	wg.Wait()
 }

@@ -124,24 +124,35 @@ func PqcPowProof(ctx context.Context, seed []byte, nbit []byte, p pqc.PqcPowAPI,
 	if err != nil {
 		return nil, err
 	}
-	x, err := c.Run(notifs, ts.Height(), tm)
+	x, err := c.Run(ctx,notifs, ts.Height(), tm)
 	if err != nil {
 		return nil, err
 	}
 	return x, nil
 }
 
-func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm *time.Ticker) ([]byte, error) {
+func (c *controller) Run(ctx context.Context, notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm *time.Ticker) ([]byte, error) {
 	//Receive blocks generated from devices
 	result := make(chan []byte)
 	//Notify other devices to stop mining when one of them acquires a block
 	// stopch := make(chan bool)
 	// defer close(stopch)
 	// defer close(result)
+	defer close(result) 
+
 	ctx, stop := context.WithCancel(context.Background())
 	//Calculate the value of x
+	// for devID := 0; devID < c.size; devID++ {
+	// 	go c.devs[devID].GetX(ctx, devID, 0, result)
+	// }
+	var wg sync.WaitGroup
+	defer wg.Wait() 
 	for devID := 0; devID < c.size; devID++ {
-		go c.devs[devID].GetX(devID, 0, result, ctx)
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			c.devs[id].GetX(ctx, id, 0, result)
+		}(devID)
 	}
 
 	tickerC := tm.C
@@ -159,6 +170,7 @@ func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm
 			// if build.UpgradeYellowStoneHeight >= 0 && hgt > build.UpgradeYellowStoneHeight {
 			log.Warnf("Run out time")
 			// stopch <- true
+			kernel.AbortCalc()
 			stop()
 			return nil, pqc.ErrXFoundOutTime
 			// }
@@ -172,6 +184,7 @@ func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm
 					build.Clock.Sleep(build.Clock.Until(retention))
 					log.Infow("new chain notify ", "now time:", build.Clock.Now(), "head MinTimestamp:", time.Unix(int64(change.Val.MinTimestamp()), 0))
 					// stopch <- true
+					kernel.AbortCalc()
 					stop()
 					return nil, pqc.NewBlockheads
 				}
@@ -228,7 +241,7 @@ func NewDev(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int, ctr *control
 	return d
 }
 
-func (d *dev) GetX(devID int, startSMCount int, results chan []byte, ctx context.Context) {
+func (d *dev) GetX(ctx context.Context, devID int, startSMCount int, results chan []byte) {
 	if !d.lk.TryLock() {
 		fmt.Println("TryLock fail dev:", devID)
 		for {
@@ -246,7 +259,7 @@ func (d *dev) GetX(devID int, startSMCount int, results chan []byte, ctx context
 		}
 	}
 	defer d.lk.Unlock()
-	defer close(results)
+	// defer close(results)
 	d.deviceID = devID
 	d.startSMCount = startSMCount
 	fix := d.controller.GetNextFixStr()
