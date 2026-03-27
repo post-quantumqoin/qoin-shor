@@ -18,13 +18,13 @@ import (
 	"github.com/post-quantumqoin/core-types/big"
 	actorstypes "github.com/post-quantumqoin/core-types/contracts"
 	// builtintypes "github.com/post-quantumqoin/core-types/builtin"
-	exported0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
-	exported2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
-	exported3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
-	exported4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
-	exported5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
-	exported6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
-	exported7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
+	// exported0 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
+	// exported2 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
+	// exported3 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
+	// exported4 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
+	// exported5 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
+	// exported6 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
+	// exported7 "github.com/post-quantumqoin/specs-contracts/contracts/builtin/exported"
 	blockadt "github.com/post-quantumqoin/specs-contracts/contracts/util0/adt"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
@@ -43,18 +43,18 @@ import (
 func NewActorRegistry() *vm.ActorRegistry {
 	inv := vm.NewActorRegistry()
 
-	inv.Register(actorstypes.Version0, vm.ActorsVersionPredicate(actorstypes.Version0), builtin.MakeRegistryLegacy(exported0.BuiltinActors()))
-	inv.Register(actorstypes.Version2, vm.ActorsVersionPredicate(actorstypes.Version2), builtin.MakeRegistryLegacy(exported2.BuiltinActors()))
-	inv.Register(actorstypes.Version3, vm.ActorsVersionPredicate(actorstypes.Version3), builtin.MakeRegistryLegacy(exported3.BuiltinActors()))
-	inv.Register(actorstypes.Version4, vm.ActorsVersionPredicate(actorstypes.Version4), builtin.MakeRegistryLegacy(exported4.BuiltinActors()))
-	inv.Register(actorstypes.Version5, vm.ActorsVersionPredicate(actorstypes.Version5), builtin.MakeRegistryLegacy(exported5.BuiltinActors()))
-	inv.Register(actorstypes.Version6, vm.ActorsVersionPredicate(actorstypes.Version6), builtin.MakeRegistryLegacy(exported6.BuiltinActors()))
-	inv.Register(actorstypes.Version7, vm.ActorsVersionPredicate(actorstypes.Version7), builtin.MakeRegistryLegacy(exported7.BuiltinActors()))
-	inv.Register(actorstypes.Version8, vm.ActorsVersionPredicate(actorstypes.Version8), builtin.MakeRegistry(actorstypes.Version8))
-	inv.Register(actorstypes.Version9, vm.ActorsVersionPredicate(actorstypes.Version9), builtin.MakeRegistry(actorstypes.Version9))
-	inv.Register(actorstypes.Version10, vm.ActorsVersionPredicate(actorstypes.Version10), builtin.MakeRegistry(actorstypes.Version10))
-	inv.Register(actorstypes.Version11, vm.ActorsVersionPredicate(actorstypes.Version11), builtin.MakeRegistry(actorstypes.Version11))
-	inv.Register(actorstypes.Version12, vm.ActorsVersionPredicate(actorstypes.Version12), builtin.MakeRegistry(actorstypes.Version12))
+	// inv.Register(actorstypes.Version0, vm.ActorsVersionPredicate(actorstypes.Version0), builtin.MakeRegistryLegacy(exported0.BuiltinActors()))
+	// inv.Register(actorstypes.Version2, vm.ActorsVersionPredicate(actorstypes.Version2), builtin.MakeRegistryLegacy(exported2.BuiltinActors()))
+	// inv.Register(actorstypes.Version3, vm.ActorsVersionPredicate(actorstypes.Version3), builtin.MakeRegistryLegacy(exported3.BuiltinActors()))
+	// inv.Register(actorstypes.Version4, vm.ActorsVersionPredicate(actorstypes.Version4), builtin.MakeRegistryLegacy(exported4.BuiltinActors()))
+	// inv.Register(actorstypes.Version5, vm.ActorsVersionPredicate(actorstypes.Version5), builtin.MakeRegistryLegacy(exported5.BuiltinActors()))
+	// inv.Register(actorstypes.Version6, vm.ActorsVersionPredicate(actorstypes.Version6), builtin.MakeRegistryLegacy(exported6.BuiltinActors()))
+	// inv.Register(actorstypes.Version7, vm.ActorsVersionPredicate(actorstypes.Version7), builtin.MakeRegistryLegacy(exported7.BuiltinActors()))
+	// // inv.Register(actorstypes.Version8, vm.ActorsVersionPredicate(actorstypes.Version8), builtin.MakeRegistry(actorstypes.Version8))
+	// inv.Register(actorstypes.Version9, vm.ActorsVersionPredicate(actorstypes.Version9), builtin.MakeRegistry(actorstypes.Version9))
+	// inv.Register(actorstypes.Version10, vm.ActorsVersionPredicate(actorstypes.Version10), builtin.MakeRegistry(actorstypes.Version10))
+	// inv.Register(actorstypes.Version11, vm.ActorsVersionPredicate(actorstypes.Version11), builtin.MakeRegistry(actorstypes.Version11))
+	// inv.Register(actorstypes.Version12, vm.ActorsVersionPredicate(actorstypes.Version12), builtin.MakeRegistry(actorstypes.Version12))
 	inv.Register(actorstypes.Version13, vm.ActorsVersionPredicate(actorstypes.Version13), builtin.MakeRegistry(actorstypes.Version13))
 
 	return inv

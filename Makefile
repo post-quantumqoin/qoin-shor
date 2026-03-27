@@ -78,6 +78,9 @@ debug: build-devnets
 calibnet: GOFLAGS+=-tags=calibnet
 calibnet: build-devnets
 
+quantumresistnet: GOFLAGS+=-tags=quantumresistnet
+quantumresistnet: build-devnets
+
 butterflynet: GOFLAGS+=-tags=butterflynet
 butterflynet: build-devnets
 
