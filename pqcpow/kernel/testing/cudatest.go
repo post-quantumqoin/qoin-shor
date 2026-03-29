@@ -117,7 +117,7 @@ func main() {
 		gxstr := CudaGetX(deviceID, m, n, whichXWidth, startSMCount, coefficientBit) // blocks this goroutine only
 		fmt.Printf("cuda CudaGetX:%s\n", gxstr)
 	}()
-	// 另一 goroutine 请求中断（延迟以确保内核正在运行）
+	// Another goroutine requests interruption (delay to ensure the kernel is running)
 	go func() {
 		defer wg.Done()
 		time.Sleep(2 * time.Second)

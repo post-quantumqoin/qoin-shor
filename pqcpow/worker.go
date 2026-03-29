@@ -138,40 +138,45 @@ func (c *Controller)initPowParams(mqphash *mqphash.MQPHash, nbit []byte, whichXW
 }
 
 func (c *Controller) Run(notifs <-chan []*api.HeadChange,hgt abi.ChainEpoch,tm *time.Ticker) ([]byte, error) {
-	//Receive blocks generated from devices
-	result := make(chan []byte)
-	var wg sync.WaitGroup
-	defer wg.Wait() 
-	defer close(result) 
+    // Use a buffered channel with a capacity of at least the number of devices
+	resultCh := make(chan []byte, c.size)
+	defer close(resultCh) 
+    var wg sync.WaitGroup
+
 	for devID := 0; devID < c.size; devID++ {
 		wg.Add(1)
 		go func(id int) {
 			defer wg.Done()
-			c.devs[id].GetX(id, 0, result)
+			c.devs[id].GetX(id, 0, resultCh)
 		}(devID)
 	}
 
 	tickerC := tm.C
 	for {
 		select {
-		case r := <-result:
+		case r := <-resultCh:
 			// if len(r) == 0 {
 			// 	log.Warnf("run x not found")
 			// 	return nil, pqc.ErrXNotFound
 			// }
+			// Receive the first valid result: cancel other workers to ensure resource release
+			// Call at a single location if global forced interruption of computation is required (depends on kernel implementation).
 			kernel.AbortCalc()
+			wg.Wait()
 			return r, nil
 		case <-tickerC:
-			// if build.UpgradeYellowStoneHeight >= 0 && hgt > build.UpgradeYellowStoneHeight {
+			// Timeout
 			log.Warnf("Run out time")
-			// stopch <- true
 			kernel.AbortCalc()
-			// er = pqc.ErrXFoundOutTime
-			// wg.Wait() 
-			// stop()
+			wg.Wait()
 			return nil, pqc.ErrXFoundOutTime
-			// }
-		case n := <-notifs:
+		 case n, ok := <-notifs:
+			if !ok {
+                // Notify channel is closed, treat as abort 
+                kernel.AbortCalc()
+                wg.Wait()
+                return nil, pqc.NewBlockheads
+            }
 			for _, change := range n {
 				//a head change notifs,if a new block header is generated
 				// the miner stops the Proof-of-Work for this block
@@ -180,12 +185,9 @@ func (c *Controller) Run(notifs <-chan []*api.HeadChange,hgt abi.ChainEpoch,tm *
 					retention := time.Unix(int64(change.Val.MinTimestamp()-(uint64(15)-build.MinerRetentionTimeSecs)), 0)
 					build.Clock.Sleep(build.Clock.Until(retention))
 					log.Infow("new chain notify ", "now time:", build.Clock.Now(), "head MinTimestamp:", time.Unix(int64(change.Val.MinTimestamp()), 0))
-					// stopch <- true
 					kernel.AbortCalc()
-					// wg.Wait() 
-					// stop()
+				 	wg.Wait()
 					return nil, pqc.NewBlockheads
-					// er = pqc.NewBlockheads
 				}
 
 				log.Infow("new chain ", "hgt:", hgt, "Height:", change.Val.Height())
