@@ -36,6 +36,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/shake3"
 	"github.com/post-quantumqoin/qoin-shor/pqcpow/pqc"
 	"github.com/post-quantumqoin/qoin-shor/pqcpow"
+	
 )
 
 var log = logging.Logger("pqcminer")
@@ -70,6 +71,10 @@ func NewPqcMiner(api v1api.FullNode, addr address.Address, sf *slashfilter.Slash
 		panic(err)
 	}
 	log.Infow("NewPqcMiner ", "addr:", addr.String())
+	cl, rr := pqcpow.NewController()
+	if rr != nil {
+		panic(err)
+	}
 	return &PqcMiner{
 		api:     api,
 		epp:     nil,
@@ -99,7 +104,7 @@ func NewPqcMiner(api v1api.FullNode, addr address.Address, sf *slashfilter.Slash
 				"time", build.Clock.Now())
 			return func(bool, abi.ChainEpoch, error) {}, 0, nil
 		},
-
+		ctrl:			   cl,
 		sf:                sf,
 		minedBlockHeights: arc,
 		evtTypes: [...]journal.EventType{
@@ -126,6 +131,8 @@ type PqcMiner struct {
 
 	// lastWork holds the last MiningBase we built upon.
 	lastWork *MiningBase
+
+	ctrl *pqcpow.Controller
 
 	sf *slashfilter.SlashFilter
 	// minedBlockHeights is a safeguard that caches the last heights we mined.
@@ -698,13 +705,16 @@ func (m *PqcMiner) mineOne(ctx context.Context, base *MiningBase) (minedBlock *t
 	// }
 
 	proofStart := uint64(build.Clock.Now().Unix())
-	PqcPowProof, err := computePqcPowProof(ctx, nbit, minedBlock, m.api)
+	PqcPowProof, err := m.computePqcPowProof(ctx, nbit, minedBlock, m.api)
 	if err != nil {
 		if err == pqc.ErrXFoundOutTime {
 			log.Warnf("compute pqc pow proof out time: %+v", err)
 			return nil, nil
 		}
-
+		if err == pqc.ErrXNotFound {
+			log.Warnf("compute pqc x not found: %+v", err)
+			return nil, nil
+		}
 		if err == pqc.NewBlockheads {
 			log.Warnf("compute pqc pow proof: %+v", err)
 			return nil, nil
@@ -773,7 +783,7 @@ func (m *PqcMiner) computeTicket(ctx context.Context, brand *types.BeaconEntry, 
 // func computePqcPowProofV0(ctx context.Context, seed []byte, nbit []byte, minedBlock *types.BlockMsg, p pqc.PqcPowAPI) (*types.PqcPowProof, error) {
 // }
 
-func computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.BlockMsg, p pqc.PqcPowAPI) (*types.PqcPowProof, error) {
+func (m *PqcMiner) computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.BlockMsg, p pqc.PqcPowAPI) (*types.PqcPowProof, error) {
 	var seedProof []byte
 	nbitProof := nbit
 
@@ -789,26 +799,27 @@ func computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.Bloc
 		return nil, err
 	}
 	tm := time.NewTicker(17 * time.Second)
+	defer tm.Stop()
 	for {
 		seedBuf := shake3.Shake256XOF(seedProof, 72)
 		log.Infow("computePqcPowProof", " seedBuf:", seedBuf)
 
-		qproof, err := pqcpow.PqcPowProof(ctx, seedBuf, nbitProof, p, tm)
-		if err == pqc.ErrXNotFound {
-			log.Infow("computePqcPowProof RefreshNbit")
-			nbitProof = pqc.RefreshNbit(nbitProof) //
+		qproof, err := m.ctrl.GeneratePQCProof(ctx, seedBuf, nbitProof, p, tm)
+		// if err == pqc.ErrXNotFound {
+		// 	log.Infow("computePqcPowProof RefreshNbit")
+		// 	nbitProof = pqc.RefreshNbit(nbitProof) //
 
-			minedBlock.Header.PqcPowProof.Nbit = nbitProof
+		// 	minedBlock.Header.PqcPowProof.Nbit = nbitProof
 
-			qpcseed, err := minedBlock.Header.PqcProofSeed() //TODO:upgrade v2.0
-			if err != nil {
-				err = xerrors.Errorf("failed get qpcseed: %w", err)
-				return nil, err
-			}
+		// 	qpcseed, err := minedBlock.Header.PqcProofSeed() //TODO:upgrade v2.0
+		// 	if err != nil {
+		// 		err = xerrors.Errorf("failed get qpcseed: %w", err)
+		// 		return nil, err
+		// 	}
 
-			seedProof = qpcseed
-			continue
-		}
+		// 	seedProof = qpcseed
+		// 	continue
+		// }
 
 		if err != nil {
 			return nil, err
@@ -820,20 +831,6 @@ func computePqcPowProof(ctx context.Context, nbit []byte, minedBlock *types.Bloc
 			PowProof: qproof,
 		}, nil
 	}
-	// }
-	// seedProof, err = minedBlock.Header.PqcSeed()
-
-	// seedBuf := shake3.Shake256XOF(seedProof, 72)
-	// log.Infow("computePqcPowProof", " seedBuf:", seedBuf)
-	// qproof, err := pqc.PqcPowProof(ctx, seedBuf, nbitProof, p)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// fmt.Println("computePqcPowProof nbitProof:  qproof: len(qproof):", nbitProof, qproof, len(qproof))
-	// return &types.PqcPowProof{
-	// 	Nbit:     nbitProof,
-	// 	PowProof: qproof,
-	// }, nil
 }
 
 func (m *PqcMiner) createBlock(base *MiningBase, addr address.Address, ticket *types.Ticket,
