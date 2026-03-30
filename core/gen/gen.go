@@ -152,14 +152,14 @@ func NewGeneratorWithSectorsAndUpgradeSchedule(numSectors int, us stmgr.UpgradeS
 		return nil, xerrors.Errorf("creating memrepo wallet failed: %w", err)
 	}
 
-	banker, err := w.WalletNew(context.Background(), types.KTSecp256k1)
+	banker, err := w.WalletNew(context.Background(), types.KTSecp256k1, nil)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to generate banker key: %w", err)
 	}
 
 	receievers := make([]address.Address, msgsPerBlock)
 	for r := range receievers {
-		receievers[r], err = w.WalletNew(context.Background(), types.KTBLS)
+		receievers[r], err = w.WalletNew(context.Background(), types.KTBLS, nil)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to generate receiver key: %w", err)
 		}
