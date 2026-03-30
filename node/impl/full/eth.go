@@ -1489,7 +1489,7 @@ func (e *EthEventHandler) installEthFilterSpec(ctx context.Context, filterSpec *
 		}
 	}
 
-	// Convert all addresses to filecoin f4 addresses
+	// Convert all addresses to filecoin Q4 Addresses
 	for _, ea := range filterSpec.Address {
 		a, err := ea.ToFilecoinAddress()
 		if err != nil {

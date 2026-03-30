@@ -144,7 +144,7 @@ func ethCallToFilecoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.
 			return nil, fmt.Errorf("failed to construct the ethereum system address: %w", err)
 		}
 	} else {
-		// The from address must be translatable to an f4 address.
+		// The from address must be translatable to an Q4 Address.
 		var err error
 		from, err = tx.From.ToFilecoinAddress()
 		if err != nil {
@@ -384,7 +384,7 @@ func parseEthRevert(ret []byte) string {
 //
 // If the actor doesn't exist in the state-tree but we have its ID, we use a masked ID address. It could have been deleted.
 func lookupEthAddress(addr address.Address, st *state.StateTree) (ethtypes.EthAddress, error) {
-	// Attempt to convert directly, if it's an f4 address.
+	// Attempt to convert directly, if it's an Q4 Address.
 	ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
 	if err == nil && !ethAddr.IsMaskedID() {
 		return ethAddr, nil
