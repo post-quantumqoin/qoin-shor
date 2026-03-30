@@ -420,7 +420,7 @@ func EthAddressFromFilecoinAddress(addr address.Address) (EthAddress, error) {
 			return EthAddress{}, err
 		}
 		if ethAddr.IsMaskedID() {
-			return EthAddress{}, xerrors.Errorf("f410f addresses cannot embed masked-ID payloads: %s", ethAddr)
+			return EthAddress{}, xerrors.Errorf("Q410q addresses cannot embed masked-ID payloads: %s", ethAddr)
 		}
 		return ethAddr, nil
 	}
@@ -485,7 +485,7 @@ func (ea EthAddress) ToFilecoinAddress() (address.Address, error) {
 	addr, err := address.NewDelegatedAddress(builtintypes.EthereumAddressManagerActorID, ea[:])
 	if err != nil {
 		return address.Undef, fmt.Errorf("failed to translate supplied address (%s) into a "+
-			"Filecoin f4 address: %w", hex.EncodeToString(ea[:]), err)
+			"Filecoin Q4 Address: %w", hex.EncodeToString(ea[:]), err)
 	}
 	return addr, nil
 }

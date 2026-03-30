@@ -357,48 +357,6 @@ func (w *PqcWallet) SetDefault(a address.Address) error {
 	return nil
 }
 
-// func (w *PqcWallet) WalletNew(ctx context.Context, typ types.KeyType) (address.Address, error) {
-// 	w.lk.Lock()
-// 	defer w.lk.Unlock()
-
-// 	log.Debug("PqcWallet WalletNew typ:", typ)
-// 	k, err := key.GeneratePqcKey(typ)
-// 	if err != nil {
-// 		return address.Undef, err
-// 	}
-
-// 	log.Debug("k.PQCCert.Version:", k.PQCCert.Version)
-// 	for _, pk := range k.PQCCert.Pubkeys {
-// 		log.Debug("k.PQCCert.pk.Typ:", pk.Typ)
-// 		log.Debug("k.PQCCert.pk.Pubkey:", len(pk.Pubkey))
-// 	}
-
-// 	for _, kps := range k.KeyInfo.PqcKeypairs {
-// 		log.Debug("PqcKeypairs .PqcType:", kps.PqcType)
-// 		log.Debug("PqcKeypairs.PqcVersion:", kps.PqcVersion)
-// 		log.Debug("PqcKeypairs .PqcSeed:", kps.PqcSeed)
-// 	}
-
-// 	if err := w.keystore.Put(KNamePrefix+k.Address.String(), k.KeyInfo); err != nil {
-// 		return address.Undef, xerrors.Errorf("saving to keystore: %w", err)
-// 	}
-
-// 	w.Pqckeys[k.Address] = k
-
-// 	_, err = w.keystore.Get(KDefault)
-// 	if err != nil {
-// 		if !xerrors.Is(err, types.ErrKeyInfoNotFound) {
-// 			return address.Undef, err
-// 		}
-
-// 		if err := w.keystore.Put(KDefault, k.KeyInfo); err != nil {
-// 			return address.Undef, xerrors.Errorf("failed to set new key as default: %w", err)
-// 		}
-// 	}
-
-// 	return k.Address, nil
-// }
-
 // WalletNew creates a new wallet where the caller can specify
 // separately the wallet key type (`walletType`) and the password/key algorithm
 // type (`pwdType`). For non-PQC wallet types `walletType` is used to generate

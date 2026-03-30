@@ -64,7 +64,7 @@ type EthTxArgs struct {
 // - TransactionIndex
 // - Hash
 func EthTxFromSignedEthMessage(smsg *types.SignedMessage) (EthTx, error) {
-	// The from address is always an f410f address, never an ID or other address.
+	// The from address is always an Q410q address, never an ID or other address.
 	if !IsEthAddress(smsg.Message.From) {
 		return EthTx{}, xerrors.Errorf("sender must be an eth account, was %s", smsg.Message.From)
 	}

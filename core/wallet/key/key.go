@@ -1,7 +1,7 @@
 package key
 
 import (
-	"fmt"
+	// "fmt"
 	"sort"
 	// "strings"
 
@@ -139,11 +139,9 @@ func GeneratePqcKeyWithAlgs(typ types.KeyType, algs []types.SigAlg) (*PqcKey, er
         list = append(list, a)
     }
 	
-	fmt.Println("GeneratePqcKeyWithAlgs generating key for keyType:", typ, "algs:", list)
 	var kprs []types.PqcKeypair
     for _, a := range list {
         ctyp := PqcActSigType(a)
-		fmt.Println("GeneratePqcKeyWithAlgs generating key for alg:", a, "ctyp:", ctyp)
         seed, sk, pk, err := sigs.PqcGenerate(ctyp)
         if err != nil {
             return nil, xerrors.Errorf("generate %s failed: %w", a, err)
@@ -163,49 +161,6 @@ func GeneratePqcKeyWithAlgs(typ types.KeyType, algs []types.SigAlg) (*PqcKey, er
     }
 
     return NewPqcKey(ki)
-	// if strings.Contains(string(sg), string(types.KTDelegated)) {
-	// 	sg = "falcon512 dilithium3"
-	// 	ki.Type = typ
-	// }
-
-	// if strings.Contains(string(sg), string(types.KTPqc)) {
-	// 	typ = "falcon512 dilithium3"
-	// 	ki.Type = typ
-	// }
-
-	// if !strings.Contains(string(sg), string(types.Falcon512)) &&
-	// 	!strings.Contains(string(sg), string(types.Falcon1024)) &&
-	// 	!strings.Contains(string(sg), string(types.Dilithium3)) &&
-	// 	!strings.Contains(string(sg), string(types.Dilithium5)) {
-	// 	return nil, xerrors.Errorf("unknown sig type: %s", typ)
-	// }
-	// fd := strings.Fields(string(sg))
-	// var kprs []types.PqcKeypair
-	// for _, tp := range fd {
-	// 	ctyp := PqcActSigType(types.KeyType(tp))
-	// 	if ctyp == crypto.SigTypeUnknown {
-	// 		return nil, xerrors.Errorf("unknown sig type: %s", typ)
-	// 	}
-	// 	// fmt.Println("key GeneratePqcKey ctyp:",ctyp)
-	// 	seed, sk, pk, err := sigs.PqcGenerate(ctyp)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	kpr := types.PqcKeypair{
-	// 		PqcVersion: 0,
-	// 		PqcSeed:    seed,
-	// 		PqcType:    types.KeyType(tp),
-
-	// 		PqcPrivateKey: sk,
-	// 		PqcPublicKey:  pk,
-	// 	}
-	// 	kprs = append(kprs, kpr)
-	// }
-	// // ki := types.KeyInfo{
-	// // 	PqcKeypairs: kprs,
-	// // }
-	// ki.PqcKeypairs = kprs
-	// return NewPqcKey(ki)
 }
 
 type PqcKey struct {
@@ -220,7 +175,6 @@ func NewPqcKey(keyInfo types.KeyInfo) (*PqcKey, error) {
 	if len(keyInfo.PqcKeypairs) == 0 {
         return nil, xerrors.Errorf("no pqc keypairs in KeyInfo")
     }
-	fmt.Println("NewPqcKey KeyInfo Type:", keyInfo.Type, "NumKeypairs:", len(keyInfo.PqcKeypairs))
 	// Sort keypairs by type to ensure deterministic order in cert
 	kpairs := make([]types.PqcKeypair, len(keyInfo.PqcKeypairs))
     copy(kpairs, keyInfo.PqcKeypairs)
@@ -286,51 +240,4 @@ func NewPqcKey(keyInfo types.KeyInfo) (*PqcKey, error) {
     }
 
 	return pk, nil
-	// var Pbks []types.PqcCertPubkey
-
-	// for _, kp := range KeyInfo.PqcKeypairs {
-	// 	Pbks = append(Pbks, types.PqcCertPubkey{Typ: string(kp.PqcType), Pubkey: kp.PqcPublicKey})
-	// }
-	// fmt.Println("NewPqcKey Pbks len:", len(Pbks))
-	// cert := types.PQCCert{
-	// 	Pubkeys: Pbks,
-	// 	Version: 0,
-	// }
-
-	// k := &PqcKey{
-	// 	KeyInfo: KeyInfo,
-	// 	PQCCert: cert,
-	// }
-	// if KeyInfo.Type == types.KTDelegated {
-	// 	//Use the first public key as the address
-	// 	pb, err := Pbks[0].Serialize()
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("pqc public key serialization failure")
-	// 	}
-	// 	// Transitory Delegated signature verification as per FIP-0055
-	// 	ethAddr, err := ethtypes.EthAddressFromPubKey(pb)
-	// 	if err != nil {
-	// 		return nil, xerrors.Errorf("failed to calculate Eth address from public key: %w", err)
-	// 	}
-
-	// 	ea, err := ethtypes.CastEthAddress(ethAddr)
-	// 	if err != nil {
-	// 		return nil, xerrors.Errorf("failed to create ethereum address from bytes: %w", err)
-	// 	}
-
-	// 	k.Address, err = ea.ToFilecoinAddress()
-	// 	if err != nil {
-	// 		return nil, xerrors.Errorf("converting Delegated to address: %w", err)
-	// 	}
-	// 	return k, nil
-	// }
-
-	//Use the first public key as the address
-	// pb, err := Pbks[0].Serialize()
-	// if err != nil {
-	// 	return nil, fmt.Errorf("pqc public key serialization failure")
-	// }
-
-	// k.Address, err = address.NewPqcAddress(pb)
-	// return k, nil
 }
