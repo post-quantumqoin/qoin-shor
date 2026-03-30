@@ -88,9 +88,9 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 
 	if ki != nil {
 		// minerAddr, err = key.NewKey(*ki)
-		k, err := key.PqcNewKey(*ki)
+		k, err := key.NewPqcKey(*ki)
 
-		// _, minerAddr, _ = key.PqcNewKey(ki.PQCCert)
+		// _, minerAddr, _ = key.NewPqcKey(ki.PQCCert)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -101,7 +101,7 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 
 	} else {
 		// minerAddr, err = key.GenerateKey(types.KTBLS)
-		k, err := key.PqcGenerateKey(types.KTPqc)
+		k, err := key.GeneratePqcKeyWithAlgs(types.KTPqc, []types.SigAlg{types.Falcon512, types.Dilithium3})
 		// pqckey, minerAddr = key.NewPqcKey()
 		if err != nil {
 			return nil, nil, err

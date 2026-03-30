@@ -3323,9 +3323,9 @@ func (mr *MockFullNodeMockRecorder) WalletList(arg0 interface{}) *gomock.Call {
 }
 
 // WalletNew mocks base method.
-func (m *MockFullNode) WalletNew(arg0 context.Context, arg1 types.KeyType) (address.Address, error) {
+func (m *MockFullNode) WalletNew(arg0 context.Context, arg1 types.KeyType, arg2 []types.SigAlg) (address.Address, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "WalletNew", arg0, arg1)
+	ret := m.ctrl.Call(m, "WalletNew", arg0, arg1, arg2)
 	ret0, _ := ret[0].(address.Address)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
