@@ -301,10 +301,10 @@ var EvmDeployCmd = &cli.Command{
 
 		delegated, err := ea.ToFilecoinAddress()
 		if err != nil {
-			return fmt.Errorf("failed to calculate f4 address: %w", err)
+			return fmt.Errorf("failed to calculate Q4 Address: %w", err)
 		}
 
-		afmt.Printf("f4 Address: %s\n", delegated)
+		afmt.Printf("Q4 Address: %s\n", delegated)
 
 		if len(wait.Receipt.Return) > 0 {
 			result := base64.StdEncoding.EncodeToString(wait.Receipt.Return)
