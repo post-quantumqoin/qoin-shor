@@ -41,7 +41,7 @@ var walletCmd = &cli.Command{
 		walletSign,
 		walletVerify,
 		walletDelete,
-		walletMarket,
+		// walletMarket,
 	},
 }
 
@@ -118,11 +118,11 @@ var walletList = &cli.Command{
 			Usage:   "Output ID addresses",
 			Aliases: []string{"i"},
 		},
-		&cli.BoolFlag{
-			Name:    "market",
-			Usage:   "Output market balances",
-			Aliases: []string{"m"},
-		},
+		// &cli.BoolFlag{
+		// 	Name:    "market",
+		// 	Usage:   "Output market balances",
+		// 	Aliases: []string{"m"},
+		// },
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
@@ -189,13 +189,13 @@ var walletList = &cli.Command{
 					}
 				}
 
-				if cctx.Bool("market") {
-					mbal, err := api.StateMarketBalance(ctx, addr, types.EmptyTSK)
-					if err == nil {
-						row["Market(Avail)"] = types.QOIN(types.BigSub(mbal.Escrow, mbal.Locked))
-						row["Market(Locked)"] = types.QOIN(mbal.Locked)
-					}
-				}
+				// if cctx.Bool("market") {
+				// 	mbal, err := api.StateMarketBalance(ctx, addr, types.EmptyTSK)
+				// 	if err == nil {
+				// 		row["Market(Avail)"] = types.QOIN(types.BigSub(mbal.Escrow, mbal.Locked))
+				// 		row["Market(Locked)"] = types.QOIN(mbal.Locked)
+				// 	}
+				// }
 
 				tw.Write(row)
 			}
