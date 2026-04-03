@@ -41,14 +41,22 @@ var walletCmd = &cli.Command{
 		walletSign,
 		walletVerify,
 		walletDelete,
-		walletMarket,
+		// walletMarket,
 	},
 }
 
 var walletNew = &cli.Command{
 	Name:      "new",
 	Usage:     "Generate a new key of the given type",
-	ArgsUsage: "[falcon512|falcon1024|dilithium3|dilithium5 (default falcon512 dilithium3)]",
+	ArgsUsage: "[pqc|delegated (default pqc:falcon512 dilithium3)]",
+	Flags: []cli.Flag{
+		&cli.StringSliceFlag{
+			Name:    "algs",
+			Usage:   "PQC algorithms to generate (can be repeated). Allowed: falcon512, falcon1024, dilithium3, dilithium5 (default: falcon512,dilithium3)",
+			Value:   cli.NewStringSlice(string(types.Falcon512), string(types.Dilithium3)),
+			Aliases: []string{"a"},
+		},
+	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
@@ -59,32 +67,33 @@ var walletNew = &cli.Command{
 
 		afmt := NewAppFmt(cctx.App)
 
-		var typ string
-
-		switch cctx.NArg() {
-		case 1:
-			arg0 := cctx.Args().First()
-			typ = arg0
-		case 2:
-			arg0 := cctx.Args().Get(0)
-			arg1 := cctx.Args().Get(1)
-			typ = arg0 + " " + arg1
-		case 3:
-			arg0 := cctx.Args().Get(0)
-			arg1 := cctx.Args().Get(1)
-			arg2 := cctx.Args().Get(2)
-			typ = arg0 + " " + arg1 + " " + arg2
-		case 4:
-			arg0 := cctx.Args().Get(0)
-			arg1 := cctx.Args().Get(1)
-			arg2 := cctx.Args().Get(2)
-			arg3 := cctx.Args().Get(3)
-			typ = arg0 + " " + arg1 + " " + arg2 + " " + arg3
-		default:
-			typ = "falcon512 dilithium3"
+		var typ types.KeyType
+		if cctx.Args().First() != "" {
+			typ = types.KeyType(cctx.Args().First())
+		} else {
+			typ = types.KTPqc
+			afmt.Printf("No key type specified, defaulting to %s\n", typ)
+		}
+		// parse algs flag into []types.SigAlg
+		var algs []types.SigAlg
+		algArgs := cctx.StringSlice("algs")
+		for _, s := range algArgs {
+			ss := strings.TrimSpace(s)
+			switch ss {
+			case string(types.Falcon512):
+				algs = append(algs, types.Falcon512)
+			case string(types.Falcon1024):
+				algs = append(algs, types.Falcon1024)
+			case string(types.Dilithium3):
+				algs = append(algs, types.Dilithium3)
+			case string(types.Dilithium5):
+				algs = append(algs, types.Dilithium5)
+			default:
+				return fmt.Errorf("unrecognized alg: %s", ss)
+			}
 		}
 
-		nk, err := api.WalletNew(ctx, types.KeyType(typ))
+		nk, err := api.WalletNew(ctx, typ, algs)
 		if err != nil {
 			return err
 		}
@@ -109,11 +118,11 @@ var walletList = &cli.Command{
 			Usage:   "Output ID addresses",
 			Aliases: []string{"i"},
 		},
-		&cli.BoolFlag{
-			Name:    "market",
-			Usage:   "Output market balances",
-			Aliases: []string{"m"},
-		},
+		// &cli.BoolFlag{
+		// 	Name:    "market",
+		// 	Usage:   "Output market balances",
+		// 	Aliases: []string{"m"},
+		// },
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
@@ -180,13 +189,13 @@ var walletList = &cli.Command{
 					}
 				}
 
-				if cctx.Bool("market") {
-					mbal, err := api.StateMarketBalance(ctx, addr, types.EmptyTSK)
-					if err == nil {
-						row["Market(Avail)"] = types.QOIN(types.BigSub(mbal.Escrow, mbal.Locked))
-						row["Market(Locked)"] = types.QOIN(mbal.Locked)
-					}
-				}
+				// if cctx.Bool("market") {
+				// 	mbal, err := api.StateMarketBalance(ctx, addr, types.EmptyTSK)
+				// 	if err == nil {
+				// 		row["Market(Avail)"] = types.QOIN(types.BigSub(mbal.Escrow, mbal.Locked))
+				// 		row["Market(Locked)"] = types.QOIN(mbal.Locked)
+				// 	}
+				// }
 
 				tw.Write(row)
 			}

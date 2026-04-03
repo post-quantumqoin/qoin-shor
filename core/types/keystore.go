@@ -17,6 +17,10 @@ var (
 // KeyType defines a type of a key
 type KeyType string
 
+type SigAlg string
+
+// type WalletType string
+
 func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 	{
 		// first option, try unmarshaling as string
@@ -50,8 +54,12 @@ func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 		return nil
 	}
 }
-
+//Multi-Algorithm Signature Wallet
+//Single-Algorithm Signature Wallet
 const (
+	// WTMAS       WalletType = "mas"
+	// WTSAS       WalletType = "sas"
+
 	KTBLS             KeyType = "bls"
 	KTSecp256k1       KeyType = "secp256k1"
 	KTSecp256k1Ledger KeyType = "secp256k1-ledger"
@@ -59,10 +67,10 @@ const (
 	KTDelegated KeyType = "delegated"
 	KTPqc       KeyType = "pqc"
 
-	Falcon512  KeyType = "falcon512"
-	Falcon1024 KeyType = "falcon1024"
-	Dilithium3 KeyType = "dilithium3"
-	Dilithium5 KeyType = "dilithium5"
+	Falcon512  SigAlg = "falcon512"
+	Falcon1024 SigAlg = "falcon1024"
+	Dilithium3 SigAlg = "dilithium3"
+	Dilithium5 SigAlg = "dilithium5"
 )
 
 type PqcKeypair struct {

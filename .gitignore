@@ -21,3 +21,11 @@
 go.work
 go.work.sum
 shor
+shor-miner
+shor-seed
+build/.*
+**/*.pc
+ext/qvm/rust/target
+/docgen-md
+/docgen-openrpc
+build/paramfetch.sh

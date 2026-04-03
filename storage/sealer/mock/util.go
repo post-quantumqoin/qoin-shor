@@ -31,12 +31,12 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 		return nil, nil, err
 	}
 
-	pqckey, err := key.PqcGenerateKey(types.KTPqc)
+	pqckey, err := key.GeneratePqcKey(types.KTPqc)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	pqcWrKey, err := key.PqcGenerateKey(types.KTPqc)
+	pqcWrKey, err := key.GeneratePqcKey(types.KTPqc)
 	if err != nil {
 		return nil, nil, err
 	}

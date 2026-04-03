@@ -63,15 +63,15 @@ func (e *EthModuleDummy) EthGetTransactionByHashLimited(ctx context.Context, txH
 	return nil, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
+func (e *EthModuleDummy) EthGetTransactionCount(ctx context.Context, sender ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
 	return 0, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*api.EthTxReceipt, error) {
+func (e *EthModuleDummy) EthGetTransactionReceipt(ctx context.Context, txHash ethtypes.EthHash) (*api.EthTxReceipt, error) {
 	return nil, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionReceiptLimited(ctx context.Context, txHash cid.Cid, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
+func (e *EthModuleDummy) EthGetTransactionReceiptLimited(ctx context.Context, txHash ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
 	return nil, ErrModuleDisabled
 }
 
@@ -83,7 +83,7 @@ func (e *EthModuleDummy) EthGetTransactionByBlockNumberAndIndex(ctx context.Cont
 	return ethtypes.EthTx{}, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetCode(ctx context.Context, address string, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
+func (e *EthModuleDummy) EthGetCode(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	return nil, ErrModuleDisabled
 }
 
@@ -91,7 +91,7 @@ func (e *EthModuleDummy) EthGetStorageAt(ctx context.Context, address ethtypes.E
 	return nil, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetBalance(ctx context.Context, address address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
+func (e *EthModuleDummy) EthGetBalance(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
 	return ethtypes.EthBigIntZero, ErrModuleDisabled
 }
 
@@ -135,8 +135,8 @@ func (e *EthModuleDummy) EthMaxPriorityFeePerGas(ctx context.Context) (ethtypes.
 	return ethtypes.EthBigIntZero, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) {
-	return nil, ErrModuleDisabled
+func (e *EthModuleDummy) EthSendRawTransaction(context.Context, ethtypes.EthBytes) (ethtypes.EthHash, error){
+	return *new(ethtypes.EthHash), ErrModuleDisabled
 }
 
 func (e *EthModuleDummy) EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) {

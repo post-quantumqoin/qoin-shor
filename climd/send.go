@@ -131,7 +131,7 @@ var sendCmd = &cli.Command{
 		if ethtypes.IsEthAddress(params.From) {
 			// Method numbers don't make sense from eth accounts.
 			if cctx.IsSet("method") {
-				return xerrors.Errorf("messages from f410f addresses may not specify a method number")
+				return xerrors.Errorf("messages from Q410q addresses may not specify a method number")
 			}
 
 			// Now, figure out the correct method number from the recipient.
@@ -154,13 +154,13 @@ var sendCmd = &cli.Command{
 				params.Params = buf.Bytes()
 			}
 
-			// We can only send to an f410f or f0 address.
+			// We can only send to an Q410q or f0 address.
 			if !(params.To.Protocol() == address.ID || params.To.Protocol() == address.Delegated) {
 				api := srv.FullNodeAPI()
 				// Resolve id addr if possible.
 				params.To, err = api.StateLookupID(ctx, params.To, types.EmptyTSK)
 				if err != nil {
-					return xerrors.Errorf("addresses starting with f410f can only send to other addresses starting with f410f, or id addresses. could not find id address for %s", params.To.String())
+					return xerrors.Errorf("addresses starting with Q410q can only send to other addresses starting with Q410q, or id addresses. could not find id address for %s", params.To.String())
 				}
 			}
 		} else {

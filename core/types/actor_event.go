@@ -49,7 +49,7 @@ type ActorEvent struct {
 
 	// Filecoin address of the actor that emitted this event.
 	// NOTE: In a future upgrade, this will change to always be an ID address. Currently this will be
-	// either the f4 address, or ID address if an f4 is not available for this actor.
+	// either the Q4 Address, or ID address if an f4 is not available for this actor.
 	Emitter address.Address `json:"emitter"`
 
 	// Reverted is set to true if the message that produced this event was reverted because of a network re-org

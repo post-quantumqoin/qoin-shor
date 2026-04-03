@@ -1850,8 +1850,9 @@ github.com/polydawn/refmt v0.0.0-20201211092308-30ac6d18308e/go.mod h1:uIp+gprXx
 github.com/polydawn/refmt v0.89.0 h1:ADJTApkvkeBZsN0tBTx8QjpD9JkmxbKp0cxfr9qszm4=
 github.com/polydawn/refmt v0.89.0/go.mod h1:/zvteZs/GwLtCgZ4BL6CBsk9IKIlexP43ObX9AxTqTw=
 github.com/posener/complete v1.1.1/go.mod h1:em0nMJCgc9GFtwrmVmEMR/ZL6WyhyjMBndrE9hABlRI=
-github.com/post-quantumqoin/address v0.1.0 h1:EIytaGzWWlmI0zA0ZuS3Og7/2yxAQvLg2RDoXHd3Nnk=
 github.com/post-quantumqoin/address v0.1.0/go.mod h1:nUgdfmMqWh2PqMqiCDN0Ua+wLTuy5BX/9/Utyf6jk64=
+github.com/post-quantumqoin/address v0.1.2 h1:gjsh6Lxq7lnui8Gr7/JKhUzqWx3bJJTjxwo5TeMYG3s=
+github.com/post-quantumqoin/address v0.1.2/go.mod h1:nUgdfmMqWh2PqMqiCDN0Ua+wLTuy5BX/9/Utyf6jk64=
 github.com/post-quantumqoin/bitset v0.1.1 h1:4yhEsYeSIlyaDSUPH/TwxXqgAESf4GXvTCp1tZPL0lk=
 github.com/post-quantumqoin/bitset v0.1.1/go.mod h1:qN/fyWYiqmUdMp93g+IqYI4jMQgTtDcjg6YodlQ4OY8=
 github.com/post-quantumqoin/core-types v0.4.2/go.mod h1:KWsIDozBI8cKWxZsxOdtTkr6EEh2aRhmJX3VOcwECiA=

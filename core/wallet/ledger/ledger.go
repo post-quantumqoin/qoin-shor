@@ -169,7 +169,7 @@ const hdHard = 0x80000000
 var filHDBasePath = []uint32{hdHard | 44, hdHard | 461, hdHard, 0}
 var filHdPathLen = 5
 
-func (lw LedgerWallet) WalletNew(ctx context.Context, t types.KeyType) (address.Address, error) {
+func (lw LedgerWallet) WalletNew(ctx context.Context, t types.KeyType, algs []types.SigAlg) (address.Address, error) {
 	if t != types.KTSecp256k1Ledger {
 		return address.Undef, fmt.Errorf("unsupported key type: '%s', only '%s' supported",
 			t, types.KTSecp256k1Ledger)

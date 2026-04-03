@@ -116,7 +116,7 @@ type BuiltinActorsMetadata struct {
 // There should be no need to call this method as the result is cached in the
 // `EmbeddedBuiltinActorsMetadata` variable on `make gen`.
 func ReadEmbeddedBuiltinActorsMetadata() ([]*BuiltinActorsMetadata, error) {
-	files, err := embeddedBuiltinActorReleases.ReadDir("actors")
+	files, err := embeddedBuiltinActorReleases.ReadDir("contracts")
 	if err != nil {
 		return nil, xerrors.Errorf("failed to read embedded bundle directory: %s", err)
 	}
@@ -156,7 +156,7 @@ func readEmbeddedBuiltinActorsMetadata(bundle string) ([]*BuiltinActorsMetadata,
 	if err != nil {
 		return nil, xerrors.Errorf("failed to parse actors version from bundle '%q': %s", bundle, err)
 	}
-	fi, err := embeddedBuiltinActorReleases.Open(fmt.Sprintf("actors/%s", bundle))
+	fi, err := embeddedBuiltinActorReleases.Open(fmt.Sprintf("contracts/%s", bundle))
 	if err != nil {
 		return nil, err
 	}
@@ -251,7 +251,7 @@ func readBundleManifest(r io.Reader) (cid.Cid, map[string]cid.Cid, error) {
 // GetEmbeddedBuiltinActorsBundle returns the builtin-actors bundle for the given actors version.
 func GetEmbeddedBuiltinActorsBundle(version actorstypes.Version, networkBundleName string) ([]byte, bool) {
 	fmt.Printf("GetEmbeddedBuiltinActorsBundle embeddedBuiltinActorReleases.Open: %s\n", fmt.Sprintf("actors/v%d.tar.zst", version))
-	fi, err := embeddedBuiltinActorReleases.Open(fmt.Sprintf("actors/v%d.tar.zst", version))
+	fi, err := embeddedBuiltinActorReleases.Open(fmt.Sprintf("contracts/v%d.tar.zst", version))
 	if err != nil {
 		return nil, false
 	}

@@ -319,7 +319,7 @@ type FullNode interface {
 	// WalletNew creates a new address in the wallet with the given sigType.
 	// Available key types: bls, secp256k1, secp256k1-ledger
 	// Support for numerical types: 1 - secp256k1, 2 - BLS is deprecated
-	WalletNew(context.Context, types.KeyType) (address.Address, error) //perm:write
+	WalletNew(context.Context, types.KeyType, []types.SigAlg) (address.Address, error) //perm:write
 	// WalletHas indicates whether the given address is in the wallet.
 	WalletHas(context.Context, address.Address) (bool, error) //perm:write
 	// WalletList lists all the addresses in the wallet.
@@ -813,15 +813,15 @@ type FullNode interface {
 	EthGetTransactionByHashLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*ethtypes.EthTx, error)               //perm:read
 	EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid) (*ethtypes.EthHash, error)                                                    //perm:read
 	EthGetMessageCidByTransactionHash(ctx context.Context, txHash *ethtypes.EthHash) (*cid.Cid, error)                                         //perm:read
-	EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error)    //perm:read
-	EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*EthTxReceipt, error)                                                            //perm:read
-	EthGetTransactionReceiptLimited(ctx context.Context, txHash cid.Cid, limit abi.ChainEpoch) (*EthTxReceipt, error)                          //perm:read
+	EthGetTransactionCount(ctx context.Context, sender ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error)    //perm:read
+	EthGetTransactionReceipt(ctx context.Context, txHash ethtypes.EthHash) (*EthTxReceipt, error)                                                            //perm:read
+	EthGetTransactionReceiptLimited(ctx context.Context, txHash ethtypes.EthHash, limit abi.ChainEpoch) (*EthTxReceipt, error)                          //perm:read
 	EthGetTransactionByBlockHashAndIndex(ctx context.Context, blkHash ethtypes.EthHash, txIndex ethtypes.EthUint64) (ethtypes.EthTx, error)    //perm:read
 	EthGetTransactionByBlockNumberAndIndex(ctx context.Context, blkNum ethtypes.EthUint64, txIndex ethtypes.EthUint64) (ethtypes.EthTx, error) //perm:read
 
-	EthGetCode(ctx context.Context, address string, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)                                               //perm:read
+	EthGetCode(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)                                               //perm:read
 	EthGetStorageAt(ctx context.Context, address ethtypes.EthAddress, position ethtypes.EthBytes, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) //perm:read
-	EthGetBalance(ctx context.Context, address address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error)                                  //perm:read
+	EthGetBalance(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error)                                  //perm:read
 	EthChainId(ctx context.Context) (ethtypes.EthUint64, error)                                                                                                      //perm:read
 	EthSyncing(ctx context.Context) (ethtypes.EthSyncingResult, error)                                                                                               //perm:read
 	NetVersion(ctx context.Context) (string, error)                                                                                                                  //perm:read
@@ -834,7 +834,7 @@ type FullNode interface {
 	EthEstimateGas(ctx context.Context, p jsonrpc.RawParams) (ethtypes.EthUint64, error)                                 //perm:read
 	EthCall(ctx context.Context, tx ethtypes.EthCall, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) //perm:read
 
-	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) //perm:read
+	EthSendRawTransaction(ctx context.Context, rawTx ethtypes.EthBytes) (ethtypes.EthHash, error) //perm:read
 	EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error)      //perm:read
 	// Returns event logs matching given filter spec.
 	EthGetLogs(ctx context.Context, filter *ethtypes.EthFilterSpec) (*ethtypes.EthFilterResult, error) //perm:read

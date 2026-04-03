@@ -88,7 +88,7 @@ func (f *eventFilter) CollectEvents(ctx context.Context, te *TipSetEvents, rever
 		return nil
 	}
 
-	// cache of lookups between actor id and f4 address
+	// cache of lookups between actor id and Q4 Address
 	addressLookups := make(map[abi.ActorID]address.Address)
 
 	ems, err := te.messages(ctx)
