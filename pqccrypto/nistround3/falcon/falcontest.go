@@ -6,9 +6,9 @@ import (
 	// "bytes"
 	// "io"
 	"fmt"
-	
-	"pqccrypto/nistRound3/falcon/falcon512"
-	"pqccrypto/nistRound3/falcon/falcon1024"
+
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/falcon/falcon512"
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/falcon/falcon1024"
 	// "pqccrypto/nistRound3/falcon/falcon1024"
 	
 )

@@ -6,8 +6,7 @@ import (
 	// "bytes"
 	// "io"
 	"fmt"
-
-	"pqccrypto/nistRound3/dilithium/dilithium2"
+ 	"pqccrypto/nistround3/dilithium/dilithium2/dilithium2"
 	// "pqccrypto/nistRound3/dilithium/dilithium3"
 	// "pqccrypto/nistRound3/dilithium/dilithium5"
 	// "pqccrypto/nistRound3/falcon/falcon1024"
