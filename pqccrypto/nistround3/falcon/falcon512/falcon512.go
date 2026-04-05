@@ -4,6 +4,7 @@ package falcon512
 #cgo CFLAGS: -I./falconCore -I${SRCDIR}/../../../randombytes
 #cgo CFLAGS: -DFALCON_PREFIX=falcon_inner512 
 #cgo CFLAGS: -W -Wall -O2 
+#cgo LDFLAGS: -lm -Wl,--as-needed -Wl,--allow-multiple-definition
 
 #include <stdio.h>
 #include <stdlib.h>

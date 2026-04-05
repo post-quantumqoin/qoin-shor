@@ -3,7 +3,7 @@ package shared
 /*
 #cgo CFLAGS: -I${SRCDIR}/../dilithium/core  -I${SRCDIR}/../../randombytes
 #cgo CFLAGS: -Wall -Wextra -Wpedantic -Wredundant-decls -Wshadow -Wvla -Wpointer-arith -O3 -march=native -mtune=native -w 
-#cgo LDFLAGS: -lm
+#cgo LDFLAGS: -lm -Wl,--as-needed -Wl,--allow-multiple-definition
 
 #include "fips202.c"
 #include "randombytes.c"

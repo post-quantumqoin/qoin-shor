@@ -4,7 +4,7 @@ package dilithium2
 #cgo CFLAGS: -I../core -I../../../randombytes/
 #cgo CFLAGS: -DDILITHIUM_PREFIX=pqcrystals_dilithium2 -DDILITHIUM_MODE=2
 #cgo CFLAGS: -Wall -Wextra -Wpedantic -Wredundant-decls -Wshadow -Wvla -Wpointer-arith -O3 -march=native -mtune=native
-#cgo LDFLAGS: -lm
+#cgo LDFLAGS: -lm -Wl,--as-needed -Wl,--allow-multiple-definition
  
 #include <stdlib.h>
 #include "api.h"

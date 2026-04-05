@@ -4,7 +4,7 @@ package dilithium5
 #cgo CFLAGS: -I../core -I../../../randombytes/
 #cgo CFLAGS: -DDILITHIUM_PREFIX=pqcrystals_dilithium5 -DDILITHIUM_MODE=5
 #cgo CFLAGS: -Wall -Wextra -Wpedantic -Wno-pragma-messages -Wredundant-decls -Wshadow -Wvla -Wpointer-arith -O3 -march=native -mtune=native
-#cgo LDFLAGS: -lm
+#cgo LDFLAGS: -lm -Wl,--as-needed -Wl,--allow-multiple-definition
 
 
 #include "../core/fips202.h"
