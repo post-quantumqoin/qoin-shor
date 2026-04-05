@@ -7,9 +7,9 @@ import (
 	// "io"
 	"fmt"
 
-	"pqccrypto/nistRound3/dilithium/dilithium2"
-	"pqccrypto/nistRound3/dilithium/dilithium5"
-	"pqccrypto/nistRound3/dilithium/dilithium3"
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/dilithium/dilithium2"
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/dilithium/dilithium3"
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/dilithium/dilithium5"
 	
 	// "pqccrypto/nistRound3/falcon/falcon1024"
 	

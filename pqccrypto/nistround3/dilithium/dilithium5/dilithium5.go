@@ -1,9 +1,14 @@
 package dilithium5
 
 /*
-#cgo CFLAGS: -I../core -DDILITHIUM_PREFIX=pqcrystals_dilithium5
-#cgo LDFLAGS: -L. -L../core/build5 -lpqcrystals_dilithium5_ref 
+#cgo CFLAGS: -I../core -I../../../randombytes/
+#cgo CFLAGS: -DDILITHIUM_PREFIX=pqcrystals_dilithium5 -DDILITHIUM_MODE=5
+#cgo CFLAGS: -Wall -Wextra -Wpedantic -Wno-pragma-messages -Wredundant-decls -Wshadow -Wvla -Wpointer-arith -O3 -march=native -mtune=native
+#cgo LDFLAGS: -lm -Wl,--as-needed -Wl,--allow-multiple-definition
 
+
+#include "../core/fips202.h"
+#include "../../../randombytes/randombytes.h"
 #include <stdlib.h>
 #include "api.h"
 */
@@ -15,6 +20,7 @@ import (
 	"unsafe"
 	"errors"
 
+ 	_ "github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/share"
 )
 
 // Dilithium5CryptoNonceBytes is the size of a serialized nonce key.

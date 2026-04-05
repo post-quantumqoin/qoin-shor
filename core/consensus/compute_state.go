@@ -72,7 +72,7 @@ func (t *TipSetExecutor) NewActorRegistry() *vm.ActorRegistry {
 	return NewActorRegistry()
 }
 
-type FilecoinBlockMessages struct {
+type QoinBlockMessages struct {
 	store.BlockMessages
 
 	WinCount int64
@@ -82,7 +82,7 @@ func (t *TipSetExecutor) ApplyBlocks(ctx context.Context,
 	sm *stmgr.StateManager,
 	parentEpoch abi.ChainEpoch,
 	pstate cid.Cid,
-	bms []FilecoinBlockMessages,
+	bms []QoinBlockMessages,
 	epoch abi.ChainEpoch,
 	r rand.Rand,
 	em stmgr.ExecMonitor,
@@ -358,8 +358,8 @@ func (t *TipSetExecutor) ExecuteTipSet(ctx context.Context,
 	if err != nil {
 		return cid.Undef, cid.Undef, xerrors.Errorf("getting block messages for tipset: %w", err)
 	}
-	fmt.Println("ExecuteTipSet FilecoinBlockMessages")
-	fbmsgs := make([]FilecoinBlockMessages, len(blkmsgs))
+	fmt.Println("ExecuteTipSet QoinBlockMessages")
+	fbmsgs := make([]QoinBlockMessages, len(blkmsgs))
 	for i := range fbmsgs {
 		fbmsgs[i].BlockMessages = blkmsgs[i]
 		// fbmsgs[i].WinCount = ts.Blocks()[i].ElectionProof.WinCount

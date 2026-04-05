@@ -1,9 +1,8 @@
-/dns4/lotus-bootstrap.ipfsforce.com/tcp/41778/p2p/12D3KooWGhufNmZHF3sv48aQeS13ng5XVJZ9E6qy2Ms4VzqeUsHk
-/dns4/bootstrap-0.starpool.in/tcp/12757/p2p/12D3KooWGHpBMeZbestVEWkfdnC9u7p6uFHXL1n7m1ZBqsEmiUzz
-/dns4/bootstrap-1.starpool.in/tcp/12757/p2p/12D3KooWQZrGH1PxSNZPum99M1zNvjNFM33d1AAu5DcvdHptuU7u
-/dns4/node.glif.io/tcp/1235/p2p/12D3KooWBF8cpp65hp2u9LK5mh19x67ftAam84z9LsfaquTDSBpt
-/dns4/bootstarp-0.1475.io/tcp/61256/p2p/12D3KooWRzCVDwHUkgdK7eRgnoXbjDAELhxPErjHzbRLguSV1aRt
-/dns4/bootstrap-venus.mainnet.filincubator.com/tcp/8888/p2p/QmQu8C6deXwKvJP2D8B6QGyhngc3ZiDnFzEHBDx8yeBXST
-/dns4/bootstrap-mainnet-0.chainsafe-fil.io/tcp/34000/p2p/12D3KooWKKkCZbcigsWTEu1cgNetNbZJqeNtysRtFpq7DTqw3eqH
-/dns4/bootstrap-mainnet-1.chainsafe-fil.io/tcp/34000/p2p/12D3KooWGnkd9GQKo3apkShQDaq1d6cKJJmsVe6KiQkacUk1T8oZ
-/dns4/bootstrap-mainnet-2.chainsafe-fil.io/tcp/34000/p2p/12D3KooWHQRSDFv4FvAjtU32shQ7znz7oRbLBryXzZ9NMK2feyyH
+/dns/acadia.postquantumqoin.org/tcp/9743/p2p/12D3KooWRsLqsfqLynVNzdK7TH4utyGr7kkbh2sdUkEstbFgPRPC
+/dns/yosemite.postquantumqoin.org/tcp/5033/p2p/12D3KooWRxMTz4KS9Qt9WJyPB2HtCKgFgVjUU4t1kb4fy3pGQz3V
+/dns/qmainnet.postquantumqoin.org/tcp/8542/p2p/12D3KooWEe6gXGwcKcyV9SMWD1vUv7CoG1U59abD7i88oxdmcAvJ
+/dns/qoin.postquantumqoin.org/tcp/9763/p2p/12D3KooWCQKxopnTVKMUjCibggzNUta5ndYyEB1iR5vtd6VfLZxe
+/dns/yellowstone.postquantumqoin.org/tcp/8648/p2p/12D3KooWSYsaGCwP5Cxq6kChX5nAMhfrbcZPWSBtojY2PQQyZJmw
+/dns/smokymountains.postquantumqoin.org/tcp/8775/p2p/12D3KooWLtwvaE9Y6fiZc2aQaw4CKnKhHeZLLBLtD6V7PG7b4z4n
+/dns/rockymountain.postquantumqoin.org/tcp/7753/p2p/12D3KooWCey7YjZjLAurfarpC2pZnCut6ZW7LrSukN2Q8cV9PsGk
+/dns/olympic.postquantumqoin.org/tcp/5083/p2p/12D3KooWSMADmPCW9XrEf5TCbTy8AhxzUtj91jMiGqwj8rhpD5YX
