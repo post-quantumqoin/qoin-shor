@@ -20,9 +20,11 @@ import (
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
+
 	// "github.com/post-quantumqoin/core-types/builtin"
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/builtin/v10/evm"
+
 	// "github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/exitcode"
 	"github.com/post-quantumqoin/go-jsonrpc"
@@ -414,7 +416,7 @@ func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, txHash 
 	if c == cid.Undef {
 		c = txHash.ToCid()
 	}
-
+	log.Infof("EthGetTransactionReceiptLooking up transaction %s as %s", txHash.String(), c.String())
 	msgLookup, err := a.StateAPI.StateSearchMsg(ctx, types.EmptyTSK, c, limit, true)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to lookup Eth Txn %s as %s: %w", c, c, err)

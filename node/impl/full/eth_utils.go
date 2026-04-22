@@ -249,7 +249,7 @@ func newEthBlockFromFilecoinTipSet(ctx context.Context, ts *types.TipSet, fullTx
 		if err != nil {
 			return ethtypes.EthBlock{}, xerrors.Errorf("failed to convert msg to ethTx: %w", err)
 		}
-
+		log.Infof("newEthTxFromSignedMessage eth tx hash: %s", tx.Hash.String())
 		tx.ChainID = ethtypes.EthUint64(build.Eip155ChainId)
 		tx.BlockHash = &blkHash
 		tx.BlockNumber = &bn
@@ -262,6 +262,11 @@ func newEthBlockFromFilecoinTipSet(ctx context.Context, ts *types.TipSet, fullTx
 		}
 	}
 
+	miner, err := lookupEthAddress(ts.Blocks()[0].Miner, st)
+	if err != nil {
+		return ethtypes.EthBlock{}, xerrors.Errorf("failed to lookup miner address: %w", err)
+	}
+	block.Miner = miner
 	block.Hash = blkHash
 	block.Number = bn
 	block.ParentHash = parentBlkHash
@@ -378,7 +383,7 @@ func parseEthRevert(ret []byte) string {
 //
 //  1. If the supplied address is an f410 address, we return its payload as the EthAddress.
 //  2. Otherwise (f0, f1, f2, f3), we look up the actor on the state tree. If it has a delegated address, we return it if it's f410 address.
-//  3. Otherwise, we fall back to returning a masked ID Ethereum address. If the supplied address is an f0 address, we
+//  3. Otherwise, we fall back to returning a masked ID Ethereum address. If the supplied address is an Q0 address, we
 //     use that ID to form the masked ID address.
 //  4. Otherwise, we fetch the actor's ID from the state tree and form the masked ID with it.
 //
@@ -455,6 +460,8 @@ func ethTxHashFromSignedMessage(smsg *types.SignedMessage) (ethtypes.EthHash, er
 		return tx.TxHash()
 	} else if smsg.Signature.Type == crypto.SigTypeSecp256k1 {
 		return ethtypes.EthHashFromCid(smsg.Cid())
+	} else if smsg.Signature.Type == crypto.SigTypeMultiPqc {
+		return ethtypes.EthHashFromCid(smsg.Cid())
 	} else { // BLS message
 		return ethtypes.EthHashFromCid(smsg.Message.Cid())
 	}
@@ -475,8 +482,17 @@ func newEthTxFromSignedMessage(smsg *types.SignedMessage, st *state.StateTree) (
 		if err != nil {
 			return ethtypes.EthTx{}, xerrors.Errorf("failed to calculate hash for ethTx: %w", err)
 		}
-	} else if smsg.Signature.Type == crypto.SigTypeSecp256k1 { // Secp Filecoin Message
-		tx, err = ethTxFromNativeMessage(smsg.VMMessage(), st)
+	} else if smsg.Signature.Type == crypto.SigTypeSecp256k1 {
+		tx, err = ethTxFromNativeMessage(smsg.VMMessage(), &smsg.Signature, st)
+		if err != nil {
+			return ethtypes.EthTx{}, err
+		}
+		tx.Hash, err = ethtypes.EthHashFromCid(smsg.Cid())
+		if err != nil {
+			return ethtypes.EthTx{}, err
+		}
+	} else if smsg.Signature.Type == crypto.SigTypeMultiPqc {
+		tx, err = ethTxFromNativeMessage(smsg.VMMessage(), &smsg.Signature, st)
 		if err != nil {
 			return ethtypes.EthTx{}, err
 		}
@@ -485,7 +501,7 @@ func newEthTxFromSignedMessage(smsg *types.SignedMessage, st *state.StateTree) (
 			return ethtypes.EthTx{}, err
 		}
 	} else { // BLS Filecoin message
-		tx, err = ethTxFromNativeMessage(smsg.VMMessage(), st)
+		tx, err = ethTxFromNativeMessage(smsg.VMMessage(), &smsg.Signature, st)
 		if err != nil {
 			return ethtypes.EthTx{}, err
 		}
@@ -510,7 +526,7 @@ func newEthTxFromSignedMessage(smsg *types.SignedMessage, st *state.StateTree) (
 // - BlockNumber
 // - TransactionIndex
 // - Hash
-func ethTxFromNativeMessage(msg *types.Message, st *state.StateTree) (ethtypes.EthTx, error) {
+func ethTxFromNativeMessage(msg *types.Message, sig *crypto.Signature, st *state.StateTree) (ethtypes.EthTx, error) {
 	// Lookup the from address. This must succeed.
 	from, err := lookupEthAddress(msg.From, st)
 	if err != nil {
@@ -569,6 +585,7 @@ func ethTxFromNativeMessage(msg *types.Message, st *state.StateTree) (ethtypes.E
 		MaxFeePerGas:         ethtypes.EthBigInt(msg.GasFeeCap),
 		MaxPriorityFeePerGas: ethtypes.EthBigInt(msg.GasPremium),
 		AccessList:           []ethtypes.EthHash{},
+		PQCSig:               (*ethtypes.PQCSignature)(sig),
 	}, nil
 }
 
