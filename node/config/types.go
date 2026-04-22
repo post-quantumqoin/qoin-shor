@@ -616,7 +616,7 @@ type LotusProviderAddresses struct {
 
 // API contains configs for API endpoint
 type API struct {
-	// Binding address for the Lotus API
+	// Binding address for the Shor API
 	ListenAddress       string
 	RemoteListenAddress string
 	Timeout             Duration
@@ -783,7 +783,7 @@ type UserRaftConfig struct {
 }
 
 type FevmConfig struct {
-	// EnableEthRPC enables eth_ rpc, and enables storing a mapping of eth transaction hashes to filecoin message Cids.
+	// EnableEthRPC enables eth_ rpc, and enables storing a mapping of eth transaction hashes to qcoin message Cids.
 	// This will also enable the RealTimeFilterAPI and HistoricFilterAPI by default, but they can be disabled by config options above.
 	EnableEthRPC bool
 

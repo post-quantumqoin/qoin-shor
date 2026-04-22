@@ -14,7 +14,7 @@ var Doc = map[string][]DocField{
 			Name: "ListenAddress",
 			Type: "string",
 
-			Comment: `Binding address for the Lotus API`,
+			Comment: `Binding address for the Shor API`,
 		},
 		{
 			Name: "RemoteListenAddress",
@@ -460,7 +460,7 @@ rewards. This address should have adequate funds to cover gas fees.`,
 			Name: "EnableEthRPC",
 			Type: "bool",
 
-			Comment: `EnableEthRPC enables eth_ rpc, and enables storing a mapping of eth transaction hashes to filecoin message Cids.
+			Comment: `EnableEthRPC enables eth_ rpc, and enables storing a mapping of eth transaction hashes to qcoin message Cids.
 This will also enable the RealTimeFilterAPI and HistoricFilterAPI by default, but they can be disabled by config options above.`,
 		},
 		{
@@ -509,7 +509,7 @@ Set to 0 to keep all mappings`,
 			Comment: ``,
 		},
 		{
-			Name: "Fevm",
+			Name: "Qevm",
 			Type: "FevmConfig",
 
 			Comment: ``,
