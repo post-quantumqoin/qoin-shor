@@ -6,7 +6,7 @@ import (
 	"github.com/post-quantumqoin/core-types/abi"
 )
 
-// this has to be in a separate package to not make lotus API depend on filecoin-ffi
+// this has to be in a separate package to not make Shor API depend on filecoin-ffi
 
 type Config struct {
 	// 0 = no limit
