@@ -29,4 +29,3 @@ ext/qvm/rust/target
 /docgen-md
 /docgen-openrpc
 build/paramfetch.sh
-build/.*
