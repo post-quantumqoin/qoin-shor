@@ -93,7 +93,7 @@ func (w *PqcWallet) WalletSign(ctx context.Context, addr address.Address, msg []
 	for _, kp := range pkey.KeyInfo.PqcKeypairs {
 		log.Debug("PqcSign kps  PqcType:", kp.PqcType)
 		log.Debug("PqcSign kps  PqcVersion:", kp.PqcVersion)
-		log.Debug("PqcSign kps  seed:", kp.PqcSeed)
+		// log.Debug("PqcSign kps  seed:", kp.PqcSeed)
 	}
 
 	if pkey.KeyInfo.Type == types.KTDelegated {
@@ -368,13 +368,13 @@ func (w *PqcWallet) WalletNew(ctx context.Context, keyType types.KeyType, algs [
 
 	log.Debug("WalletNew keyType:", keyType, "SigAlg:", algs)
 
-	var k *key.PqcKey          
+	var k *key.PqcKey
 	var err error
 
 	if keyType == types.KTDelegated || keyType == types.KTPqc {
 		log.Debug("WalletNew generating delegated or pqc key for keyType:", keyType)
-		
-		k, err = key.GeneratePqcKeyWithAlgs(keyType,algs)
+
+		k, err = key.GeneratePqcKeyWithAlgs(keyType, algs)
 		if err != nil {
 			return address.Undef, err
 		}
@@ -413,7 +413,7 @@ func (w *PqcWallet) WalletNew(ctx context.Context, keyType types.KeyType, algs [
 	}
 	log.Debug("WalletNew returning new key Address:", k.Address.String())
 	return k.Address, nil
- }
+}
 
 func (w *PqcWallet) WalletHas(ctx context.Context, addr address.Address) (bool, error) {
 	log.Debug("PqcWallet WalletHas addr:", addr)
