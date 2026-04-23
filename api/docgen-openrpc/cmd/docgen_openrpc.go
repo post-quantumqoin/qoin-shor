@@ -13,7 +13,7 @@ import (
 
 /*
 main defines a small program that writes an OpenRPC document describing
-a Lotus API to stdout.
+a Shor API to stdout.
 
 If the first argument is "miner", the document will describe the StorageMiner API.
 If not (no, or any other args), the document will describe the Full API.

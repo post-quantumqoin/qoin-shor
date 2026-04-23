@@ -69,7 +69,7 @@ func (m *EthTxHashManager) Apply(ctx context.Context, from, to *types.TipSet) er
 			if err != nil {
 				return err
 			}
-
+			log.Infof("Apply inserting tx mapping to db: %s", hash.String())
 			err = m.TransactionHashLookup.UpsertHash(hash, smsg.Cid())
 			if err != nil {
 				return err
@@ -95,7 +95,7 @@ func (m *EthTxHashManager) ProcessSignedMessage(ctx context.Context, msg *types.
 		log.Errorf("error hashing transaction: %s", err)
 		return
 	}
-
+	log.Infof("ProcessSignedMessage inserting tx mapping to db: %s", txHash.String())
 	err = m.TransactionHashLookup.UpsertHash(txHash, msg.Cid())
 	if err != nil {
 		log.Errorf("error inserting tx mapping to db: %s", err)

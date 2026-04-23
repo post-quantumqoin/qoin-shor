@@ -90,7 +90,12 @@ var sendCmd = &cli.Command{
 
 		params.To, err = address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
-			return ShowHelp(cctx, fmt.Errorf("failed to parse target address: %w", err))
+			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().Get(0))
+			if ethErr == nil {
+				params.To, err = ethAddr.ToFilecoinAddress()
+			} else {
+				return ShowHelp(cctx, fmt.Errorf("failed to parse target address: %w", err))
+			}
 		}
 
 		val, err := types.ParseFIL(cctx.Args().Get(1))
@@ -116,7 +121,7 @@ var sendCmd = &cli.Command{
 				fmt.Println("error on conversion to faddr")
 				return err
 			}
-			fmt.Println("f4 addr: ", faddr)
+			fmt.Println("Q4 addr: ", faddr)
 			params.From = faddr
 		}
 
@@ -154,7 +159,7 @@ var sendCmd = &cli.Command{
 				params.Params = buf.Bytes()
 			}
 
-			// We can only send to an Q410q or f0 address.
+			// We can only send to an Q410q or Q0 address.
 			if !(params.To.Protocol() == address.ID || params.To.Protocol() == address.Delegated) {
 				api := srv.FullNodeAPI()
 				// Resolve id addr if possible.

@@ -24,24 +24,22 @@ import (
 const Eip1559TxType = 2
 
 type EthTx struct {
-	ChainID              EthUint64   `json:"chainId"`
-	Nonce                EthUint64   `json:"nonce"`
-	Hash                 EthHash     `json:"hash"`
-	BlockHash            *EthHash    `json:"blockHash"`
-	BlockNumber          *EthUint64  `json:"blockNumber"`
-	TransactionIndex     *EthUint64  `json:"transactionIndex"`
-	From                 EthAddress  `json:"from"`
-	To                   *EthAddress `json:"to"`
-	Value                EthBigInt   `json:"value"`
-	Type                 EthUint64   `json:"type"`
-	Input                EthBytes    `json:"input"`
-	Gas                  EthUint64   `json:"gas"`
-	MaxFeePerGas         EthBigInt   `json:"maxFeePerGas"`
-	MaxPriorityFeePerGas EthBigInt   `json:"maxPriorityFeePerGas"`
-	AccessList           []EthHash   `json:"accessList"`
-	V                    EthBigInt   `json:"v"`
-	R                    EthBigInt   `json:"r"`
-	S                    EthBigInt   `json:"s"`
+	ChainID              EthUint64     `json:"chainId"`
+	Nonce                EthUint64     `json:"nonce"`
+	Hash                 EthHash       `json:"hash"`
+	BlockHash            *EthHash      `json:"blockHash"`
+	BlockNumber          *EthUint64    `json:"blockNumber"`
+	TransactionIndex     *EthUint64    `json:"transactionIndex"`
+	From                 EthAddress    `json:"from"`
+	To                   *EthAddress   `json:"to"`
+	Value                EthBigInt     `json:"value"`
+	Type                 EthUint64     `json:"type"`
+	Input                EthBytes      `json:"input"`
+	Gas                  EthUint64     `json:"gas"`
+	MaxFeePerGas         EthBigInt     `json:"maxFeePerGas"`
+	MaxPriorityFeePerGas EthBigInt     `json:"maxPriorityFeePerGas"`
+	AccessList           []EthHash     `json:"accessList"`
+	PQCSig               *PQCSignature `json:"signature,omitempty"`
 }
 
 type EthTxArgs struct {
@@ -53,9 +51,10 @@ type EthTxArgs struct {
 	MaxPriorityFeePerGas big.Int     `json:"maxPriorityFeePerGas"`
 	GasLimit             int         `json:"gasLimit"`
 	Input                []byte      `json:"input"`
-	V                    big.Int     `json:"v"`
-	R                    big.Int     `json:"r"`
-	S                    big.Int     `json:"s"`
+	// V                    big.Int     `json:"v"`
+	// R                    big.Int     `json:"r"`
+	// S                    big.Int     `json:"s"`
+	PQCSig *PQCSignature `json:"signature,omitempty"`
 }
 
 // EthTxFromSignedEthMessage does NOT populate:
@@ -79,11 +78,6 @@ func EthTxFromSignedEthMessage(smsg *types.SignedMessage) (EthTx, error) {
 		return EthTx{}, xerrors.Errorf("failed to convert the unsigned message: %w", err)
 	}
 
-	r, s, v, err := RecoverSignature(smsg.Signature)
-	if err != nil {
-		return EthTx{}, xerrors.Errorf("failed to recover signature: %w", err)
-	}
-
 	from, err := EthAddressFromFilecoinAddress(smsg.Message.From)
 	if err != nil {
 		// This should be impossible as we've already asserted that we have an EthAddress
@@ -102,9 +96,7 @@ func EthTxFromSignedEthMessage(smsg *types.SignedMessage) (EthTx, error) {
 		MaxFeePerGas:         EthBigInt(txArgs.MaxFeePerGas),
 		MaxPriorityFeePerGas: EthBigInt(txArgs.MaxPriorityFeePerGas),
 		AccessList:           []EthHash{},
-		V:                    v,
-		R:                    r,
-		S:                    s,
+		PQCSig:               (*PQCSignature)(&smsg.Signature),
 		Input:                txArgs.Input,
 	}, nil
 }
@@ -216,14 +208,14 @@ func (tx *EthTxArgs) ToSignedMessage() (*types.SignedMessage, error) {
 		return nil, xerrors.Errorf("failed to convert to unsigned msg: %w", err)
 	}
 
-	siggy, err := tx.Signature()
-	if err != nil {
-		return nil, xerrors.Errorf("failed to calculate signature: %w", err)
-	}
+	// siggy, err := tx.Signature()
+	// if err != nil {
+	// 	return nil, xerrors.Errorf("failed to calculate signature: %w", err)
+	// }
 
 	return &types.SignedMessage{
 		Message:   *unsignedMsg,
-		Signature: *siggy,
+		Signature: typescrypto.Signature(*tx.PQCSig),
 	}, nil
 }
 
@@ -262,9 +254,7 @@ func (tx *EthTx) ToEthTxArgs() EthTxArgs {
 		MaxPriorityFeePerGas: big.Int(tx.MaxPriorityFeePerGas),
 		GasLimit:             int(tx.Gas),
 		Input:                tx.Input,
-		V:                    big.Int(tx.V),
-		R:                    big.Int(tx.R),
-		S:                    big.Int(tx.S),
+		PQCSig:               tx.PQCSig,
 	}
 }
 
@@ -346,44 +336,21 @@ func (tx *EthTxArgs) packTxFields() ([]interface{}, error) {
 }
 
 func (tx *EthTxArgs) packSigFields() ([]interface{}, error) {
-	r, err := formatBigInt(tx.R)
+	if tx.PQCSig == nil {
+		return nil, fmt.Errorf("PQCSig is nil")
+	}
+
+	sigBytes, err := tx.PQCSig.Serialize()
 	if err != nil {
 		return nil, err
 	}
 
-	s, err := formatBigInt(tx.S)
-	if err != nil {
-		return nil, err
-	}
-
-	v, err := formatBigInt(tx.V)
-	if err != nil {
-		return nil, err
-	}
-
-	res := []interface{}{v, r, s}
+	res := []interface{}{sigBytes}
 	return res, nil
 }
 
 func (tx *EthTxArgs) Signature() (*typescrypto.Signature, error) {
-	r := tx.R.Int.Bytes()
-	s := tx.S.Int.Bytes()
-	v := tx.V.Int.Bytes()
-
-	sig := append([]byte{}, padLeadingZeros(r, 32)...)
-	sig = append(sig, padLeadingZeros(s, 32)...)
-	if len(v) == 0 {
-		sig = append(sig, 0)
-	} else {
-		sig = append(sig, v[0])
-	}
-
-	if len(sig) != 65 {
-		return nil, fmt.Errorf("signature is not 65 bytes")
-	}
-	return &typescrypto.Signature{
-		Type: typescrypto.SigTypeDelegated, Data: sig,
-	}, nil
+	return (*typescrypto.Signature)(tx.PQCSig), nil
 }
 
 func (tx *EthTxArgs) Sender() (address.Address, error) {
@@ -460,8 +427,8 @@ func parseEip1559Tx(data []byte) (*EthTxArgs, error) {
 		return nil, fmt.Errorf("not an EIP-1559 transaction: decoded data is not a list")
 	}
 
-	if len(decoded) != 12 {
-		return nil, fmt.Errorf("not an EIP-1559 transaction: should have 12 elements in the rlp list")
+	if len(decoded) != 10 {
+		return nil, fmt.Errorf("not an EIP-1559 transaction: should have 10 elements in the rlp list")
 	}
 
 	chainId, err := parseInt(decoded[0])
@@ -509,26 +476,14 @@ func parseEip1559Tx(data []byte) (*EthTxArgs, error) {
 		return nil, fmt.Errorf("access list should be an empty list")
 	}
 
-	r, err := parseBigInt(decoded[10])
+	sigBytes, err := parseBytes(decoded[9])
 	if err != nil {
 		return nil, err
 	}
 
-	s, err := parseBigInt(decoded[11])
-	if err != nil {
-		return nil, err
-	}
-
-	v, err := parseBigInt(decoded[9])
-	if err != nil {
-		return nil, err
-	}
-
-	// EIP-1559 and EIP-2930 transactions only support 0 or 1 for v
-	// Legacy and EIP-155 transactions support other values
-	// https://github.com/ethers-io/ethers.js/blob/56fabe987bb8c1e4891fdf1e5d3fe8a4c0471751/packages/transactions/src.ts/index.ts#L333
-	if !v.Equals(big.NewInt(0)) && !v.Equals(big.NewInt(1)) {
-		return nil, fmt.Errorf("EIP-1559 transactions only support 0 or 1 for v")
+	var pqcSig typescrypto.Signature
+	if err := pqcSig.UnmarshalCBOR(bytes.NewReader(sigBytes)); err != nil {
+		return nil, xerrors.Errorf("failed to unmarshal PQC signature: %w", err)
 	}
 
 	args := EthTxArgs{
@@ -540,9 +495,7 @@ func parseEip1559Tx(data []byte) (*EthTxArgs, error) {
 		GasLimit:             gasLimit,
 		Value:                value,
 		Input:                input,
-		V:                    v,
-		R:                    r,
-		S:                    s,
+		PQCSig:               (*PQCSignature)(&pqcSig),
 	}
 	return &args, nil
 }
