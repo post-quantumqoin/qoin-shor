@@ -273,6 +273,11 @@ func newEthBlockFromFilecoinTipSet(ctx context.Context, ts *types.TipSet, fullTx
 	block.Timestamp = ethtypes.EthUint64(ts.Blocks()[0].Timestamp)
 	block.BaseFeePerGas = ethtypes.EthBigInt{Int: ts.Blocks()[0].ParentBaseFee.Int}
 	block.GasUsed = ethtypes.EthUint64(gasUsed)
+	
+	if ts.Blocks()[0].PqcPowProof != nil && len(ts.Blocks()[0].PqcPowProof.Nbit) > 0 {
+		block.Difficulty = ethtypes.EthUint64(big.PositiveFromUnsignedBytes(ts.Blocks()[0].PqcPowProof.Nbit).Int.Uint64())
+	}
+
 	return block, nil
 }
 
