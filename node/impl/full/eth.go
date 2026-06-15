@@ -20,10 +20,12 @@ import (
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
-	"github.com/post-quantumqoin/core-types/builtin"
+
+	// "github.com/post-quantumqoin/core-types/builtin"
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
 	"github.com/post-quantumqoin/core-types/builtin/v10/evm"
-	"github.com/post-quantumqoin/core-types/crypto"
+
+	// "github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/exitcode"
 	"github.com/post-quantumqoin/go-jsonrpc"
 
@@ -57,12 +59,12 @@ type EthModuleAPI interface {
 	EthGetTransactionByHashLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*ethtypes.EthTx, error)
 	EthGetMessageCidByTransactionHash(ctx context.Context, txHash *ethtypes.EthHash) (*cid.Cid, error)
 	EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid) (*ethtypes.EthHash, error)
-	EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error)
-	EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*api.EthTxReceipt, error)
-	EthGetTransactionReceiptLimited(ctx context.Context, txHash cid.Cid, limit abi.ChainEpoch) (*api.EthTxReceipt, error)
-	EthGetCode(ctx context.Context, address string, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
+	EthGetTransactionCount(ctx context.Context, sender ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error)
+	EthGetTransactionReceipt(ctx context.Context, txHash ethtypes.EthHash) (*api.EthTxReceipt, error)
+	EthGetTransactionReceiptLimited(ctx context.Context, txHash ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error)
+	EthGetCode(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
 	EthGetStorageAt(ctx context.Context, address ethtypes.EthAddress, position ethtypes.EthBytes, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
-	EthGetBalance(ctx context.Context, address address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error)
+	EthGetBalance(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error)
 	EthFeeHistory(ctx context.Context, p jsonrpc.RawParams) (ethtypes.EthFeeHistory, error)
 	EthChainId(ctx context.Context) (ethtypes.EthUint64, error)
 	EthSyncing(ctx context.Context) (ethtypes.EthSyncingResult, error)
@@ -73,7 +75,7 @@ type EthModuleAPI interface {
 	EthEstimateGas(ctx context.Context, p jsonrpc.RawParams) (ethtypes.EthUint64, error)
 	EthCall(ctx context.Context, tx ethtypes.EthCall, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
 	EthMaxPriorityFeePerGas(ctx context.Context) (ethtypes.EthBigInt, error)
-	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error)
+	EthSendRawTransaction(context.Context, ethtypes.EthBytes) (ethtypes.EthHash, error)
 	EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error)
 	Web3ClientVersion(ctx context.Context) (string, error)
 	EthTraceBlock(ctx context.Context, blkNum string) ([]*ethtypes.EthTraceBlock, error)
@@ -359,11 +361,11 @@ func (a *EthModule) EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid)
 	return &hash, err
 }
 
-func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
-	// addr, err := sender.ToFilecoinAddress()
-	// if err != nil {
-	// 	return ethtypes.EthUint64(0), nil
-	// }
+func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
+	addr, err := sender.ToFilecoinAddress()
+	if err != nil {
+		return ethtypes.EthUint64(0), nil
+	}
 
 	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
 	if err != nil {
@@ -374,7 +376,7 @@ func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender address.A
 	// 	return ethtypes.EthUint64(0), xerrors.Errorf("failed to process address", err)
 	// }
 	// First, handle the case where the "sender" is an EVM actor.
-	if actor, err := a.StateManager.LoadActor(ctx, sender, ts); err != nil {
+	if actor, err := a.StateManager.LoadActor(ctx, addr, ts); err != nil {
 		if xerrors.Is(err, types.ErrActorNotFound) {
 			return 0, nil
 		}
@@ -393,28 +395,28 @@ func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender address.A
 		return ethtypes.EthUint64(nonce), err
 	}
 
-	nonce, err := a.Mpool.GetNonce(ctx, sender, ts.Key())
+	nonce, err := a.Mpool.GetNonce(ctx, addr, ts.Key())
 	if err != nil {
 		return ethtypes.EthUint64(0), nil
 	}
 	return ethtypes.EthUint64(nonce), nil
 }
 
-func (a *EthModule) EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*api.EthTxReceipt, error) {
-	return a.EthGetTransactionReceiptLimited(ctx, c, api.LookbackNoLimit)
+func (a *EthModule) EthGetTransactionReceipt(ctx context.Context, txHash ethtypes.EthHash) (*api.EthTxReceipt, error) {
+	return a.EthGetTransactionReceiptLimited(ctx, txHash, api.LookbackNoLimit)
 }
 
-func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, c cid.Cid, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
-	// c, err := a.EthTxHashManager.TransactionHashLookup.GetCidFromHash(txHash)
-	// if err != nil {
-	// 	log.Debug("could not find transaction hash %s in lookup table", txHash.String())
-	// }
+func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, txHash ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
+	c, err := a.EthTxHashManager.TransactionHashLookup.GetCidFromHash(txHash)
+	if err != nil {
+		log.Debug("could not find transaction hash %s in lookup table", txHash.String())
+	}
 
-	// // This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
-	// if c == cid.Undef {
-	// 	c = txHash.ToCid()
-	// }
-
+	// This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
+	if c == cid.Undef {
+		c = txHash.ToCid()
+	}
+	log.Infof("EthGetTransactionReceiptLooking up transaction %s as %s", txHash.String(), c.String())
 	msgLookup, err := a.StateAPI.StateSearchMsg(ctx, types.EmptyTSK, c, limit, true)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to lookup Eth Txn %s as %s: %w", c, c, err)
@@ -455,89 +457,89 @@ func (a *EthAPI) EthGetTransactionByBlockNumberAndIndex(context.Context, ethtype
 }
 
 // EthGetCode returns string value of the compiled bytecode
-func (a *EthModule) EthGetCode(ctx context.Context, ethAddr string, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
-	return nil, nil
-	// to, err := ethAddr.ToFilecoinAddress()
-	// if err != nil {
-	// 	return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
-	// }
+func (a *EthModule) EthGetCode(ctx context.Context, ethAddr ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
+	// return nil, nil
+	to, err := ethAddr.ToFilecoinAddress()
+	if err != nil {
+		return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
+	}
 
-	// ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
-	// if err != nil {
-	// 	return nil, xerrors.Errorf("failed to process block param: %v; %w", blkParam, err)
-	// }
+	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to process block param: %v; %w", blkParam, err)
+	}
 
-	// // StateManager.Call will panic if there is no parent
-	// if ts.Height() == 0 {
-	// 	return nil, xerrors.Errorf("block param must not specify genesis block")
-	// }
+	// StateManager.Call will panic if there is no parent
+	if ts.Height() == 0 {
+		return nil, xerrors.Errorf("block param must not specify genesis block")
+	}
 
-	// actor, err := a.StateManager.LoadActor(ctx, to, ts)
-	// if err != nil {
-	// 	if xerrors.Is(err, types.ErrActorNotFound) {
-	// 		return nil, nil
-	// 	}
-	// 	return nil, xerrors.Errorf("failed to lookup contract %s: %w", ethAddr, err)
-	// }
+	actor, err := a.StateManager.LoadActor(ctx, to, ts)
+	if err != nil {
+		if xerrors.Is(err, types.ErrActorNotFound) {
+			return nil, nil
+		}
+		return nil, xerrors.Errorf("failed to lookup contract %s: %w", ethAddr, err)
+	}
 
-	// // Not a contract. We could try to distinguish between accounts and "native" contracts here,
-	// // but it's not worth it.
-	// if !builtinactors.IsEvmActor(actor.Code) {
-	// 	return nil, nil
-	// }
+	// Not a contract. We could try to distinguish between accounts and "native" contracts here,
+	// but it's not worth it.
+	if !builtinactors.IsEvmActor(actor.Code) {
+		return nil, nil
+	}
 
-	// msg := &types.Message{
-	// 	From:       builtinactors.SystemActorAddr,
-	// 	To:         to,
-	// 	Value:      big.Zero(),
-	// 	Method:     builtintypes.MethodsEVM.GetBytecode,
-	// 	Params:     nil,
-	// 	GasLimit:   build.BlockGasLimit,
-	// 	GasFeeCap:  big.Zero(),
-	// 	GasPremium: big.Zero(),
-	// }
+	msg := &types.Message{
+		From:       builtinactors.SystemActorAddr,
+		To:         to,
+		Value:      big.Zero(),
+		Method:     builtintypes.MethodsEVM.GetBytecode,
+		Params:     nil,
+		GasLimit:   build.BlockGasLimit,
+		GasFeeCap:  big.Zero(),
+		GasPremium: big.Zero(),
+	}
 
-	// // Try calling until we find a height with no migration.
-	// var res *api.InvocResult
-	// for {
-	// 	res, err = a.StateManager.Call(ctx, msg, ts)
-	// 	if err != stmgr.ErrExpensiveFork {
-	// 		break
-	// 	}
-	// 	ts, err = a.Chain.GetTipSetFromKey(ctx, ts.Parents())
-	// 	if err != nil {
-	// 		return nil, xerrors.Errorf("getting parent tipset: %w", err)
-	// 	}
-	// }
+	// Try calling until we find a height with no migration.
+	var res *api.InvocResult
+	for {
+		res, err = a.StateManager.Call(ctx, msg, ts)
+		if err != stmgr.ErrExpensiveFork {
+			break
+		}
+		ts, err = a.Chain.GetTipSetFromKey(ctx, ts.Parents())
+		if err != nil {
+			return nil, xerrors.Errorf("getting parent tipset: %w", err)
+		}
+	}
 
-	// if err != nil {
-	// 	return nil, xerrors.Errorf("failed to call GetBytecode: %w", err)
-	// }
+	if err != nil {
+		return nil, xerrors.Errorf("failed to call GetBytecode: %w", err)
+	}
 
-	// if res.MsgRct == nil {
-	// 	return nil, fmt.Errorf("no message receipt")
-	// }
+	if res.MsgRct == nil {
+		return nil, fmt.Errorf("no message receipt")
+	}
 
-	// if res.MsgRct.ExitCode.IsError() {
-	// 	return nil, xerrors.Errorf("GetBytecode failed: %s", res.Error)
-	// }
+	if res.MsgRct.ExitCode.IsError() {
+		return nil, xerrors.Errorf("GetBytecode failed: %s", res.Error)
+	}
 
-	// var getBytecodeReturn evm.GetBytecodeReturn
-	// if err := getBytecodeReturn.UnmarshalCBOR(bytes.NewReader(res.MsgRct.Return)); err != nil {
-	// 	return nil, fmt.Errorf("failed to decode EVM bytecode CID: %w", err)
-	// }
+	var getBytecodeReturn evm.GetBytecodeReturn
+	if err := getBytecodeReturn.UnmarshalCBOR(bytes.NewReader(res.MsgRct.Return)); err != nil {
+		return nil, fmt.Errorf("failed to decode EVM bytecode CID: %w", err)
+	}
 
-	// // The contract has selfdestructed, so the code is "empty".
-	// if getBytecodeReturn.Cid == nil {
-	// 	return nil, nil
-	// }
+	// The contract has selfdestructed, so the code is "empty".
+	if getBytecodeReturn.Cid == nil {
+		return nil, nil
+	}
 
-	// blk, err := a.Chain.StateBlockstore().Get(ctx, *getBytecodeReturn.Cid)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("failed to get EVM bytecode: %w", err)
-	// }
+	blk, err := a.Chain.StateBlockstore().Get(ctx, *getBytecodeReturn.Cid)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get EVM bytecode: %w", err)
+	}
 
-	// return blk.RawData(), nil
+	return blk.RawData(), nil
 }
 
 func (a *EthModule) EthGetStorageAt(ctx context.Context, ethAddr ethtypes.EthAddress, position ethtypes.EthBytes, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
@@ -631,7 +633,7 @@ func (a *EthModule) EthGetStorageAt(ctx context.Context, ethAddr ethtypes.EthAdd
 	return ethtypes.EthBytes(ret), nil
 }
 
-func (a *EthModule) EthGetBalance(ctx context.Context, addr address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
+func (a *EthModule) EthGetBalance(ctx context.Context, addr ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
 	// var ethAddr ethtypes.EthAddress
 
 	// if err := ethAddr.UnmarshalJSON(addressRaw); err != nil {
@@ -648,10 +650,10 @@ func (a *EthModule) EthGetBalance(ctx context.Context, addr address.Address, blk
 	// 	// return xerrors.Errorf("failed to unmarshal storage slot: %w", err)
 	// }
 
-	// filAddr, err := ethAddr.ToFilecoinAddress()
-	// if err != nil {
-	// 	return ethtypes.EthBigInt{}, err
-	// }
+	filAddr, err := addr.ToFilecoinAddress()
+	if err != nil {
+		return ethtypes.EthBigInt{}, err
+	}
 	log.Warn("EthGetBalance addr:", addr)
 	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
 	if err != nil {
@@ -663,7 +665,7 @@ func (a *EthModule) EthGetBalance(ctx context.Context, addr address.Address, blk
 		return ethtypes.EthBigInt{}, xerrors.Errorf("failed to compute tipset state: %w", err)
 	}
 
-	actor, err := a.StateManager.LoadActorRaw(ctx, addr, st)
+	actor, err := a.StateManager.LoadActorRaw(ctx, filAddr, st)
 	if xerrors.Is(err, types.ErrActorNotFound) {
 		return ethtypes.EthBigIntZero, nil
 	} else if err != nil {
@@ -876,81 +878,81 @@ func (a *EthModule) EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParam
 	return unsignedMsg.Cid().Bytes(), nil
 }
 
-func (a *EthModule) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) {
-	// txArgs, err := ethtypes.ParseEthTxArgs(rawTx)
-	// if err != nil {
-	// 	return ethtypes.EmptyEthHash, err
-	// }
+func (a *EthModule) EthSendRawTransaction(ctx context.Context, rawTx ethtypes.EthBytes) (ethtypes.EthHash, error) {
 
 	// log.Warn("EthSendRawTransaction  len(rawTx):", len(rawTx))
-	msg, err := jsonrpc.DecodeParams[ethtypes.QoinMessage](rawTx)
-	if err != nil {
-		return nil, xerrors.Errorf("decoding params: %w", err)
-	}
-	log.Warn("EthSendRawTransaction msg From:", msg.From)
-	to, err := address.NewFromString(msg.To)
-	if err != nil {
-		return nil, xerrors.Errorf("decoding params: %w", err)
-	}
-	from, err := address.NewFromString(msg.From)
-	if err != nil {
-		return nil, xerrors.Errorf("decoding params: %w", err)
-	}
-	unsignedMsg := &types.Message{
-		Version:    0,
-		To:         to,
-		From:       from,
-		Nonce:      uint64(msg.Nonce.Int64()),
-		Value:      abi.TokenAmount(msg.Value),
-		GasLimit:   msg.GasLimit.Int64(),
-		GasFeeCap:  abi.TokenAmount(msg.GasFeeCap),
-		GasPremium: abi.TokenAmount(msg.GasPremium),
-		Method:     abi.MethodNum(msg.MethodSend),
-	}
-
-	log.Warn("EthSendRawTransaction uunsignedMsg.Cid().Bytes():", unsignedMsg.Cid().Bytes())
-
-	var pqcSigns []crypto.PqcSignature
-	for _, sg := range msg.Signatures.Signatures {
-		pqcSigns = append(pqcSigns, crypto.PqcSignature{Type: crypto.SigType(sg.PqcType), Data: sg.Data})
-	}
-
-	cert := &crypto.SignPQCCert{
-		Version: 0,
-	}
-
-	for _, ct := range msg.Signatures.Cert {
-		tp, err := crypto.SigType(ct.PqcType).Name()
-		if err != nil {
-			return nil, xerrors.Errorf("decoding params: %w", err)
-		}
-		cert.Pubkeys = append(cert.Pubkeys, crypto.SignPqcCertPubkey{Typ: tp, Pubkey: ct.PublicKey})
-	}
-	siggy := &crypto.Signature{
-		Type:          crypto.SigTypeMultiPqc,
-		PqcCert:       *cert,
-		PqcSignatures: pqcSigns,
-	}
-	smsg := &types.SignedMessage{
-		Message:   *unsignedMsg,
-		Signature: *siggy,
-	}
-
-	// smsg, err := txArgs.ToSignedMessage()
+	// msg, err := jsonrpc.DecodeParams[ethtypes.QoinMessage](rawTx)
 	// if err != nil {
-	// 	return ethtypes.EmptyEthHash, err
+	// 	return nil, xerrors.Errorf("decoding params: %w", err)
 	// }
+	// log.Warn("EthSendRawTransaction msg From:", msg.From)
+	// to, err := address.NewFromString(msg.To)
+	// if err != nil {
+	// 	return nil, xerrors.Errorf("decoding params: %w", err)
+	// }
+	// from, err := address.NewFromString(msg.From)
+	// if err != nil {
+	// 	return nil, xerrors.Errorf("decoding params: %w", err)
+	// }
+	// unsignedMsg := &types.Message{
+	// 	Version:    0,
+	// 	To:         to,
+	// 	From:       from,
+	// 	Nonce:      uint64(msg.Nonce.Int64()),
+	// 	Value:      abi.TokenAmount(msg.Value),
+	// 	GasLimit:   msg.GasLimit.Int64(),
+	// 	GasFeeCap:  abi.TokenAmount(msg.GasFeeCap),
+	// 	GasPremium: abi.TokenAmount(msg.GasPremium),
+	// 	Method:     abi.MethodNum(msg.MethodSend),
+	// }
+
+	// log.Warn("EthSendRawTransaction uunsignedMsg.Cid().Bytes():", unsignedMsg.Cid().Bytes())
+
+	// var pqcSigns []crypto.PqcSignature
+	// for _, sg := range msg.Signatures.Signatures {
+	// 	pqcSigns = append(pqcSigns, crypto.PqcSignature{Type: crypto.SigType(sg.PqcType), Data: sg.Data})
+	// }
+
+	// cert := &crypto.SignPQCCert{
+	// 	Version: 0,
+	// }
+
+	// for _, ct := range msg.Signatures.Cert {
+	// 	tp, err := crypto.SigType(ct.PqcType).Name()
+	// 	if err != nil {
+	// 		return nil, xerrors.Errorf("decoding params: %w", err)
+	// 	}
+	// 	cert.Pubkeys = append(cert.Pubkeys, crypto.SignPqcCertPubkey{Typ: tp, Pubkey: ct.PublicKey})
+	// }
+	// siggy := &crypto.Signature{
+	// 	Type:          crypto.SigTypeMultiPqc,
+	// 	PqcCert:       *cert,
+	// 	PqcSignatures: pqcSigns,
+	// }
+	// smsg := &types.SignedMessage{
+	// 	Message:   *unsignedMsg,
+	// 	Signature: *siggy,
+	// }
+
+	txArgs, err := ethtypes.ParseEthTxArgs(rawTx)
+	if err != nil {
+		return ethtypes.EmptyEthHash, err
+	}
+	smsg, err := txArgs.ToSignedMessage()
+	if err != nil {
+		return ethtypes.EmptyEthHash, err
+	}
 
 	_, err = a.MpoolAPI.MpoolPush(ctx, smsg)
 	if err != nil {
-		return nil, err
+		return ethtypes.EmptyEthHash, err
 	}
-	c, err := smsg.Cid().MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	// return ethtypes.EthHashFromTxBytes(rawTx), nil
-	return c, nil
+	// c, err := smsg.Cid().MarshalJSON()
+	// if err != nil {
+	// 	return nil, err
+	// }
+	return ethtypes.EthHashFromTxBytes(rawTx), nil
+	// return c, nil
 }
 
 func (a *EthModule) Web3ClientVersion(ctx context.Context) (string, error) {
@@ -1125,44 +1127,44 @@ func (a *EthModule) applyMessage(ctx context.Context, msg *types.Message, tsk ty
 }
 
 func (a *EthModule) EthEstimateGas(ctx context.Context, p jsonrpc.RawParams) (ethtypes.EthUint64, error) {
-	// params, err := jsonrpc.DecodeParams[ethtypes.EthEstimateGasParams](p)
+	params, err := jsonrpc.DecodeParams[ethtypes.EthEstimateGasParams](p)
+	if err != nil {
+		return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
+	}
+	// log.Warn("EthEstimateGas  p:", p)
+	// params, err := jsonrpc.DecodeParams[ethtypes.QoinEstimateGasParams](p)
 	// if err != nil {
 	// 	return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
 	// }
-	log.Warn("EthEstimateGas  p:", p)
-	params, err := jsonrpc.DecodeParams[ethtypes.QoinEstimateGasParams](p)
-	if err != nil {
-		return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
-	}
 	// var from address.Address
 	// var params []byte
-	log.Warn("EthEstimateGas  params:", params)
-	from, err := address.NewFromString(params.Tx.From)
-	if err != nil {
-		return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
-	}
-	log.Warn("EthEstimateGas  from:", from.String())
-	to, err := address.NewFromString(params.Tx.To)
-	if err != nil {
-		return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
-	}
-	log.Warn("EthEstimateGas  to:", to.String())
-
-	var msg *types.Message
-	msg = &types.Message{
-		From:   from,
-		To:     to,
-		Value:  big.Int(params.Tx.Value),
-		Method: builtin.MethodSend,
-		// Params:     []byte,
-		GasLimit:   build.BlockGasLimit,
-		GasFeeCap:  big.Zero(),
-		GasPremium: big.Zero(),
-	}
-	// msg, err := ethCallToFilecoinMessage(ctx, params.Tx)
+	// log.Warn("EthEstimateGas  params:", params)
+	// from, err := address.NewFromString(params.Tx.From)
 	// if err != nil {
-	// 	return ethtypes.EthUint64(0), err
+	// 	return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
 	// }
+	// log.Warn("EthEstimateGas  from:", from.String())
+	// to, err := address.NewFromString(params.Tx.To)
+	// if err != nil {
+	// 	return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
+	// }
+	// log.Warn("EthEstimateGas  to:", to.String())
+
+	// var msg *types.Message
+	// msg = &types.Message{
+	// 	From:   from,
+	// 	To:     to,
+	// 	Value:  big.Int(params.Tx.Value),
+	// 	Method: builtin.MethodSend,
+	// 	// Params:     []byte,
+	// 	GasLimit:   build.BlockGasLimit,
+	// 	GasFeeCap:  big.Zero(),
+	// 	GasPremium: big.Zero(),
+	// }
+	msg, err := ethCallToFilecoinMessage(ctx, params.Tx)
+	if err != nil {
+		return ethtypes.EthUint64(0), err
+	}
 
 	// Set the gas limit to the zero sentinel value, which makes
 	// gas estimation actually run.
@@ -1489,7 +1491,7 @@ func (e *EthEventHandler) installEthFilterSpec(ctx context.Context, filterSpec *
 		}
 	}
 
-	// Convert all addresses to filecoin f4 addresses
+	// Convert all addresses to filecoin Q4 Addresses
 	for _, ea := range filterSpec.Address {
 		a, err := ea.ToFilecoinAddress()
 		if err != nil {

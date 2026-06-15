@@ -1,11 +1,13 @@
 package key
 
 import (
-	"fmt"
-	"strings"
+	// "fmt"
+	"sort"
+	// "strings"
 
 	"golang.org/x/xerrors"
 
+	logging "github.com/ipfs/go-log/v2"
 	// "github.com/post-quantumqoin/qoin-shor/lib/address"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/crypto"
@@ -15,6 +17,8 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"
 	// pqccrypto "github.com/post-quantumqoin/qoin-shor/pqccrypto"
 )
+
+var log = logging.Logger("key")
 
 func GenerateKey(typ types.KeyType) (*Key, error) {
 	ctyp := ActSigType(typ)
@@ -91,16 +95,14 @@ func ActSigType(typ types.KeyType) crypto.SigType {
 		return crypto.SigTypeBLS
 	case types.KTSecp256k1:
 		return crypto.SigTypeSecp256k1
-	case types.KTDelegated:
-		return crypto.SigTypeDelegated
 	default:
 		return crypto.SigTypeUnknown
 	}
 }
 
 // //type SigType byte
-func PqcActSigType(typ types.KeyType) crypto.SigType {
-	switch typ {
+func PqcActSigType(sa types.SigAlg) crypto.SigType {
+	switch sa {
 	case types.Falcon512:
 		return crypto.SigTypeFalcon512
 	case types.Falcon1024:
@@ -114,54 +116,50 @@ func PqcActSigType(typ types.KeyType) crypto.SigType {
 	}
 }
 
-func PqcGenerateKey(typ types.KeyType) (*PqcKey, error) {
-	ki := types.KeyInfo{
-		Type: types.KTPqc,
+func GeneratePqcKeyWithAlgs(typ types.KeyType, algs []types.SigAlg) (*PqcKey, error) {
+	if len(algs) == 0 {
+		// Default to all supported algorithms if none specified
+		algs = []types.SigAlg{types.Falcon512, types.Dilithium3}
 	}
-
-	if strings.Contains(string(typ), string(types.KTDelegated)) {
-		typ = "falcon512 dilithium3"
-		ki.Type = types.KTDelegated
-	}
-
-	if strings.Contains(string(typ), string(types.KTPqc)) {
-		typ = "falcon512 dilithium3"
-		ki.Type = types.KTPqc
-	}
-
-	if !strings.Contains(string(typ), string(types.Falcon512)) &&
-		!strings.Contains(string(typ), string(types.Falcon1024)) &&
-		!strings.Contains(string(typ), string(types.Dilithium3)) &&
-		!strings.Contains(string(typ), string(types.Dilithium5)) {
-		return nil, xerrors.Errorf("unknown sig type: %s", typ)
-	}
-	fd := strings.Fields(string(typ))
-	var kprs []types.PqcKeypair
-	for _, tp := range fd {
-		ctyp := PqcActSigType(types.KeyType(tp))
-		if ctyp == crypto.SigTypeUnknown {
-			return nil, xerrors.Errorf("unknown sig type: %s", typ)
+	// Validate algorithms and remove duplicates
+	seen := map[types.SigAlg]struct{}{}
+	var list []types.SigAlg
+	for _, a := range algs {
+		if _, ok := seen[a]; ok {
+			continue
 		}
-		// fmt.Println("key PqcGenerateKey ctyp:",ctyp)
+		switch a {
+		case types.Falcon512, types.Falcon1024, types.Dilithium3, types.Dilithium5:
+			// ok
+		default:
+			return nil, xerrors.Errorf("unknown pqc algorithm: %s", a)
+		}
+		seen[a] = struct{}{}
+		list = append(list, a)
+	}
+
+	var kprs []types.PqcKeypair
+	for _, a := range list {
+		ctyp := PqcActSigType(a)
 		seed, sk, pk, err := sigs.PqcGenerate(ctyp)
 		if err != nil {
-			return nil, err
+			return nil, xerrors.Errorf("generate %s failed: %w", a, err)
 		}
-		kpr := types.PqcKeypair{
-			PqcVersion: 0,
-			PqcSeed:    seed,
-			PqcType:    types.KeyType(tp),
-
+		kprs = append(kprs, types.PqcKeypair{
+			PqcVersion:    0,
+			PqcSeed:       seed,
+			PqcType:       types.KeyType(a),
 			PqcPrivateKey: sk,
 			PqcPublicKey:  pk,
-		}
-		kprs = append(kprs, kpr)
+		})
 	}
-	// ki := types.KeyInfo{
-	// 	PqcKeypairs: kprs,
-	// }
-	ki.PqcKeypairs = kprs
-	return PqcNewKey(ki)
+
+	ki := types.KeyInfo{
+		Type:        typ, // This should be set to a type that indicates it's a multi-algorithm key, e.g., "pqc-multi"
+		PqcKeypairs: kprs,
+	}
+
+	return NewPqcKey(ki)
 }
 
 type PqcKey struct {
@@ -172,52 +170,73 @@ type PqcKey struct {
 	Address address.Address
 }
 
-func PqcNewKey(KeyInfo types.KeyInfo) (*PqcKey, error) {
-	var Pbks []types.PqcCertPubkey
-
-	for _, kp := range KeyInfo.PqcKeypairs {
-		Pbks = append(Pbks, types.PqcCertPubkey{Typ: string(kp.PqcType), Pubkey: kp.PqcPublicKey})
+func NewPqcKey(keyInfo types.KeyInfo) (*PqcKey, error) {
+	if len(keyInfo.PqcKeypairs) == 0 {
+		return nil, xerrors.Errorf("no pqc keypairs in KeyInfo")
 	}
-	fmt.Println("PqcNewKey Pbks len:", len(Pbks))
+	// Sort keypairs by type to ensure deterministic order in cert
+	kpairs := make([]types.PqcKeypair, len(keyInfo.PqcKeypairs))
+	copy(kpairs, keyInfo.PqcKeypairs)
+	sort.Slice(kpairs, func(i, j int) bool {
+		return string(kpairs[i].PqcType) < string(kpairs[j].PqcType)
+	})
+
+	var pubkeys []types.PqcCertPubkey
+	for _, kp := range kpairs {
+		if len(kp.PqcPublicKey) == 0 {
+			return nil, xerrors.Errorf("empty public key for pqc type %s", kp.PqcType)
+		}
+		pubkeys = append(pubkeys, types.PqcCertPubkey{
+			Typ:    string(kp.PqcType),
+			Pubkey: kp.PqcPublicKey,
+		})
+	}
+
 	cert := types.PQCCert{
-		Pubkeys: Pbks,
+		Pubkeys: pubkeys,
 		Version: 0,
 	}
 
-	k := &PqcKey{
-		KeyInfo: KeyInfo,
+	pk := &PqcKey{
+		KeyInfo: keyInfo,
 		PQCCert: cert,
 	}
-	if KeyInfo.Type == types.KTDelegated {
-		//Use the first public key as the address
-		pb, err := Pbks[0].Serialize()
+
+	// ensure at least one pubkey exists
+	if len(pubkeys) == 0 {
+		return nil, xerrors.Errorf("no cert pubkeys built")
+	}
+
+	// If the key type is Delegated, we derive the address from the first public key using Ethereum's method
+	if keyInfo.Type == types.KTDelegated {
+		pb, err := pubkeys[0].Serialize()
 		if err != nil {
-			return nil, fmt.Errorf("pqc public key serialization failure")
+			return nil, xerrors.Errorf("serialize delegated pubkey: %w", err)
 		}
-		// Transitory Delegated signature verification as per FIP-0055
 		ethAddr, err := ethtypes.EthAddressFromPubKey(pb)
 		if err != nil {
-			return nil, xerrors.Errorf("failed to calculate Eth address from public key: %w", err)
+			return nil, xerrors.Errorf("eth address from pubkey: %w", err)
 		}
-
 		ea, err := ethtypes.CastEthAddress(ethAddr)
 		if err != nil {
-			return nil, xerrors.Errorf("failed to create ethereum address from bytes: %w", err)
+			return nil, xerrors.Errorf("cast eth address: %w", err)
 		}
-
-		k.Address, err = ea.ToFilecoinAddress()
+		pk.Address, err = ea.ToFilecoinAddress()
 		if err != nil {
-			return nil, xerrors.Errorf("converting Delegated to address: %w", err)
+			return nil, xerrors.Errorf("convert delegated to filecoin address: %w", err)
 		}
-		return k, nil
+		return pk, nil
 	}
 
-	//Use the first public key as the address
-	pb, err := Pbks[0].Serialize()
+	// For non-delegated keys, we derive the address from the first public key using Filecoin's method
+	pb, err := pubkeys[0].Serialize()
 	if err != nil {
-		return nil, fmt.Errorf("pqc public key serialization failure")
+		return nil, xerrors.Errorf("serialize pqc pubkey: %w", err)
+	}
+	pk.Address, err = address.NewPqcAddress(pb)
+	if err != nil {
+		return nil, xerrors.Errorf("new pqc address: %w", err)
 	}
 
-	k.Address, err = address.NewPqcAddress(pb)
-	return k, nil
+	return pk, nil
 }

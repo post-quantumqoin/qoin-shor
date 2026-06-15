@@ -5,11 +5,12 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"math"
+	// "math"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/post-quantumqoin/qoin-shor/pqcpow/pqc"
@@ -20,10 +21,10 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/pqccrypto/mqphash"
 )
 var log = logging.Logger("pqcpow")
-var devslk []*sync.Mutex
+
 
 const maxN = 63 //If bigger then fix it.
-type controller struct {
+type Controller struct {
 	size      int
 	fixNumber int
 	fixIndex  int
@@ -33,18 +34,66 @@ type controller struct {
 	numOfVariables int
 	devs           []*dev
 
-	fixlk sync.Mutex
+	// devslk []*sync.Mutex
+	// fixlk sync.Mutex
 }
 
-func NewController(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int) (*controller, error) {
-	c := &controller{}
+func NewController() (*Controller, error) {
+	c := &Controller{}
+	c.fixIndex = 0
+	c.size = int(kernel.GetDeviceCount()) // get Device number.
+	log.Infof("Device count: %d", c.size)
+	devs, err := c.getDevs() //Registered Device List.
+	if err != nil {
+		return nil, err
+	}
+	c.devs = devs
+	return c, nil
+}
+
+func (c *Controller)getDevs() ([]*dev, error) {
+	var devs []*dev
+	for devID := 0; devID < c.size; devID++ {
+		d := NewDev(c)
+		devs = append(devs, d)
+	}
+	return devs, nil
+}
+
+func (c *Controller)GeneratePQCProof(ctx context.Context, seed []byte, nbit []byte, p pqc.PqcPowAPI, tm *time.Ticker) ([]byte, error) {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	m := int(nbit[0]) + pqc.EquationsOffset
+	n := m + pqc.VariablesN
+	mh := mqphash.CreateMQP(seed, m, n)
+	log.Infof("GeneratePQCProof seed len: nbit: m: n: len(mh.Seed):", len(seed), nbit, m, n, len(mh.Seed))
+	whichXWidth := pqc.WhichXWidth
+	err := c.initPowParams(mh, nbit, whichXWidth)
+	if err != nil {
+		return nil, err
+	}
+	ts, err := p.ChainHead(ctx)
+	if err != nil {
+		return nil, err
+	}
+	notifs, err := p.ChainNotify(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x, err := c.Run(notifs, ts.Height(), tm)
+	if err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+func (c *Controller)initPowParams(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth  int) (error){
+	if(mqphash == nil || len(nbit) == 0 || whichXWidth <= 0){
+		return xerrors.New("invalid parameters for InitPowParams")
+	}
 	c.numOfEquations = int(nbit[0]) + pqc.EquationsOffset
 	c.numOfVariables = c.numOfEquations + pqc.VariablesN
 
-	c.fixIndex = 0
-
-	c.size = int(kernel.GetDeviceCount()) // get Device number.
-	fmt.Println("c.size:", c.size)
 	if c.size <= 1 { // set fixnumber.
 		c.fixNumber = 0
 	} else if c.size <= 2 {
@@ -67,7 +116,9 @@ func NewController(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int) (*con
 	// fmt.Println("c.fixNumber:", c.fixNumber)
 
 	if c.fixNumber > 0 { //create fix str Array.
-		fLen := math.Pow(float64(2), float64(c.fixNumber))
+		// fLen := math.Pow(float64(2), float64(c.fixNumber))
+		fLen := 1 << uint(c.fixNumber)
+        c.fixStr = make([]string, 0, fLen)
 		for i := 0; i < int(fLen); i++ {
 			str := strconv.FormatInt(int64(i), 2)
 			for j := 0; c.fixNumber > len(str); j++ {
@@ -76,93 +127,56 @@ func NewController(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int) (*con
 			c.fixStr = append(c.fixStr, str)
 		}
 	}
-	fmt.Println("c.fixStr:", c.fixStr)
-
-	if len(devslk) != c.size { // create signals for device resources.
-		for devID := 0; devID < c.size; devID++ {
-			lk := new(sync.Mutex)
-			devslk = append(devslk, lk)
-		}
+	log.Infof("InitPowParams numOfEquations: numOfVariables: fixNumber: fixStr len:", c.numOfEquations, c.numOfVariables, c.fixNumber, len(c.fixStr))
+	for _, dev := range c.devs {
+        if err := dev.initParams(mqphash, nbit, whichXWidth); err != nil {
+            return err
+        }		
 	}
+	return nil
 
-	devs, err := getDevs(mqphash, nbit, whichXWidth, c) //Registered Device List.
-	if err != nil {
-		return nil, err
-	}
-	c.devs = devs
-	return c, nil
 }
 
-func getDevs(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int, c *controller) ([]*dev, error) {
-	var devs []*dev
+func (c *Controller) Run(notifs <-chan []*api.HeadChange,hgt abi.ChainEpoch,tm *time.Ticker) ([]byte, error) {
+    // Use a buffered channel with a capacity of at least the number of devices
+	resultCh := make(chan []byte, c.size)
+	defer close(resultCh) 
+    var wg sync.WaitGroup
+
 	for devID := 0; devID < c.size; devID++ {
-		if len(devslk) == 0 {
-			return nil, fmt.Errorf("the list of device signals is empty")
-		}
-		dlk := devslk[devID]
-		d := NewDev(mqphash, nbit, whichXWidth, c, dlk)
-		devs = append(devs, d)
-	}
-	return devs, nil
-}
-
-func PqcPowProof(ctx context.Context, seed []byte, nbit []byte, p pqc.PqcPowAPI, tm *time.Ticker) ([]byte, error) {
-	m := int(nbit[0]) + pqc.EquationsOffset
-	n := m + pqc.VariablesN
-	mh := mqphash.CreateMQP(seed, m, n)
-	fmt.Println("PqcPowProof seed len: nbit: m: n: len(mh.Seed):", len(seed), nbit, m, n, len(mh.Seed))
-	whichXWidth := pqc.WhichXWidth
-	c, err := NewController(mh, nbit, whichXWidth)
-	if err != nil {
-		return nil, err
-	}
-	ts, err := p.ChainHead(ctx)
-	if err != nil {
-		return nil, err
-	}
-	notifs, err := p.ChainNotify(ctx)
-	if err != nil {
-		return nil, err
-	}
-	x, err := c.Run(notifs, ts.Height(), tm)
-	if err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm *time.Ticker) ([]byte, error) {
-	//Receive blocks generated from devices
-	result := make(chan []byte)
-	//Notify other devices to stop mining when one of them acquires a block
-	// stopch := make(chan bool)
-	// defer close(stopch)
-	// defer close(result)
-	ctx, stop := context.WithCancel(context.Background())
-	//Calculate the value of x
-	for devID := 0; devID < c.size; devID++ {
-		go c.devs[devID].GetX(devID, 0, result, ctx)
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			c.devs[id].GetX(id, 0, resultCh)
+		}(devID)
 	}
 
 	tickerC := tm.C
 	for {
 		select {
-		case r := <-result:
-			if len(r) == 0 {
-				log.Warnf("run x not found")
-				return nil, pqc.ErrXNotFound
-			}
-			// stopch <- true
-			stop()
+		case r := <-resultCh:
+			// if len(r) == 0 {
+			// 	log.Warnf("run x not found")
+			// 	return nil, pqc.ErrXNotFound
+			// }
+			// Receive the first valid result: cancel other workers to ensure resource release
+			// Call at a single location if global forced interruption of computation is required (depends on kernel implementation).
+			kernel.AbortCalc()
+			wg.Wait()
 			return r, nil
 		case <-tickerC:
-			// if build.UpgradeYellowStoneHeight >= 0 && hgt > build.UpgradeYellowStoneHeight {
+			// Timeout
 			log.Warnf("Run out time")
-			// stopch <- true
-			stop()
+			kernel.AbortCalc()
+			wg.Wait()
 			return nil, pqc.ErrXFoundOutTime
-			// }
-		case n := <-notifs:
+		 case n, ok := <-notifs:
+			if !ok {
+                // Notify channel is closed, treat as abort 
+                kernel.AbortCalc()
+                wg.Wait()
+                return nil, pqc.NewBlockheads
+            }
 			for _, change := range n {
 				//a head change notifs,if a new block header is generated
 				// the miner stops the Proof-of-Work for this block
@@ -171,8 +185,8 @@ func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm
 					retention := time.Unix(int64(change.Val.MinTimestamp()-(uint64(15)-build.MinerRetentionTimeSecs)), 0)
 					build.Clock.Sleep(build.Clock.Until(retention))
 					log.Infow("new chain notify ", "now time:", build.Clock.Now(), "head MinTimestamp:", time.Unix(int64(change.Val.MinTimestamp()), 0))
-					// stopch <- true
-					stop()
+					kernel.AbortCalc()
+				 	wg.Wait()
 					return nil, pqc.NewBlockheads
 				}
 
@@ -182,9 +196,7 @@ func (c *controller) Run(notifs <-chan []*api.HeadChange, hgt abi.ChainEpoch, tm
 	}
 }
 
-func (c *controller) GetNextFixStr() string {
-	c.fixlk.Lock()
-	defer c.fixlk.Unlock()
+func (c *Controller) GetNextFixStr() string {
 	if c.fixNumber == 0 ||
 		len(c.fixStr) == 0 ||
 		c.fixIndex >= len(c.fixStr) {
@@ -207,46 +219,56 @@ type dev struct {
 	nbit         []byte
 	//  child: ChildProcessWithoutNullStreams;
 	deviceID   int
-	controller *controller
+	controller *Controller
 	xbuf       []byte
 	smCount    int
 
-	lk *sync.Mutex
+	lk sync.Mutex
 }
 
-func NewDev(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int, ctr *controller, dlk *sync.Mutex) *dev {
+func NewDev(ctr *Controller) *dev {
 	d := &dev{
-		mqphash:     mqphash,
-		nbit:        nbit,
-		whichXWidth: whichXWidth,
+		// mqphash:     mqphash,
+		// nbit:        nbit,
+		// whichXWidth: whichXWidth,
 		controller:  ctr,
-		lk:          dlk,
 	}
-	d.m = int(nbit[0]) + pqc.EquationsOffset
-	d.n = d.m + pqc.VariablesN
-	d.startSMCount = 0
+	// d.m = int(nbit[0]) + pqc.EquationsOffset
+	// d.n = d.m + pqc.VariablesN
+	// d.startSMCount = 0
+	// d.lk = new(sync.Mutex)
 	return d
 }
 
-func (d *dev) GetX(devID int, startSMCount int, results chan []byte, ctx context.Context) {
-	if !d.lk.TryLock() {
-		fmt.Println("TryLock fail dev:", devID)
-		for {
-			if d.lk.TryLock() {
-				fmt.Println("TryLock success dev:", devID)
-				break
-			}
-			select {
-			case <-ctx.Done():
-				fmt.Println("stop mine")
-				return
-			default:
-				// fmt.Println("TryLock dev:", devID)
-			}
-		}
-	}
+func (d *dev) initParams(mqphash *mqphash.MQPHash, nbit []byte, whichXWidth int) error{
+	if mqphash == nil {
+        return xerrors.New("mqphash is nil")
+    }
+    if len(nbit) == 0 {
+        return xerrors.New("nbit is empty")
+    }
+    if whichXWidth <= 0 {
+        return xerrors.New("whichXWidth must be > 0")
+    }
+	// optional: if already initialized, return or no-op
+    // if d.mqphash != nil {
+    //     return xerrors.New("dev already initialized")
+    // }
+	// defensive copy
+    d.nbit = append([]byte(nil), nbit...)
+	d.mqphash = mqphash
+	d.whichXWidth = whichXWidth
+	d.m = int(nbit[0]) + pqc.EquationsOffset
+	d.n = d.m + pqc.VariablesN
+	d.startSMCount = 0
+
+	return nil
+}
+
+func (d *dev) GetX(devID int, startSMCount int, results chan []byte) {
+	d.lk.Lock()
 	defer d.lk.Unlock()
-	defer close(results)
+	// defer close(results)
 	d.deviceID = devID
 	d.startSMCount = startSMCount
 	fix := d.controller.GetNextFixStr()
@@ -258,16 +280,16 @@ func (d *dev) GetX(devID int, startSMCount int, results chan []byte, ctx context
 			var err error
 			if len(fix) != 0 {
 				x, _, err = d.calculate(fix) // return d.xbuf = mf.fixBack(rx, fix)
-				select {
-				case <-ctx.Done():
-					fmt.Println("stop mine")
+				if err ==  pqc.ErrAbort {
 					return
-				default:
-					fmt.Println("I am working!")
+				}
+				if err ==  pqc.ErrXNotFound {
+					// results <- nil
+					return
 				}
 				if err != nil {
 					fmt.Println("GetX calculate err:", err)
-					results <- nil
+					// results <- nil
 					return
 				}
 			} else {
@@ -290,16 +312,16 @@ func (d *dev) GetX(devID int, startSMCount int, results chan []byte, ctx context
 			}
 		} else { //no fix
 			_, x, err := d.calculate(fix)
-			select {
-			case <-ctx.Done():
-				fmt.Println("stop mine")
+			if err ==  pqc.ErrAbort {
 				return
-			default:
-				fmt.Println("I am working!")
+			}
+			if err ==  pqc.ErrXNotFound {
+				// results <- nil
+				return
 			}
 			if err != nil {
 				fmt.Println("GetX calculate err:", err)
-				results <- nil
+				// results <- nil
 				return
 			}
 			fmt.Println("GetX calculate:", x)
@@ -321,14 +343,6 @@ func (d *dev) GetX(devID int, startSMCount int, results chan []byte, ctx context
 		if pqc.VerifyPoW(d.mqphash.Seed, d.nbit, d.xbuf) {
 			verify = true
 		}
-		//check that the results channel is closed
-		// select {
-		// case <-stopch:
-		// 	fmt.Println("stopch chan is closed devID:", devID)
-		// 	return
-		// default:
-		// 	fmt.Println("check clx chan status:", devID)
-		// }
 
 		if verify {
 			fmt.Println("VerifyPoW is ok  d.deviceID: fix: d.xbuf:s", d.deviceID, fix, d.xbuf)
@@ -370,25 +384,6 @@ func (d *dev) checkSolution(solution string) bool {
 	return d.mqphash.CheckIsSolution(xBuf[0:d.mqphash.VariablesByte])
 }
 
-// private checkSolution(): boolean {
-// 	let solution = this.x_data.x;
-// 	let x = solution.slice(solution.length - this.n, solution.length);
-
-// 	for (let index = 0; index < this.mqphash.MQP.unwantedVariablesBit; index++) {
-// 		x += '0';
-// 	}
-
-// 	let xBuf = Buffer.alloc(32);
-// 	let index = 0;
-
-// 	for (let i = 0; i < x.length; i += 8) {
-// 		xBuf[index++] = parseInt(x.slice(i, i + 8), 2);
-// 	}
-// 	this.x_data.xBuf = xBuf;
-
-// 	return this.mqphash.checkIsSolution(xBuf.subarray(0, this.mqphash.MQP.variablesByte));
-// }
-
 func (d *dev) calculate(fix string) ([]byte, string, error) {
 	// d.lk.Lock()
 	// defer d.lk.Unlock()
@@ -420,7 +415,11 @@ func (d *dev) calculate(fix string) ([]byte, string, error) {
 		rx := kernel.CudaGetX(d.deviceID, d.m, mf.NewN(), d.whichXWidth, uint64(d.startSMCount), mf.NewCoe(), equations)
 		// CudaGetX(deviceID int, m int, n int, whichXWidth int, startSMCount uint64, coefficientBit int, xIn []string)
 		srx := strings.Split(rx, "x found:")
-		if len(srx) <= 1 {
+
+		if strings.Contains(rx, "abort") {
+			return nil, "", pqc.ErrAbort
+		}
+		if strings.Contains(rx, "x not found") {
 			return nil, "", pqc.ErrXNotFound
 		}
 		// fmt.Println("calculate CudaGetX fix: srx[1]:", fix, srx[1])

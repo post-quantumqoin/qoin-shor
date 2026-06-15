@@ -93,10 +93,10 @@ func DHTRouting(mode dht.ModeOpt) interface{} {
 			dht.Datastore(dstore),
 			dht.Validator(validator),
 			dht.ProtocolPrefix(build.DhtProtocolName(nn)),
-			// dht.QueryFilter(dht.PublicQueryFilter),
-			// dht.RoutingTableFilter(dht.PublicRoutingTableFilter),
-			dht.QueryFilter(dht.PrivateQueryFilter),
-			dht.RoutingTableFilter(dht.PrivateRoutingTableFilter),
+			dht.QueryFilter(dht.PublicQueryFilter),
+			dht.RoutingTableFilter(dht.PublicRoutingTableFilter),
+			// dht.QueryFilter(dht.PrivateQueryFilter),
+			// dht.RoutingTableFilter(dht.PrivateRoutingTableFilter),
 			dht.DisableProviders(),
 			dht.DisableValues()}
 		d, err := dht.New(

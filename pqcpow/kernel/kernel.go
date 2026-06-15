@@ -6,6 +6,7 @@ package kernel
 
 char* cudaGetX(int deviceID, int m, int n, int whichXWidth, unsigned long long int startSMCount, int coefficientBit, char **eqs);
 int cudaGetDevCount();
+void abortCalc();
 unsigned long long int cudaGetNumOfExecution(int n, int m);
 #cgo LDFLAGS:-L${SRCDIR} -lgpuworker -lcommon  -lstdc++  -L/usr/local/cuda/lib64 -lcudart -lnvidia-ml
 */
@@ -56,4 +57,9 @@ func CudaGetX(deviceID int, m int, n int, whichXWidth int, startSMCount uint64, 
 
 	return gxstr
 	// return ""
+}
+
+func AbortCalc() int32 {
+	C.abortCalc()
+	return 0
 }

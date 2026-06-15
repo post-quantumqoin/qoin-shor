@@ -60,7 +60,7 @@ func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, 
 
 func ActorNameByCode(c cid.Cid) string {
 	if name, version, ok := actors.GetActorMetaByCode(c); ok {
-		return fmt.Sprintf("fil/%d/%s", version, name)
+		return fmt.Sprintf("qoin/%d/%s", version, name)
 	}
 
 	switch {

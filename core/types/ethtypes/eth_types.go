@@ -23,6 +23,7 @@ import (
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
 	builtintypes "github.com/post-quantumqoin/core-types/builtin"
+	typescrypto "github.com/post-quantumqoin/core-types/crypto"
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/lib/must"
@@ -420,7 +421,7 @@ func EthAddressFromFilecoinAddress(addr address.Address) (EthAddress, error) {
 			return EthAddress{}, err
 		}
 		if ethAddr.IsMaskedID() {
-			return EthAddress{}, xerrors.Errorf("f410f addresses cannot embed masked-ID payloads: %s", ethAddr)
+			return EthAddress{}, xerrors.Errorf("Q410q addresses cannot embed masked-ID payloads: %s", ethAddr)
 		}
 		return ethAddr, nil
 	}
@@ -485,7 +486,7 @@ func (ea EthAddress) ToFilecoinAddress() (address.Address, error) {
 	addr, err := address.NewDelegatedAddress(builtintypes.EthereumAddressManagerActorID, ea[:])
 	if err != nil {
 		return address.Undef, fmt.Errorf("failed to translate supplied address (%s) into a "+
-			"Filecoin f4 address: %w", hex.EncodeToString(ea[:]), err)
+			"Filecoin Q4 Address: %w", hex.EncodeToString(ea[:]), err)
 	}
 	return addr, nil
 }
@@ -1218,4 +1219,95 @@ type EthCreateTraceResult struct {
 	Address *EthAddress `json:"address,omitempty"`
 	GasUsed EthUint64   `json:"gasUsed"`
 	Code    EthBytes    `json:"code"`
+}
+
+type JPqcSignature struct {
+	Type typescrypto.SigType `json:"type"`
+	Data EthBytes            `json:"data"`
+}
+
+type JSignPQCCert struct {
+	Pubkeys []struct {
+		Typ    string   `json:"type"`
+		Pubkey EthBytes `json:"pubkey"`
+	} `json:"pubkeys"`
+	Version uint8 `json:"version"`
+}
+
+type PQCSignature typescrypto.Signature
+
+func (s PQCSignature) MarshalJSON() ([]byte, error) {
+	pqcSigs := make([]JPqcSignature, len(s.PqcSignatures))
+	for i, sig := range s.PqcSignatures {
+		pqcSigs[i] = JPqcSignature{
+			Type: sig.Type,
+			Data: EthBytes(sig.Data),
+		}
+	}
+
+	pubkeys := make([]struct {
+		Typ    string   `json:"type"`
+		Pubkey EthBytes `json:"pubkey"`
+	}, len(s.PqcCert.Pubkeys))
+	for i, pk := range s.PqcCert.Pubkeys {
+		pubkeys[i].Typ = pk.Typ
+		pubkeys[i].Pubkey = EthBytes(pk.Pubkey)
+	}
+
+	return json.Marshal(&struct {
+		Type          typescrypto.SigType `json:"type"`
+		Data          EthBytes            `json:"data"`
+		PqcSignatures []JPqcSignature     `json:"pqcSignatures,omitempty"`
+		PqcCert       JSignPQCCert        `json:"pqcCert,omitempty"`
+	}{
+		Type:          s.Type,
+		Data:          EthBytes(s.Data),
+		PqcSignatures: pqcSigs,
+		PqcCert: JSignPQCCert{
+			Pubkeys: pubkeys,
+			Version: s.PqcCert.Version,
+		},
+	})
+}
+
+func (s *PQCSignature) UnmarshalJSON(b []byte) error {
+	var temp struct {
+		Type          typescrypto.SigType `json:"type"`
+		Data          EthBytes            `json:"data"`
+		PqcSignatures []JPqcSignature     `json:"pqcSignatures,omitempty"`
+		PqcCert       JSignPQCCert        `json:"pqcCert,omitempty"`
+	}
+	if err := json.Unmarshal(b, &temp); err != nil {
+		return err
+	}
+
+	s.Type = temp.Type
+	s.Data = temp.Data
+
+	pqcSigs := make([]typescrypto.PqcSignature, len(temp.PqcSignatures))
+	for i, sig := range temp.PqcSignatures {
+		pqcSigs[i] = typescrypto.PqcSignature{
+			Type: sig.Type,
+			Data: sig.Data,
+		}
+	}
+	s.PqcSignatures = pqcSigs
+
+	pubkeys := make([]typescrypto.SignPqcCertPubkey, len(temp.PqcCert.Pubkeys))
+	for i, pk := range temp.PqcCert.Pubkeys {
+		pubkeys[i] = typescrypto.SignPqcCertPubkey{
+			Typ:    pk.Typ,
+			Pubkey: pk.Pubkey,
+		}
+	}
+	s.PqcCert = typescrypto.SignPQCCert{
+		Pubkeys: pubkeys,
+		Version: temp.PqcCert.Version,
+	}
+
+	return nil
+}
+
+func (s *PQCSignature) Serialize() ([]byte, error) {
+	return (*typescrypto.Signature)(s).Serialize()
 }

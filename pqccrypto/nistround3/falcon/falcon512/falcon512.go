@@ -1,12 +1,26 @@
 package falcon512
 
 /*
-#cgo CFLAGS: -I./falconCore/ -DFALCON_PREFIX=falcon_inner512
-#cgo LDFLAGS: -L${SRCDIR}/falconCore/build -lkat512int
+#cgo CFLAGS: -I./falconCore -I${SRCDIR}/../../../randombytes
+#cgo CFLAGS: -DFALCON_PREFIX=falcon_inner512 
+#cgo CFLAGS: -W -Wall -O2 
+#cgo LDFLAGS: -lm -Wl,--as-needed -Wl,--allow-multiple-definition
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "api.h"
+
+#include "./falconCore/api.c"
+#include "./falconCore/codec.c"
+#include "./falconCore/common.c"
+#include "./falconCore/fft.c"
+#include "./falconCore/fpr.c"
+#include "./falconCore/keygen.c"
+#include "./falconCore/rng.c"
+#include "./falconCore/shake.c"
+#include "./falconCore/sign.c"
+#include "./falconCore/vrfy.c"
+#include "../../../randombytes/randombytes.h"
 */
 import "C"
 import (
@@ -16,6 +30,7 @@ import (
 	"unsafe"
 	"errors"
 
+	_ "github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/share"
 )
 
 // Falcon512CryptoNonceBytes is the size of a serialized nonce key.

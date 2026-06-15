@@ -28,7 +28,7 @@ func TestLotusMount(t *testing.T) {
 	// when test is done, assert expectations on all mock objects.
 	defer mockCtrl.Finish()
 
-	// create a mock lotus api that returns the reader we want
+	// create a mock Shor API that returns the reader we want
 	mockLotusMountAPI := mock_dagstore.NewMockMinerAPI(mockCtrl)
 
 	mockLotusMountAPI.EXPECT().IsUnsealed(gomock.Any(), cid).Return(true, nil).Times(1)

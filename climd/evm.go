@@ -235,11 +235,22 @@ var EvmDeployCmd = &cli.Command{
 		var fromAddr address.Address
 		if from := cctx.String("from"); from == "" {
 			fromAddr, err = api.WalletDefaultAddress(ctx)
+			if err != nil {
+				return err
+			}
 		} else {
 			fromAddr, err = address.NewFromString(from)
-		}
-		if err != nil {
-			return err
+			if err != nil {
+				var eaddr ethtypes.EthAddress
+				eaddr, err = ethtypes.ParseEthAddress(from)
+				if err != nil {
+					return xerrors.Errorf("from address is neither a qoin nor an eth address")
+				}
+				fromAddr, err = eaddr.ToFilecoinAddress()
+				if err != nil {
+					return err
+				}
+			}
 		}
 
 		initcode := abi.CborBytes(contract)
@@ -301,10 +312,10 @@ var EvmDeployCmd = &cli.Command{
 
 		delegated, err := ea.ToFilecoinAddress()
 		if err != nil {
-			return fmt.Errorf("failed to calculate f4 address: %w", err)
+			return fmt.Errorf("failed to calculate Q4 Address: %w", err)
 		}
 
-		afmt.Printf("f4 Address: %s\n", delegated)
+		afmt.Printf("Q4 Address: %s\n", delegated)
 
 		if len(wait.Receipt.Return) > 0 {
 			result := base64.StdEncoding.EncodeToString(wait.Receipt.Return)
@@ -342,9 +353,18 @@ var EvmInvokeCmd = &cli.Command{
 			return xerrors.Errorf("must pass the address and calldata")
 		}
 
-		addr, err := address.NewFromString(cctx.Args().Get(0))
+		addrStr := cctx.Args().Get(0)
+		addr, err := address.NewFromString(addrStr)
 		if err != nil {
-			return xerrors.Errorf("failed to decode address: %w", err)
+			var eaddr ethtypes.EthAddress
+			eaddr, err = ethtypes.ParseEthAddress(addrStr)
+			if err != nil {
+				return xerrors.Errorf("failed to decode address as either qoin or eth address")
+			}
+			addr, err = eaddr.ToFilecoinAddress()
+			if err != nil {
+				return err
+			}
 		}
 
 		var calldata []byte
@@ -368,12 +388,19 @@ var EvmInvokeCmd = &cli.Command{
 
 			fromAddr = defaddr
 		} else {
-			addr, err := address.NewFromString(from)
+			fAddr, err := address.NewFromString(from)
 			if err != nil {
-				return err
+				var eaddr ethtypes.EthAddress
+				eaddr, err = ethtypes.ParseEthAddress(from)
+				if err != nil {
+					return xerrors.Errorf("from address is neither a qoin nor an eth address")
+				}
+				fAddr, err = eaddr.ToFilecoinAddress()
+				if err != nil {
+					return err
+				}
 			}
-
-			fromAddr = addr
+			fromAddr = fAddr
 		}
 
 		val := abi.NewTokenAmount(cctx.Int64("value"))
@@ -518,7 +545,7 @@ var EvmGetBytecode = &cli.Command{
 		defer closer()
 		ctx := ReqContext(cctx)
 
-		code, err := api.EthGetCode(ctx, "", ethtypes.NewEthBlockNumberOrHashFromPredefined("latest"))
+		code, err := api.EthGetCode(ctx, contractAddr, ethtypes.NewEthBlockNumberOrHashFromPredefined("latest"))
 		if err != nil {
 			return err
 		}

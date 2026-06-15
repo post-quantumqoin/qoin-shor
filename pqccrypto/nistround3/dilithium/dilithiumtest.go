@@ -1,5 +1,4 @@
 package main
- 
 
 import "C"
 import (
@@ -7,19 +6,18 @@ import (
 	// "io"
 	"fmt"
 
-	"pqccrypto/nistRound3/dilithium/dilithium2"
-	"pqccrypto/nistRound3/dilithium/dilithium5"
-	"pqccrypto/nistRound3/dilithium/dilithium3"
-	
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/dilithium/dilithium2"
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/dilithium/dilithium3"
+	"github.com/post-quantumqoin/qoin-shor/pqccrypto/nistround3/dilithium/dilithium5"
 	// "pqccrypto/nistRound3/falcon/falcon1024"
-	
 )
-func TestDilithium2()  {
+
+func TestDilithium2() {
 	fmt.Println("start: TestDilithium2 GenerateKey test start\n")
-	_, skbytes, pkbytes, _:= dilithium2.GenerateKey()
+	_, skbytes, pkbytes, _ := dilithium2.GenerateKey()
 
 	msg := []byte("hello")
-	signature, _:= dilithium2.Sign(skbytes, msg)
+	signature, _ := dilithium2.Sign(skbytes, msg)
 
 	// msg2 := []byte("hello2")
 	err := dilithium2.Verify(pkbytes, msg, signature)
@@ -30,12 +28,12 @@ func TestDilithium2()  {
 	fmt.Println("end: TestDilithium2 GenerateKey is ok\n")
 }
 
-func TestDilithium3()  {
+func TestDilithium3() {
 	fmt.Println("start: TestDilithium3 GenerateKey test start\n")
-	_, skbytes, pkbytes, _:= dilithium3.GenerateKey()
+	_, skbytes, pkbytes, _ := dilithium3.GenerateKey()
 
 	msg := []byte("hello")
-	signature, _:= dilithium3.Sign(skbytes, msg)
+	signature, _ := dilithium3.Sign(skbytes, msg)
 
 	// msg2 := []byte("hello2")
 	err := dilithium3.Verify(pkbytes, msg, signature)
@@ -46,12 +44,12 @@ func TestDilithium3()  {
 	fmt.Println("end: TestDilithium3 GenerateKey is ok\n")
 }
 
-func TestDilithium5()  {
+func TestDilithium5() {
 	fmt.Println("start: TestDilithium5 GenerateKey test start\n")
-	_, skbytes, pkbytes, _:= dilithium5.GenerateKey()
+	_, skbytes, pkbytes, _ := dilithium5.GenerateKey()
 
 	msg := []byte("hello")
-	signature, _:= dilithium5.Sign(skbytes, msg)
+	signature, _ := dilithium5.Sign(skbytes, msg)
 
 	// msg2 := []byte("hello2")
 	err := dilithium5.Verify(pkbytes, msg, signature)
@@ -65,22 +63,22 @@ func TestDilithium5()  {
 func TestDilithium2GenBySeed() {
 	fmt.Println("start: TestDilithium2GenBySeed GenBySeed test \n")
 
-	seedbytes, sk1, pk1, _:= dilithium2.GenerateKey()
+	seedbytes, sk1, pk1, _ := dilithium2.GenerateKey()
 	sk2 := dilithium2.GenSkBySeed(seedbytes)
 	pk2 := dilithium2.GenPkBySeed(seedbytes)
-	skr := dilithium2.Equals(sk1,sk2)
+	skr := dilithium2.Equals(sk1, sk2)
 	if !skr {
 		fmt.Println("err: sk1 skr is not Equals ")
 	}
-	pkr := dilithium2.Equals(pk1,pk2)
+	pkr := dilithium2.Equals(pk1, pk2)
 	if !pkr {
 		fmt.Println("err: pk1 pk2 is not Equals ")
 	}
-	
-	msg := []byte("hello")
-	signature1, _:= dilithium2.Sign(sk1, msg)
 
-	signature2, _:= dilithium2.SignBySeed(seedbytes, msg)
+	msg := []byte("hello")
+	signature1, _ := dilithium2.Sign(sk1, msg)
+
+	signature2, _ := dilithium2.SignBySeed(seedbytes, msg)
 
 	err := dilithium2.Verify(pk1, msg, signature2)
 	if !err {
@@ -100,22 +98,22 @@ func TestDilithium2GenBySeed() {
 func TestDilithium3GenBySeed() {
 	fmt.Println("start: TestDilithium3GenBySeed GenBySeed test \n")
 
-	seedbytes, sk1, pk1, _:= dilithium3.GenerateKey()
+	seedbytes, sk1, pk1, _ := dilithium3.GenerateKey()
 	sk2 := dilithium3.GenSkBySeed(seedbytes)
 	pk2 := dilithium3.GenPkBySeed(seedbytes)
-	skr := dilithium3.Equals(sk1,sk2)
+	skr := dilithium3.Equals(sk1, sk2)
 	if !skr {
 		fmt.Println("err: sk1 skr is not Equals ")
 	}
-	pkr := dilithium3.Equals(pk1,pk2)
+	pkr := dilithium3.Equals(pk1, pk2)
 	if !pkr {
 		fmt.Println("err: pk1 pk2 is not Equals ")
 	}
-	
-	msg := []byte("hello")
-	signature1, _:= dilithium3.Sign(sk1, msg)
 
-	signature2, _:= dilithium3.SignBySeed(seedbytes, msg)
+	msg := []byte("hello")
+	signature1, _ := dilithium3.Sign(sk1, msg)
+
+	signature2, _ := dilithium3.SignBySeed(seedbytes, msg)
 
 	err := dilithium3.Verify(pk1, msg, signature2)
 	if !err {
@@ -135,22 +133,22 @@ func TestDilithium3GenBySeed() {
 func TestDilithium5GenBySeed() {
 	fmt.Println("start: TestDilithium5GenBySeed GenBySeed test \n")
 
-	seedbytes, sk1, pk1, _:= dilithium5.GenerateKey()
+	seedbytes, sk1, pk1, _ := dilithium5.GenerateKey()
 	sk2 := dilithium5.GenSkBySeed(seedbytes)
 	pk2 := dilithium5.GenPkBySeed(seedbytes)
-	skr := dilithium5.Equals(sk1,sk2)
+	skr := dilithium5.Equals(sk1, sk2)
 	if !skr {
 		fmt.Println("err: sk1 skr is not Equals ")
 	}
-	pkr := dilithium5.Equals(pk1,pk2)
+	pkr := dilithium5.Equals(pk1, pk2)
 	if !pkr {
 		fmt.Println("err: pk1 pk2 is not Equals ")
 	}
-	
-	msg := []byte("hello")
-	signature1, _:= dilithium5.Sign(sk1, msg)
 
-	signature2, _:= dilithium5.SignBySeed(seedbytes, msg)
+	msg := []byte("hello")
+	signature1, _ := dilithium5.Sign(sk1, msg)
+
+	signature2, _ := dilithium5.SignBySeed(seedbytes, msg)
 
 	err := dilithium5.Verify(pk1, msg, signature2)
 	if !err {
@@ -167,16 +165,15 @@ func TestDilithium5GenBySeed() {
 
 }
 
- 
 func main() {
- 
-	TestDilithium2() 
-	TestDilithium2GenBySeed() 
+
+	TestDilithium2()
+	TestDilithium2GenBySeed()
 
 	TestDilithium3()
 	TestDilithium3GenBySeed()
 
-	TestDilithium5()  
+	TestDilithium5()
 	TestDilithium5GenBySeed()
 
 }
