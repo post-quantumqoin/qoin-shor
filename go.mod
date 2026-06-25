@@ -107,7 +107,7 @@ require (
 	github.com/multiformats/go-varint v0.0.7
 	github.com/open-rpc/meta-schema v0.0.0-20201029221707-1b72ef2ea333
 	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58
-	github.com/post-quantumqoin/address v0.1.0
+	github.com/post-quantumqoin/address v0.1.2
 	github.com/post-quantumqoin/bitset v0.1.1
 	github.com/post-quantumqoin/core-types v0.4.3
 	github.com/post-quantumqoin/go-jsonrpc v0.1.0
