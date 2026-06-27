@@ -1342,7 +1342,7 @@ func (mr *MockFullNodeMockRecorder) EthGetTransactionHashByCid(arg0, arg1 interf
 }
 
 // EthGetTransactionReceipt mocks base method.
-func (m *MockFullNode) EthGetTransactionReceipt(arg0 context.Context, arg1 *ethtypes.EthHash) (*api.EthTxReceipt, error) {
+func (m *MockFullNode) EthGetTransactionReceipt(arg0 context.Context, arg1 ethtypes.EthHash) (*api.EthTxReceipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EthGetTransactionReceipt", arg0, arg1)
 	ret0, _ := ret[0].(*api.EthTxReceipt)
@@ -1357,7 +1357,7 @@ func (mr *MockFullNodeMockRecorder) EthGetTransactionReceipt(arg0, arg1 interfac
 }
 
 // EthGetTransactionReceiptLimited mocks base method.
-func (m *MockFullNode) EthGetTransactionReceiptLimited(arg0 context.Context, arg1 *ethtypes.EthHash, arg2 abi.ChainEpoch) (*api.EthTxReceipt, error) {
+func (m *MockFullNode) EthGetTransactionReceiptLimited(arg0 context.Context, arg1 ethtypes.EthHash, arg2 abi.ChainEpoch) (*api.EthTxReceipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EthGetTransactionReceiptLimited", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*api.EthTxReceipt)
