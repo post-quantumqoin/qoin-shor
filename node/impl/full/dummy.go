@@ -67,11 +67,11 @@ func (e *EthModuleDummy) EthGetTransactionCount(ctx context.Context, sender addr
 	return 0, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionReceipt(ctx context.Context, txHash *ethtypes.EthHash) (*api.EthTxReceipt, error) {
+func (e *EthModuleDummy) EthGetTransactionReceipt(ctx context.Context, txHash ethtypes.EthHash) (*api.EthTxReceipt, error) {
 	return nil, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionReceiptLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
+func (e *EthModuleDummy) EthGetTransactionReceiptLimited(ctx context.Context, txHash ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
 	return nil, ErrModuleDisabled
 }
 
