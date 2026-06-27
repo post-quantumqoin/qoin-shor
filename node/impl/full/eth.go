@@ -73,7 +73,7 @@ type EthModuleAPI interface {
 	EthEstimateGas(ctx context.Context, p jsonrpc.RawParams) (ethtypes.EthUint64, error)
 	EthCall(ctx context.Context, tx ethtypes.EthCall, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
 	EthMaxPriorityFeePerGas(ctx context.Context) (ethtypes.EthBigInt, error)
-	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) (ethtypes.EthTx, error)
+	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) (ethtypes.EthHash, error)
 	EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error)
 	Web3ClientVersion(ctx context.Context) (string, error)
 	EthTraceBlock(ctx context.Context, blkNum string) ([]*ethtypes.EthTraceBlock, error)
@@ -405,7 +405,7 @@ func (a *EthModule) EthGetTransactionReceipt(ctx context.Context, txHash *ethtyp
 }
 
 func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
-	c, err := a.EthTxHashManager.TransactionHashLookup.GetCidFromHash(txHash)
+	c, err := a.EthTxHashManager.TransactionHashLookup.GetCidFromHash(*txHash)
 	if err != nil {
 		log.Debug("could not find transaction hash %s in lookup table", txHash.String())
 	}
