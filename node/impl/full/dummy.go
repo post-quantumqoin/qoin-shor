@@ -67,11 +67,11 @@ func (e *EthModuleDummy) EthGetTransactionCount(ctx context.Context, sender addr
 	return 0, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*api.EthTxReceipt, error) {
+func (e *EthModuleDummy) EthGetTransactionReceipt(ctx context.Context, txHash *ethtypes.EthHash) (*api.EthTxReceipt, error) {
 	return nil, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionReceiptLimited(ctx context.Context, txHash cid.Cid, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
+func (e *EthModuleDummy) EthGetTransactionReceiptLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
 	return nil, ErrModuleDisabled
 }
 
@@ -135,8 +135,8 @@ func (e *EthModuleDummy) EthMaxPriorityFeePerGas(ctx context.Context) (ethtypes.
 	return ethtypes.EthBigIntZero, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) {
-	return nil, ErrModuleDisabled
+func (e *EthModuleDummy) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) (ethtypes.EthHash, error) {
+	return ethtypes.EmptyEthHash, ErrModuleDisabled
 }
 
 func (e *EthModuleDummy) EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) {

@@ -19,12 +19,9 @@ import (
 	peer "github.com/libp2p/go-libp2p/core/peer"
 	protocol "github.com/libp2p/go-libp2p/core/protocol"
 
+	datatransfer "github.com/filecoin-project/go-data-transfer/v2"
 	address "github.com/post-quantumqoin/address"
 	bitfield "github.com/post-quantumqoin/bitset"
-	datatransfer "github.com/filecoin-project/go-data-transfer/v2"
-	retrievalmarket "github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
-	jsonrpc "github.com/post-quantumqoin/go-jsonrpc"
-	auth "github.com/post-quantumqoin/go-jsonrpc/auth"
 	abi "github.com/post-quantumqoin/core-types/abi"
 	big "github.com/post-quantumqoin/core-types/big"
 	paych "github.com/post-quantumqoin/core-types/builtin/v8/paych"
@@ -33,6 +30,9 @@ import (
 	crypto "github.com/post-quantumqoin/core-types/crypto"
 	dline "github.com/post-quantumqoin/core-types/dline"
 	network "github.com/post-quantumqoin/core-types/network"
+	jsonrpc "github.com/post-quantumqoin/go-jsonrpc"
+	auth "github.com/post-quantumqoin/go-jsonrpc/auth"
+	retrievalmarket "github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
 
 	api "github.com/post-quantumqoin/qoin-shor/api"
 	apitypes "github.com/post-quantumqoin/qoin-shor/api/types"
@@ -1342,7 +1342,7 @@ func (mr *MockFullNodeMockRecorder) EthGetTransactionHashByCid(arg0, arg1 interf
 }
 
 // EthGetTransactionReceipt mocks base method.
-func (m *MockFullNode) EthGetTransactionReceipt(arg0 context.Context, arg1 ethtypes.EthHash) (*api.EthTxReceipt, error) {
+func (m *MockFullNode) EthGetTransactionReceipt(arg0 context.Context, arg1 *ethtypes.EthHash) (*api.EthTxReceipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EthGetTransactionReceipt", arg0, arg1)
 	ret0, _ := ret[0].(*api.EthTxReceipt)
@@ -1357,7 +1357,7 @@ func (mr *MockFullNodeMockRecorder) EthGetTransactionReceipt(arg0, arg1 interfac
 }
 
 // EthGetTransactionReceiptLimited mocks base method.
-func (m *MockFullNode) EthGetTransactionReceiptLimited(arg0 context.Context, arg1 ethtypes.EthHash, arg2 abi.ChainEpoch) (*api.EthTxReceipt, error) {
+func (m *MockFullNode) EthGetTransactionReceiptLimited(arg0 context.Context, arg1 *ethtypes.EthHash, arg2 abi.ChainEpoch) (*api.EthTxReceipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EthGetTransactionReceiptLimited", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*api.EthTxReceipt)
@@ -1447,7 +1447,7 @@ func (mr *MockFullNodeMockRecorder) EthProtocolVersion(arg0 interface{}) *gomock
 }
 
 // EthSendRawTransaction mocks base method.
-func (m *MockFullNode) EthSendRawTransaction(arg0 context.Context, arg1 ethtypes.EthBytes) (ethtypes.EthHash, error) {
+func (m *MockFullNode) EthSendRawTransaction(arg0 context.Context, arg1 jsonrpc.RawParams) (ethtypes.EthHash, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EthSendRawTransaction", arg0, arg1)
 	ret0, _ := ret[0].(ethtypes.EthHash)

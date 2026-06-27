@@ -11,11 +11,9 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p/core/peer"
 
-	"github.com/post-quantumqoin/bitset"
 	datatransfer "github.com/filecoin-project/go-data-transfer/v2"
-	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
-	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 	"github.com/post-quantumqoin/address"
+	bitfield "github.com/post-quantumqoin/bitset"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
 	"github.com/post-quantumqoin/core-types/builtin/v8/paych"
@@ -24,6 +22,8 @@ import (
 	"github.com/post-quantumqoin/core-types/dline"
 	abinetwork "github.com/post-quantumqoin/core-types/network"
 	"github.com/post-quantumqoin/go-jsonrpc"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 
 	apitypes "github.com/post-quantumqoin/qoin-shor/api/types"
 	"github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
@@ -814,8 +814,8 @@ type FullNode interface {
 	EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid) (*ethtypes.EthHash, error)                                                    //perm:read
 	EthGetMessageCidByTransactionHash(ctx context.Context, txHash *ethtypes.EthHash) (*cid.Cid, error)                                         //perm:read
 	EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error)    //perm:read
-	EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*EthTxReceipt, error)                                                            //perm:read
-	EthGetTransactionReceiptLimited(ctx context.Context, txHash cid.Cid, limit abi.ChainEpoch) (*EthTxReceipt, error)                          //perm:read
+	EthGetTransactionReceipt(ctx context.Context, txHash *ethtypes.EthHash) (*EthTxReceipt, error)                                                 //perm:read
+	EthGetTransactionReceiptLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*EthTxReceipt, error)               //perm:read
 	EthGetTransactionByBlockHashAndIndex(ctx context.Context, blkHash ethtypes.EthHash, txIndex ethtypes.EthUint64) (ethtypes.EthTx, error)    //perm:read
 	EthGetTransactionByBlockNumberAndIndex(ctx context.Context, blkNum ethtypes.EthUint64, txIndex ethtypes.EthUint64) (ethtypes.EthTx, error) //perm:read
 
@@ -834,7 +834,7 @@ type FullNode interface {
 	EthEstimateGas(ctx context.Context, p jsonrpc.RawParams) (ethtypes.EthUint64, error)                                 //perm:read
 	EthCall(ctx context.Context, tx ethtypes.EthCall, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) //perm:read
 
-	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) //perm:read
+	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) (ethtypes.EthHash, error) //perm:read
 	EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error)      //perm:read
 	// Returns event logs matching given filter spec.
 	EthGetLogs(ctx context.Context, filter *ethtypes.EthFilterSpec) (*ethtypes.EthFilterResult, error) //perm:read

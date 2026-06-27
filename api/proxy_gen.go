@@ -16,14 +16,9 @@ import (
 	"github.com/libp2p/go-libp2p/core/protocol"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/address"
-	"github.com/post-quantumqoin/bitset"
 	datatransfer "github.com/filecoin-project/go-data-transfer/v2"
-	"github.com/post-quantumqoin/go-qoin-markets/piecestore"
-	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
-	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
-	"github.com/post-quantumqoin/go-jsonrpc"
-	"github.com/post-quantumqoin/go-jsonrpc/auth"
+	"github.com/post-quantumqoin/address"
+	bitfield "github.com/post-quantumqoin/bitset"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/builtin/v8/paych"
 	verifregtypes "github.com/post-quantumqoin/core-types/builtin/v9/verifreg"
@@ -31,6 +26,11 @@ import (
 	"github.com/post-quantumqoin/core-types/dline"
 	abinetwork "github.com/post-quantumqoin/core-types/network"
 	"github.com/post-quantumqoin/core-types/proof"
+	"github.com/post-quantumqoin/go-jsonrpc"
+	"github.com/post-quantumqoin/go-jsonrpc/auth"
+	"github.com/post-quantumqoin/go-qoin-markets/piecestore"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
+	"github.com/post-quantumqoin/go-qoin-markets/storagemarket"
 
 	apitypes "github.com/post-quantumqoin/qoin-shor/api/types"
 	builtinactors "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
@@ -297,9 +297,9 @@ type FullNodeMethods struct {
 
 	EthGetTransactionHashByCid func(p0 context.Context, p1 cid.Cid) (*ethtypes.EthHash, error) `perm:"read"`
 
-	EthGetTransactionReceipt func(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) `perm:"read"`
+	EthGetTransactionReceipt func(p0 context.Context, p1 *ethtypes.EthHash) (*EthTxReceipt, error) `perm:"read"`
 
-	EthGetTransactionReceiptLimited func(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) `perm:"read"`
+	EthGetTransactionReceiptLimited func(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) `perm:"read"`
 
 	EthMaxPriorityFeePerGas func(p0 context.Context) (ethtypes.EthBigInt, error) `perm:"read"`
 
@@ -311,7 +311,7 @@ type FullNodeMethods struct {
 
 	EthProtocolVersion func(p0 context.Context) (ethtypes.EthUint64, error) `perm:"read"`
 
-	EthSendRawTransaction func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) `perm:"read"`
+	EthSendRawTransaction func(p0 context.Context, p1 jsonrpc.RawParams) (ethtypes.EthHash, error) `perm:"read"`
 
 	EthGetMessageCid func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) `perm:"read"`
 
@@ -731,9 +731,9 @@ type GatewayMethods struct {
 
 	EthGetTransactionHashByCid func(p0 context.Context, p1 cid.Cid) (*ethtypes.EthHash, error) ``
 
-	EthGetTransactionReceipt func(p0 context.Context, p1  cid.Cid) (*EthTxReceipt, error) ``
+	EthGetTransactionReceipt func(p0 context.Context, p1 *ethtypes.EthHash) (*EthTxReceipt, error) ``
 
-	EthGetTransactionReceiptLimited func(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) ``
+	EthGetTransactionReceiptLimited func(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) ``
 
 	EthMaxPriorityFeePerGas func(p0 context.Context) (ethtypes.EthBigInt, error) ``
 
@@ -745,7 +745,7 @@ type GatewayMethods struct {
 
 	EthProtocolVersion func(p0 context.Context) (ethtypes.EthUint64, error) ``
 
-	EthSendRawTransaction func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) ``
+	EthSendRawTransaction func(p0 context.Context, p1 jsonrpc.RawParams) (ethtypes.EthHash, error) ``
 
 	EthGetMessageCid func(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) ``
 
@@ -2389,25 +2389,25 @@ func (s *FullNodeStub) EthGetTransactionHashByCid(p0 context.Context, p1 cid.Cid
 	return nil, ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *FullNodeStruct) EthGetTransactionReceipt(p0 context.Context, p1 *ethtypes.EthHash) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceipt == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceipt(p0, p1)
 }
 
-func (s *FullNodeStub) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *FullNodeStub) EthGetTransactionReceipt(p0 context.Context, p1 *ethtypes.EthHash) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *FullNodeStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceiptLimited == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceiptLimited(p0, p1, p2)
 }
 
-func (s *FullNodeStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *FullNodeStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
@@ -2466,30 +2466,27 @@ func (s *FullNodeStub) EthProtocolVersion(p0 context.Context) (ethtypes.EthUint6
 	return *new(ethtypes.EthUint64), ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
+func (s *FullNodeStruct) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) (ethtypes.EthHash, error) {
 	if s.Internal.EthSendRawTransaction == nil {
-		return nil, ErrNotSupported
+		return ethtypes.EmptyEthHash, ErrNotSupported
 	}
 	return s.Internal.EthSendRawTransaction(p0, p1)
 }
 
-func (s *FullNodeStub) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
-	return nil, ErrNotSupported
+func (s *FullNodeStub) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) (ethtypes.EthHash, error) {
+	return ethtypes.EmptyEthHash, ErrNotSupported
 }
 
 func (s *FullNodeStub) EthGetMessageCid(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
 	return nil, ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthGetMessageCid(p0 context.Context, p1 jsonrpc.RawParams) ([]byte ,error) {
+func (s *FullNodeStruct) EthGetMessageCid(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
 	if s.Internal.EthGetMessageCid == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetMessageCid(p0, p1)
 }
-
-
-
 
 func (s *FullNodeStruct) EthSubscribe(p0 context.Context, p1 jsonrpc.RawParams) (ethtypes.EthSubscriptionID, error) {
 	if s.Internal.EthSubscribe == nil {
@@ -4713,25 +4710,25 @@ func (s *GatewayStub) EthGetTransactionHashByCid(p0 context.Context, p1 cid.Cid)
 	return nil, ErrNotSupported
 }
 
-func (s *GatewayStruct) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *GatewayStruct) EthGetTransactionReceipt(p0 context.Context, p1 *ethtypes.EthHash) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceipt == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceipt(p0, p1)
 }
 
-func (s *GatewayStub) EthGetTransactionReceipt(p0 context.Context, p1 cid.Cid) (*EthTxReceipt, error) {
+func (s *GatewayStub) EthGetTransactionReceipt(p0 context.Context, p1 *ethtypes.EthHash) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
-func (s *GatewayStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *GatewayStruct) EthGetTransactionReceiptLimited(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	if s.Internal.EthGetTransactionReceiptLimited == nil {
 		return nil, ErrNotSupported
 	}
 	return s.Internal.EthGetTransactionReceiptLimited(p0, p1, p2)
 }
 
-func (s *GatewayStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 cid.Cid, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
+func (s *GatewayStub) EthGetTransactionReceiptLimited(p0 context.Context, p1 *ethtypes.EthHash, p2 abi.ChainEpoch) (*EthTxReceipt, error) {
 	return nil, ErrNotSupported
 }
 
@@ -4790,15 +4787,15 @@ func (s *GatewayStub) EthProtocolVersion(p0 context.Context) (ethtypes.EthUint64
 	return *new(ethtypes.EthUint64), ErrNotSupported
 }
 
-func (s *GatewayStruct) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
+func (s *GatewayStruct) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) (ethtypes.EthHash, error) {
 	if s.Internal.EthSendRawTransaction == nil {
-		return nil, ErrNotSupported
+		return ethtypes.EmptyEthHash, ErrNotSupported
 	}
 	return s.Internal.EthSendRawTransaction(p0, p1)
 }
 
-func (s *GatewayStub) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {
-	return nil, ErrNotSupported
+func (s *GatewayStub) EthSendRawTransaction(p0 context.Context, p1 jsonrpc.RawParams) (ethtypes.EthHash, error) {
+	return ethtypes.EmptyEthHash, ErrNotSupported
 }
 
 func (s *GatewayStruct) EthGetMessageCid(p0 context.Context, p1 jsonrpc.RawParams) ([]byte, error) {

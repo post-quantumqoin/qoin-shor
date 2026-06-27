@@ -58,8 +58,8 @@ type EthModuleAPI interface {
 	EthGetMessageCidByTransactionHash(ctx context.Context, txHash *ethtypes.EthHash) (*cid.Cid, error)
 	EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid) (*ethtypes.EthHash, error)
 	EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error)
-	EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*api.EthTxReceipt, error)
-	EthGetTransactionReceiptLimited(ctx context.Context, txHash cid.Cid, limit abi.ChainEpoch) (*api.EthTxReceipt, error)
+	EthGetTransactionReceipt(ctx context.Context, txHash *ethtypes.EthHash) (*api.EthTxReceipt, error)
+	EthGetTransactionReceiptLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error)
 	EthGetCode(ctx context.Context, address string, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
 	EthGetStorageAt(ctx context.Context, address ethtypes.EthAddress, position ethtypes.EthBytes, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
 	EthGetBalance(ctx context.Context, address address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error)
@@ -73,7 +73,7 @@ type EthModuleAPI interface {
 	EthEstimateGas(ctx context.Context, p jsonrpc.RawParams) (ethtypes.EthUint64, error)
 	EthCall(ctx context.Context, tx ethtypes.EthCall, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
 	EthMaxPriorityFeePerGas(ctx context.Context) (ethtypes.EthBigInt, error)
-	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error)
+	EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) (ethtypes.EthTx, error)
 	EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error)
 	Web3ClientVersion(ctx context.Context) (string, error)
 	EthTraceBlock(ctx context.Context, blkNum string) ([]*ethtypes.EthTraceBlock, error)
@@ -400,20 +400,20 @@ func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender address.A
 	return ethtypes.EthUint64(nonce), nil
 }
 
-func (a *EthModule) EthGetTransactionReceipt(ctx context.Context, c cid.Cid) (*api.EthTxReceipt, error) {
-	return a.EthGetTransactionReceiptLimited(ctx, c, api.LookbackNoLimit)
+func (a *EthModule) EthGetTransactionReceipt(ctx context.Context, txHash *ethtypes.EthHash) (*api.EthTxReceipt, error) {
+	return a.EthGetTransactionReceiptLimited(ctx, txHash, api.LookbackNoLimit)
 }
 
-func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, c cid.Cid, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
-	// c, err := a.EthTxHashManager.TransactionHashLookup.GetCidFromHash(txHash)
-	// if err != nil {
-	// 	log.Debug("could not find transaction hash %s in lookup table", txHash.String())
-	// }
+func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, txHash *ethtypes.EthHash, limit abi.ChainEpoch) (*api.EthTxReceipt, error) {
+	c, err := a.EthTxHashManager.TransactionHashLookup.GetCidFromHash(txHash)
+	if err != nil {
+		log.Debug("could not find transaction hash %s in lookup table", txHash.String())
+	}
 
-	// // This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
-	// if c == cid.Undef {
-	// 	c = txHash.ToCid()
-	// }
+	// This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
+	if c == cid.Undef {
+		c = txHash.ToCid()
+	}
 
 	msgLookup, err := a.StateAPI.StateSearchMsg(ctx, types.EmptyTSK, c, limit, true)
 	if err != nil {
@@ -876,7 +876,7 @@ func (a *EthModule) EthGetMessageCid(ctx context.Context, rawTx jsonrpc.RawParam
 	return unsignedMsg.Cid().Bytes(), nil
 }
 
-func (a *EthModule) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) ([]byte, error) {
+func (a *EthModule) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.RawParams) (ethtypes.EthHash, error) {
 	// txArgs, err := ethtypes.ParseEthTxArgs(rawTx)
 	// if err != nil {
 	// 	return ethtypes.EmptyEthHash, err
@@ -885,16 +885,16 @@ func (a *EthModule) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.Raw
 	// log.Warn("EthSendRawTransaction  len(rawTx):", len(rawTx))
 	msg, err := jsonrpc.DecodeParams[ethtypes.QoinMessage](rawTx)
 	if err != nil {
-		return nil, xerrors.Errorf("decoding params: %w", err)
+		return ethtypes.EmptyEthHash, xerrors.Errorf("decoding params: %w", err)
 	}
 	log.Warn("EthSendRawTransaction msg From:", msg.From)
 	to, err := address.NewFromString(msg.To)
 	if err != nil {
-		return nil, xerrors.Errorf("decoding params: %w", err)
+		return ethtypes.EmptyEthHash, xerrors.Errorf("decoding params: %w", err)
 	}
 	from, err := address.NewFromString(msg.From)
 	if err != nil {
-		return nil, xerrors.Errorf("decoding params: %w", err)
+		return ethtypes.EmptyEthHash, xerrors.Errorf("decoding params: %w", err)
 	}
 	unsignedMsg := &types.Message{
 		Version:    0,
@@ -922,7 +922,7 @@ func (a *EthModule) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.Raw
 	for _, ct := range msg.Signatures.Cert {
 		tp, err := crypto.SigType(ct.PqcType).Name()
 		if err != nil {
-			return nil, xerrors.Errorf("decoding params: %w", err)
+			return ethtypes.EmptyEthHash, xerrors.Errorf("decoding params: %w", err)
 		}
 		cert.Pubkeys = append(cert.Pubkeys, crypto.SignPqcCertPubkey{Typ: tp, Pubkey: ct.PublicKey})
 	}
@@ -943,14 +943,16 @@ func (a *EthModule) EthSendRawTransaction(ctx context.Context, rawTx jsonrpc.Raw
 
 	_, err = a.MpoolAPI.MpoolPush(ctx, smsg)
 	if err != nil {
-		return nil, err
+		return ethtypes.EmptyEthHash, err
 	}
-	c, err := smsg.Cid().MarshalJSON()
+
+	hash, err := ethtypes.EthHashFromCid(smsg.Cid())
 	if err != nil {
-		return nil, err
+		return ethtypes.EmptyEthHash, err
 	}
+
 	// return ethtypes.EthHashFromTxBytes(rawTx), nil
-	return c, nil
+	return hash, nil
 }
 
 func (a *EthModule) Web3ClientVersion(ctx context.Context) (string, error) {
