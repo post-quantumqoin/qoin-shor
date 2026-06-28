@@ -13,6 +13,7 @@ import (
 	// pqccrypto "github.com/post-quantumqoin/qoin-shor/pqccrypto"
 
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"
 )
 
 // Sign takes in signature type, private key and message. Returns a signature for that message.
@@ -172,6 +173,65 @@ func MultiPqcVerify(sig *crypto.Signature, addr address.Address, msg []byte) err
 	if addr.Protocol() == address.ID {
 		return fmt.Errorf("must resolve ID addresses before using them to verify a signature")
 	}
+
+	// Verify that the signer address matches the public key in the PqcCert
+	if len(sig.PqcCert.Pubkeys) == 0 {
+		return xerrors.Errorf("empty pubkeys in pqc cert")
+	}
+
+	verifyMatch := func(pb []byte) bool {
+		var expectedAddr address.Address
+		var err error
+		if addr.Protocol() == address.Delegated {
+			ethAddr, err := ethtypes.EthAddressFromPubKey(pb)
+			if err != nil {
+				return false
+			}
+			ea, err := ethtypes.CastEthAddress(ethAddr)
+			if err != nil {
+				return false
+			}
+			expectedAddr, err = ea.ToFilecoinAddress()
+			if err != nil {
+				return false
+			}
+		} else {
+			expectedAddr, err = address.NewPqcAddress(pb)
+			if err != nil {
+				return false
+			}
+		}
+		return expectedAddr == addr
+	}
+
+	addressMatched := false
+
+	// Try matching using raw public key bytes (compatible with JS/TS wallets)
+	if verifyMatch(sig.PqcCert.Pubkeys[0].Pubkey) {
+		addressMatched = true
+		fmt.Println("MultiPqcVerify: Address matched using raw public key bytes (JS/TS wallet style)")
+	} else {
+		// Try matching using CBOR serialized public key struct (compatible with Go backend)
+		certPubkey := types.PqcCertPubkey{
+			Typ:    sig.PqcCert.Pubkeys[0].Typ,
+			Pubkey: sig.PqcCert.Pubkeys[0].Pubkey,
+		}
+
+		serializedPubkey, err := certPubkey.Serialize()
+		if err != nil {
+			return xerrors.Errorf("failed to serialize first pubkey: %w", err)
+		}
+
+		if verifyMatch(serializedPubkey) {
+			addressMatched = true
+			fmt.Println("MultiPqcVerify: Address matched using CBOR serialized public key struct (Go backend style)")
+		}
+	}
+
+	if !addressMatched {
+		return xerrors.Errorf("signer address %s does not match address derived from signature public key", addr)
+	}
+
 	fmt.Println("MultiPqcVerify msg:", msg)
 	for _, pk := range sig.PqcCert.Pubkeys {
 		fmt.Println("MultiPqcVerify Typ:", crypto.GetTypeByName(pk.Typ))
