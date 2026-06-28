@@ -209,6 +209,7 @@ func MultiPqcVerify(sig *crypto.Signature, addr address.Address, msg []byte) err
 	// Try matching using raw public key bytes (compatible with JS/TS wallets)
 	if verifyMatch(sig.PqcCert.Pubkeys[0].Pubkey) {
 		addressMatched = true
+		fmt.Println("MultiPqcVerify: Address matched using raw public key bytes (JS/TS wallet style)")
 	} else {
 		// Try matching using CBOR serialized public key struct (compatible with Go backend)
 		certPubkey := types.PqcCertPubkey{
@@ -223,6 +224,7 @@ func MultiPqcVerify(sig *crypto.Signature, addr address.Address, msg []byte) err
 
 		if verifyMatch(serializedPubkey) {
 			addressMatched = true
+			fmt.Println("MultiPqcVerify: Address matched using CBOR serialized public key struct (Go backend style)")
 		}
 	}
 
