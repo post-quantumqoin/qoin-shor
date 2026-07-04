@@ -31,7 +31,6 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/build"
 	actors "github.com/post-quantumqoin/qoin-shor/core/contracts"
 	builtinactors "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin"
-	builtinevm "github.com/post-quantumqoin/qoin-shor/core/contracts/builtin/evm"
 	"github.com/post-quantumqoin/qoin-shor/core/ethhashlookup"
 	"github.com/post-quantumqoin/qoin-shor/core/events/filter"
 	"github.com/post-quantumqoin/qoin-shor/core/messagepool"
@@ -359,46 +358,46 @@ func (a *EthModule) EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid)
 	return &hash, err
 }
 
-func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
-	// addr, err := sender.ToFilecoinAddress()
-	// if err != nil {
-	// 	return ethtypes.EthUint64(0), nil
-	// }
+// func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
+// 	// addr, err := sender.ToFilecoinAddress()
+// 	// if err != nil {
+// 	// 	return ethtypes.EthUint64(0), nil
+// 	// }
 
-	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
-	if err != nil {
-		return ethtypes.EthUint64(0), xerrors.Errorf("failed to process block param: %v; %w", blkParam, err)
-	}
-	// addr, err := address.NewFromString(sender)
-	// if err != nil {
-	// 	return ethtypes.EthUint64(0), xerrors.Errorf("failed to process address", err)
-	// }
-	// First, handle the case where the "sender" is an EVM actor.
-	if actor, err := a.StateManager.LoadActor(ctx, sender, ts); err != nil {
-		if xerrors.Is(err, types.ErrActorNotFound) {
-			return 0, nil
-		}
-		return 0, xerrors.Errorf("failed to lookup contract %s: %w", sender, err)
-	} else if builtinactors.IsEvmActor(actor.Code) {
-		evmState, err := builtinevm.Load(a.Chain.ActorStore(ctx), actor)
-		if err != nil {
-			return 0, xerrors.Errorf("failed to load evm state: %w", err)
-		}
-		if alive, err := evmState.IsAlive(); err != nil {
-			return 0, err
-		} else if !alive {
-			return 0, nil
-		}
-		nonce, err := evmState.Nonce()
-		return ethtypes.EthUint64(nonce), err
-	}
+// 	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
+// 	if err != nil {
+// 		return ethtypes.EthUint64(0), xerrors.Errorf("failed to process block param: %v; %w", blkParam, err)
+// 	}
+// 	// addr, err := address.NewFromString(sender)
+// 	// if err != nil {
+// 	// 	return ethtypes.EthUint64(0), xerrors.Errorf("failed to process address", err)
+// 	// }
+// 	// First, handle the case where the "sender" is an EVM actor.
+// 	if actor, err := a.StateManager.LoadActor(ctx, sender, ts); err != nil {
+// 		if xerrors.Is(err, types.ErrActorNotFound) {
+// 			return 0, nil
+// 		}
+// 		return 0, xerrors.Errorf("failed to lookup contract %s: %w", sender, err)
+// 	} else if builtinactors.IsEvmActor(actor.Code) {
+// 		evmState, err := builtinevm.Load(a.Chain.ActorStore(ctx), actor)
+// 		if err != nil {
+// 			return 0, xerrors.Errorf("failed to load evm state: %w", err)
+// 		}
+// 		if alive, err := evmState.IsAlive(); err != nil {
+// 			return 0, err
+// 		} else if !alive {
+// 			return 0, nil
+// 		}
+// 		nonce, err := evmState.Nonce()
+// 		return ethtypes.EthUint64(nonce), err
+// 	}
 
-	nonce, err := a.Mpool.GetNonce(ctx, sender, ts.Key())
-	if err != nil {
-		return ethtypes.EthUint64(0), nil
-	}
-	return ethtypes.EthUint64(nonce), nil
-}
+// 	nonce, err := a.Mpool.GetNonce(ctx, sender, ts.Key())
+// 	if err != nil {
+// 		return ethtypes.EthUint64(0), nil
+// 	}
+// 	return ethtypes.EthUint64(nonce), nil
+// }
 
 func (a *EthModule) EthGetTransactionReceipt(ctx context.Context, txHash ethtypes.EthHash) (*api.EthTxReceipt, error) {
 	return a.EthGetTransactionReceiptLimited(ctx, txHash, api.LookbackNoLimit)
