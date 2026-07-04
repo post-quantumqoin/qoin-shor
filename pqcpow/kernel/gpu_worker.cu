@@ -15,7 +15,9 @@ __device__ UINT64 unity = 1;
 __device__ UINT64 unityL;
 __device__ int unuseZiro;
 
-
+// Managed global flag visible to host and device. Set this to true on the
+// host to request that the kernel exit its internal loops promptly.
+__managed__ bool abortFlag = false;
 /**
  * Get the number of devices.
  */
@@ -170,8 +172,7 @@ __global__ void parallel(int n,
     UINT32 ix = blockIdx.x * blockDim.x + threadIdx.x;
     UINT64 x = whichXTable[ix];
     UINT64 start , end = 0;
-    // start = dtime_msec(0);
-    start = clock();
+    if (abortFlag) return;
     if (*resultFlg)
         return;
     for (int w = 0; w < whichXWidth; w++)
@@ -180,26 +181,13 @@ __global__ void parallel(int n,
         p = c;
         int i;
         UINT64 tempX = x << unuseZiro;
-       
-        // end = clock() - start;
-        // if((end / (float)CLOCKS_PER_SEC)>15){
-        //      *resultFlg = false;
-        //      return;
-        // }
-
         for (i = 0; i < m; ++i)
         {
             UINT64 y = 0;
             UINT64 tmptmpX = tempX;
-
-            end = clock() - start;
-            if((end / (float)CLOCKS_PER_SEC)>15){
-                    *resultFlg = false;
-                    return;
-            }
-
             while (tmptmpX)
             {
+                if (abortFlag) return;
                 int pos1 = __clzll(tmptmpX);
                 tmptmpX ^= unityL >> pos1;
                 y ^= (p[pos1] & x);
@@ -253,6 +241,7 @@ char* getX(int m, int n, int num_block, int num_Thread, int whichXWidth, UINT64 
     cudaMemcpyToSymbol(unityL, &unityLhost, sizeof(UINT64), 0, cudaMemcpyHostToDevice);
     cudaMemcpyToSymbol(unuseZiro, &unuseZiroHost, sizeof(int), 0, cudaMemcpyHostToDevice);
    
+    abortFlag = false;
     *resultFlg = false;
     equations = (char **)malloc(m * sizeof(char *));
 
@@ -279,10 +268,6 @@ char* getX(int m, int n, int num_block, int num_Thread, int whichXWidth, UINT64 
         }
         lastTime = end;
         end = dtime_msec(start);
-        if((end / (float)CLOCKS_PER_SEC)>15){
-             *resultFlg = false;
-             break;
-        }
     }
     end = dtime_msec(start);
 
@@ -314,15 +299,20 @@ char* getX(int m, int n, int num_block, int num_Thread, int whichXWidth, UINT64 
     }
     else
     {
-        printf("x not found\n");
+        sprintf(xstr,"x not found\n");
+    }
+    if (abortFlag){
+        sprintf(xstr,"abort\n");
     }
 	
+   
     cudaFree(c);
     cudaFree(c0);
     cudaFree(byte_parity);
     cudaFree(whichXTable);
     cudaFree(result);
     cudaFree(resultFlg);
+    
     for (int i = 0; i < m; i++)
 		free(equations[i]);
 	free(equations);
@@ -396,40 +386,46 @@ char* getX(int m, int n, int num_block, int num_Thread, int whichXWidth, UINT64 
 // }
 
 extern "C" {
+    char* cudaGetX(int deviceID, int m, int n, int whichXWidth, UINT64 startSMCount, int coefficientBit, char **eqs){
+        // int deviceID = 0, m = 1, n = 1, whichXWidth = 1;
+        // int coefficientBit = 0;
+        // UINT64 startSMCount = 0;
 
+        cudaDeviceProp deviceProp;
+        Init(&deviceProp, deviceID);
+        int num_block = deviceProp.multiProcessorCount * 128;
+        int num_Thread = 1024;
+        
+        // printf("cudaGetX:deviceID:%d,m:%d,n:%d,whichXWidth:%d,startSMCount:%d,coefficientBit:%d,num_block:%d,num_Thread:%d\n",deviceID, m, n, whichXWidth, startSMCount, coefficientBit, num_block, num_Thread);
+        
+        return getX(m, n, num_block, num_Thread, whichXWidth, startSMCount, coefficientBit, eqs);
 
-char* cudaGetX(int deviceID, int m, int n, int whichXWidth, UINT64 startSMCount, int coefficientBit, char **eqs){
-    // int deviceID = 0, m = 1, n = 1, whichXWidth = 1;
-    // int coefficientBit = 0;
-    // UINT64 startSMCount = 0;
+    }
 
-    cudaDeviceProp deviceProp;
-    Init(&deviceProp, deviceID);
-    int num_block = deviceProp.multiProcessorCount * 128;
-    int num_Thread = 1024;
-    
-    // printf("cudaGetX:deviceID:%d,m:%d,n:%d,whichXWidth:%d,startSMCount:%d,coefficientBit:%d,num_block:%d,num_Thread:%d\n",deviceID, m, n, whichXWidth, startSMCount, coefficientBit, num_block, num_Thread);
-    
-    return getX(m, n, num_block, num_Thread, whichXWidth, startSMCount, coefficientBit, eqs);
+    int cudaGetDevCount() {
+        cudaDeviceProp deviceProp;
+        Init(&deviceProp, 0);
+        return getDeviceCount();
+    }
+    // let opts = ['1', '0', `${this.m}`, `${this.n}`];
+    // getNumOfExecution opt: 1  deviceID: 0 m:this.m n:this.n
+    UINT64 cudaGetNumOfExecution(int n, int m) {
+        cudaDeviceProp deviceProp;
+        Init(&deviceProp, 0);
 
-}
+        int num_block = deviceProp.multiProcessorCount * 128;
+        int num_Thread = 1024;
 
-int cudaGetDevCount() {
-    cudaDeviceProp deviceProp;
-    Init(&deviceProp, 0);
-    return getDeviceCount();
-}
-// let opts = ['1', '0', `${this.m}`, `${this.n}`];
-// getNumOfExecution opt: 1  deviceID: 0 m:this.m n:this.n
-UINT64 cudaGetNumOfExecution(int n, int m) {
-    cudaDeviceProp deviceProp;
-    Init(&deviceProp, 0);
+        return getNumOfExecution(n, num_block, num_Thread);
+    }
 
-    int num_block = deviceProp.multiProcessorCount * 128;
-    int num_Thread = 1024;
-
-    return getNumOfExecution(n, num_block, num_Thread);
-}
-
-
+    // Request immediate, safe interrupt of the `parallel` kernel's internal loop.
+    // `resultFlg` must point to memory allocated with `cudaMallocManaged` so the
+    // host write is visible to device code. We prefetch the updated location to
+    // the active device to improve timeliness; we do not synchronize here so the
+    // call is non-blocking.
+    void abortCalc() {
+        if (abortFlag) return;
+        abortFlag = true;
+    }
 }

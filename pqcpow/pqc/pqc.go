@@ -19,6 +19,7 @@ import (
 var log = logging.Logger("pqc")
 
 var (
+	ErrAbort     = errors.New("abort")
 	ErrXNotFound     = errors.New("x not found")
 	ErrXFoundOutTime = errors.New("found x run out time")
 	NewBlockheads    = errors.New("new blockheads have been created to follow the new blockheads")

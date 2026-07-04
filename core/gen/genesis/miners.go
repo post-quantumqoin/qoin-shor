@@ -269,7 +269,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sys vm.Syscal
 						return cid.Undef, fmt.Errorf("failed to marshal proposal: %w", err)
 					}
 
-					pqckey, err := key.PqcNewKey(preseal.DealClientKey)
+					pqckey, err := key.NewPqcKey(preseal.DealClientKey)
 					if err != nil {
 						return cid.Undef, err
 					}

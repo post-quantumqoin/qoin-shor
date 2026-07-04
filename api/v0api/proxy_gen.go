@@ -410,7 +410,7 @@ type FullNodeMethods struct {
 
 	WalletList func(p0 context.Context) ([]address.Address, error) `perm:"write"`
 
-	WalletNew func(p0 context.Context, p1 types.KeyType) (address.Address, error) `perm:"write"`
+	WalletNew func(p0 context.Context, p1 types.KeyType,p2 []types.SigAlg) (address.Address, error) `perm:"write"`
 
 	WalletSetDefault func(p0 context.Context, p1 address.Address) error `perm:"write"`
 
@@ -2556,14 +2556,14 @@ func (s *FullNodeStub) WalletList(p0 context.Context) ([]address.Address, error)
 	return *new([]address.Address), ErrNotSupported
 }
 
-func (s *FullNodeStruct) WalletNew(p0 context.Context, p1 types.KeyType) (address.Address, error) {
+func (s *FullNodeStruct) WalletNew(p0 context.Context, p1 types.KeyType, p2 []types.SigAlg) (address.Address, error) {
 	if s.Internal.WalletNew == nil {
 		return *new(address.Address), ErrNotSupported
 	}
-	return s.Internal.WalletNew(p0, p1)
+	return s.Internal.WalletNew(p0, p1, p2)
 }
 
-func (s *FullNodeStub) WalletNew(p0 context.Context, p1 types.KeyType) (address.Address, error) {
+func (s *FullNodeStub) WalletNew(p0 context.Context, p1 types.KeyType, p2 []types.SigAlg) (address.Address, error) {
 	return *new(address.Address), ErrNotSupported
 }
 

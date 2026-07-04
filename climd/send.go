@@ -90,7 +90,12 @@ var sendCmd = &cli.Command{
 
 		params.To, err = address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
-			return ShowHelp(cctx, fmt.Errorf("failed to parse target address: %w", err))
+			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().Get(0))
+			if ethErr == nil {
+				params.To, err = ethAddr.ToFilecoinAddress()
+			} else {
+				return ShowHelp(cctx, fmt.Errorf("failed to parse target address: %w", err))
+			}
 		}
 
 		val, err := types.ParseFIL(cctx.Args().Get(1))
@@ -116,7 +121,7 @@ var sendCmd = &cli.Command{
 				fmt.Println("error on conversion to faddr")
 				return err
 			}
-			fmt.Println("f4 addr: ", faddr)
+			fmt.Println("Q4 addr: ", faddr)
 			params.From = faddr
 		}
 
@@ -131,7 +136,7 @@ var sendCmd = &cli.Command{
 		if ethtypes.IsEthAddress(params.From) {
 			// Method numbers don't make sense from eth accounts.
 			if cctx.IsSet("method") {
-				return xerrors.Errorf("messages from f410f addresses may not specify a method number")
+				return xerrors.Errorf("messages from Q410q addresses may not specify a method number")
 			}
 
 			// Now, figure out the correct method number from the recipient.
@@ -154,13 +159,13 @@ var sendCmd = &cli.Command{
 				params.Params = buf.Bytes()
 			}
 
-			// We can only send to an f410f or f0 address.
+			// We can only send to an Q410q or Q0 address.
 			if !(params.To.Protocol() == address.ID || params.To.Protocol() == address.Delegated) {
 				api := srv.FullNodeAPI()
 				// Resolve id addr if possible.
 				params.To, err = api.StateLookupID(ctx, params.To, types.EmptyTSK)
 				if err != nil {
-					return xerrors.Errorf("addresses starting with f410f can only send to other addresses starting with f410f, or id addresses. could not find id address for %s", params.To.String())
+					return xerrors.Errorf("addresses starting with Q410q can only send to other addresses starting with Q410q, or id addresses. could not find id address for %s", params.To.String())
 				}
 			}
 		} else {

@@ -15,7 +15,7 @@ func (q QOIN) String() string {
 	if q.Int == nil {
 		return "0 Q"
 	}
-	return q.Unitless() + " Q"
+	return q.Unitless() + " PQQ"
 }
 
 func (q QOIN) Unitless() string {

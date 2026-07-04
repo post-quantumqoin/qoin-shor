@@ -105,7 +105,7 @@ type Gateway interface {
 	EthGetTransactionReceiptLimited(ctx context.Context, txHash ethtypes.EthHash, limit abi.ChainEpoch) (*EthTxReceipt, error)
 	EthGetCode(ctx context.Context, address string, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
 	EthGetStorageAt(ctx context.Context, address ethtypes.EthAddress, position ethtypes.EthBytes, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error)
-	EthGetBalance(ctx context.Context, address address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error)
+	EthGetBalance(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error)
 	EthChainId(ctx context.Context) (ethtypes.EthUint64, error)
 	EthSyncing(ctx context.Context) (ethtypes.EthSyncingResult, error)
 	NetVersion(ctx context.Context) (string, error)

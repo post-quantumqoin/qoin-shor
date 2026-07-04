@@ -235,7 +235,7 @@ func (w *LocalWallet) SetDefault(a address.Address) error {
 	return nil
 }
 
-func (w *LocalWallet) WalletNew(ctx context.Context, typ types.KeyType) (address.Address, error) {
+func (w *LocalWallet) WalletNew(ctx context.Context, typ types.KeyType, algs []types.SigAlg) (address.Address, error) {
 	w.lk.Lock()
 	defer w.lk.Unlock()
 	log.Warnf("LocalWallet WalletNew")

@@ -1,3 +1,3 @@
 ## Shor API
 
-This package contains all lotus API definitions. 
+This package contains all Shor API definitions. 
