@@ -63,7 +63,7 @@ func (e *EthModuleDummy) EthGetTransactionByHashLimited(ctx context.Context, txH
 	return nil, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetTransactionCount(ctx context.Context, sender ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
+func (e *EthModuleDummy) EthGetTransactionCount(ctx context.Context, sender address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
 	return 0, ErrModuleDisabled
 }
 
@@ -91,7 +91,7 @@ func (e *EthModuleDummy) EthGetStorageAt(ctx context.Context, address ethtypes.E
 	return nil, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetBalance(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
+func (e *EthModuleDummy) EthGetBalance(ctx context.Context, address address.Address, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBigInt, error) {
 	return ethtypes.EthBigIntZero, ErrModuleDisabled
 }
 
