@@ -538,25 +538,25 @@ var EvmGetBytecode = &cli.Command{
 
 		fileName := cctx.Args().Get(1)
 
-		api, closer, err := GetFullNodeAPIV1(cctx)
-		if err != nil {
-			return err
-		}
-		defer closer()
-		ctx := ReqContext(cctx)
+		// api, closer, err := GetFullNodeAPIV1(cctx)
+		// if err != nil {
+		// 	return err
+		// }
+		// defer closer()
+		// ctx := ReqContext(cctx)
 
-		code, err := api.EthGetCode(ctx, contractAddr, ethtypes.NewEthBlockNumberOrHashFromPredefined("latest"))
-		if err != nil {
-			return err
-		}
-		if !cctx.Bool("bin") {
-			newCode := make([]byte, hex.EncodedLen(len(code)))
-			hex.Encode(newCode, code)
-			code = newCode
-		}
-		if err := os.WriteFile(fileName, code, 0o666); err != nil {
-			return xerrors.Errorf("failed to write bytecode to file %s: %w", fileName, err)
-		}
+		// code, err := api.EthGetCode(ctx, contractAddr, ethtypes.NewEthBlockNumberOrHashFromPredefined("latest"))
+		// if err != nil {
+		// 	return err
+		// }
+		// if !cctx.Bool("bin") {
+		// 	newCode := make([]byte, hex.EncodedLen(len(code)))
+		// 	hex.Encode(newCode, code)
+		// 	code = newCode
+		// }
+		// if err := os.WriteFile(fileName, code, 0o666); err != nil {
+		// 	return xerrors.Errorf("failed to write bytecode to file %s: %w", fileName, err)
+		// }
 
 		fmt.Printf("Code for %s written to %s\n", contractAddr, fileName)
 		return nil

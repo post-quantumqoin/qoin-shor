@@ -83,7 +83,7 @@ func (e *EthModuleDummy) EthGetTransactionByBlockNumberAndIndex(ctx context.Cont
 	return ethtypes.EthTx{}, ErrModuleDisabled
 }
 
-func (e *EthModuleDummy) EthGetCode(ctx context.Context, address ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
+func (e *EthModuleDummy) EthGetCode(ctx context.Context, address string, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	return nil, ErrModuleDisabled
 }
 
