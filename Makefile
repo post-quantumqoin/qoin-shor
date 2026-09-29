@@ -132,7 +132,7 @@ an existing shor binary in your PATH. This may cause problems if you don't run '
 
 .PHONY: build
 
-install: shor-daemon shor-miner shor-worker shor-provider
+install: shor-daemon shor-miner 
 
 install-daemon:
 	install -C ./shor /usr/local/bin/shor
