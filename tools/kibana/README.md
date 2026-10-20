@@ -1,7 +1,7 @@
 ## Lotus Kibana Dashboard
 
 This folder contains configuration files to create Kibana dashboards to track peer scores and block propagation
-throughout Filecoin network.
+throughout Qoin network.
 
 ### Importing index template
 
