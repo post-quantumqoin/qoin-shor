@@ -153,12 +153,12 @@ func (sr *stateRand) getBeaconRandomnessV2(ctx context.Context, round abi.ChainE
 }
 
 // network v14 and on
-func (sr *stateRand) getBeaconRandomnessV3(ctx context.Context, filecoinEpoch abi.ChainEpoch) ([32]byte, error) {
-	if filecoinEpoch < 0 {
-		return sr.getBeaconRandomnessV2(ctx, filecoinEpoch)
+func (sr *stateRand) getBeaconRandomnessV3(ctx context.Context, qoinEpoch abi.ChainEpoch) ([32]byte, error) {
+	if qoinEpoch < 0 {
+		return sr.getBeaconRandomnessV2(ctx, qoinEpoch)
 	}
 
-	be, err := sr.extractBeaconEntryForEpoch(ctx, filecoinEpoch)
+	be, err := sr.extractBeaconEntryForEpoch(ctx, qoinEpoch)
 	if err != nil {
 		log.Errorf("failed to get beacon entry as expected: %s", err)
 		return [32]byte{}, err
@@ -167,36 +167,36 @@ func (sr *stateRand) getBeaconRandomnessV3(ctx context.Context, filecoinEpoch ab
 	return blake2b.Sum256(be.Data), nil
 }
 
-func (sr *stateRand) GetChainRandomness(ctx context.Context, filecoinEpoch abi.ChainEpoch) ([32]byte, error) {
-	nv := sr.networkVersionGetter(ctx, filecoinEpoch)
+func (sr *stateRand) GetChainRandomness(ctx context.Context, qoinEpoch abi.ChainEpoch) ([32]byte, error) {
+	nv := sr.networkVersionGetter(ctx, qoinEpoch)
 
 	if nv >= network.Version13 {
-		return sr.getChainRandomness(ctx, filecoinEpoch, false)
+		return sr.getChainRandomness(ctx, qoinEpoch, false)
 	}
 
-	return sr.getChainRandomness(ctx, filecoinEpoch, true)
+	return sr.getChainRandomness(ctx, qoinEpoch, true)
 }
 
-func (sr *stateRand) GetBeaconRandomness(ctx context.Context, filecoinEpoch abi.ChainEpoch) ([32]byte, error) {
-	nv := sr.networkVersionGetter(ctx, filecoinEpoch)
+func (sr *stateRand) GetBeaconRandomness(ctx context.Context, qoinEpoch abi.ChainEpoch) ([32]byte, error) {
+	nv := sr.networkVersionGetter(ctx, qoinEpoch)
 
 	if nv >= network.Version14 {
-		return sr.getBeaconRandomnessV3(ctx, filecoinEpoch)
+		return sr.getBeaconRandomnessV3(ctx, qoinEpoch)
 	} else if nv == network.Version13 {
-		return sr.getBeaconRandomnessV2(ctx, filecoinEpoch)
+		return sr.getBeaconRandomnessV2(ctx, qoinEpoch)
 	} else {
-		return sr.getBeaconRandomnessV1(ctx, filecoinEpoch)
+		return sr.getBeaconRandomnessV1(ctx, qoinEpoch)
 	}
 }
 
-func (sr *stateRand) DrawChainRandomness(ctx context.Context, pers crypto.DomainSeparationTag, filecoinEpoch abi.ChainEpoch, entropy []byte) ([]byte, error) {
-	digest, err := sr.GetChainRandomness(ctx, filecoinEpoch)
+func (sr *stateRand) DrawChainRandomness(ctx context.Context, pers crypto.DomainSeparationTag, qoinEpoch abi.ChainEpoch, entropy []byte) ([]byte, error) {
+	digest, err := sr.GetChainRandomness(ctx, qoinEpoch)
 
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get chain randomness: %w", err)
 	}
 
-	ret, err := DrawRandomnessFromDigest(digest, pers, filecoinEpoch, entropy)
+	ret, err := DrawRandomnessFromDigest(digest, pers, qoinEpoch, entropy)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to draw chain randomness: %w", err)
 	}
@@ -204,14 +204,14 @@ func (sr *stateRand) DrawChainRandomness(ctx context.Context, pers crypto.Domain
 	return ret, nil
 }
 
-func (sr *stateRand) DrawBeaconRandomness(ctx context.Context, pers crypto.DomainSeparationTag, filecoinEpoch abi.ChainEpoch, entropy []byte) ([]byte, error) {
-	digest, err := sr.GetBeaconRandomness(ctx, filecoinEpoch)
+func (sr *stateRand) DrawBeaconRandomness(ctx context.Context, pers crypto.DomainSeparationTag, qoinEpoch abi.ChainEpoch, entropy []byte) ([]byte, error) {
+	digest, err := sr.GetBeaconRandomness(ctx, qoinEpoch)
 
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get beacon randomness: %w", err)
 	}
 
-	ret, err := DrawRandomnessFromDigest(digest, pers, filecoinEpoch, entropy)
+	ret, err := DrawRandomnessFromDigest(digest, pers, qoinEpoch, entropy)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to draw beacon randomness: %w", err)
 	}
@@ -219,15 +219,15 @@ func (sr *stateRand) DrawBeaconRandomness(ctx context.Context, pers crypto.Domai
 	return ret, nil
 }
 
-func (sr *stateRand) extractBeaconEntryForEpoch(ctx context.Context, filecoinEpoch abi.ChainEpoch) (*types.BeaconEntry, error) {
-	randTs, err := sr.GetBeaconRandomnessTipset(ctx, filecoinEpoch, false)
+func (sr *stateRand) extractBeaconEntryForEpoch(ctx context.Context, qoinEpoch abi.ChainEpoch) (*types.BeaconEntry, error) {
+	randTs, err := sr.GetBeaconRandomnessTipset(ctx, qoinEpoch, false)
 	if err != nil {
 		return nil, err
 	}
 
-	nv := sr.networkVersionGetter(ctx, filecoinEpoch)
+	nv := sr.networkVersionGetter(ctx, qoinEpoch)
 
-	round := sr.beacon.BeaconForEpoch(filecoinEpoch).MaxBeaconRoundForEpoch(nv, filecoinEpoch)
+	round := sr.beacon.BeaconForEpoch(qoinEpoch).MaxBeaconRoundForEpoch(nv, qoinEpoch)
 
 	for i := 0; i < 20; i++ {
 		cbe := randTs.Blocks()[0].BeaconEntries
@@ -245,5 +245,5 @@ func (sr *stateRand) extractBeaconEntryForEpoch(ctx context.Context, filecoinEpo
 		randTs = next
 	}
 
-	return nil, xerrors.Errorf("didn't find beacon for round %d (epoch %d)", round, filecoinEpoch)
+	return nil, xerrors.Errorf("didn't find beacon for round %d (epoch %d)", round, qoinEpoch)
 }
