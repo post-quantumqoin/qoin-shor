@@ -104,7 +104,7 @@ func baseEnvironment(st *state.StateTree, from address.Address) (*environment, e
 
 func traceToAddress(act *types.ActorTrace) ethtypes.EthAddress {
 	if act.State.Address != nil {
-		if addr, err := ethtypes.EthAddressFromFilecoinAddress(*act.State.Address); err == nil {
+		if addr, err := ethtypes.EthAddressFromQoinAddress(*act.State.Address); err == nil {
 			return addr
 		}
 	}

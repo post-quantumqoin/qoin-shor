@@ -100,7 +100,7 @@ var walletNew = &cli.Command{
 		}
 
 		if ethtypes.IsEthAddress(nk) {
-			ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(nk)
+			ethAddr, err := ethtypes.EthAddressFromQoinAddress(nk)
 			if err == nil {
 				afmt.Printf("%s\n", ethAddr)
 				return nil
@@ -164,7 +164,7 @@ var walletList = &cli.Command{
 		for _, addr := range addrs {
 			addrStr := addr.String()
 			if ethtypes.IsEthAddress(addr) {
-				ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+				ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 				if err == nil {
 					addrStr = fmt.Sprintf("%s ", ethAddr)
 				}
@@ -297,7 +297,7 @@ var walletGetDefault = &cli.Command{
 		}
 
 		if ethtypes.IsEthAddress(addr) {
-			ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+			ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 			if err == nil {
 				afmt.Printf("%s\n", ethAddr.String())
 				return nil
@@ -496,7 +496,7 @@ var walletImport = &cli.Command{
 
 		addrStr := addr.String()
 		if ethtypes.IsEthAddress(addr) {
-			ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+			ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 			if err == nil {
 				addrStr = ethAddr.String()
 			}

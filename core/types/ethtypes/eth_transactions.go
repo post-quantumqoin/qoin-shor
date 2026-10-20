@@ -79,7 +79,7 @@ func EthTxFromSignedEthMessage(smsg *types.SignedMessage) (EthTx, error) {
 		return EthTx{}, xerrors.Errorf("failed to convert the unsigned message: %w", err)
 	}
 
-	from, err := EthAddressFromFilecoinAddress(smsg.Message.From)
+	from, err := EthAddressFromQoinAddress(smsg.Message.From)
 	if err != nil {
 		// This should be impossible as we've already asserted that we have an EthAddress
 		// sender...
@@ -132,7 +132,7 @@ func EthTxArgsFromUnsignedEthMessage(msg *types.Message) (EthTxArgs, error) {
 			return EthTxArgs{}, fmt.Errorf("unsupported EAM method")
 		}
 	} else if msg.Method == builtintypes.MethodsEVM.InvokeContract {
-		addr, err := EthAddressFromFilecoinAddress(msg.To)
+		addr, err := EthAddressFromQoinAddress(msg.To)
 		if err != nil {
 			return EthTxArgs{}, err
 		}

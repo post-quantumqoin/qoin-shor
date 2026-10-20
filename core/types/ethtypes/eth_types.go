@@ -398,7 +398,7 @@ func EthAddressFromActorID(id abi.ActorID) EthAddress {
 	return ethaddr
 }
 
-func EthAddressFromFilecoinAddress(addr address.Address) (EthAddress, error) {
+func EthAddressFromQoinAddress(addr address.Address) (EthAddress, error) {
 	switch addr.Protocol() {
 	case address.ID:
 		id, err := address.IDFromAddress(addr)

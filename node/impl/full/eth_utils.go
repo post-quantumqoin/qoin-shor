@@ -395,7 +395,7 @@ func parseEthRevert(ret []byte) string {
 // If the actor doesn't exist in the state-tree but we have its ID, we use a masked ID address. It could have been deleted.
 func lookupEthAddress(addr address.Address, st *state.StateTree) (ethtypes.EthAddress, error) {
 	// Attempt to convert directly, if it's an Q4 Address.
-	ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+	ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 	if err == nil && !ethAddr.IsMaskedID() {
 		return ethAddr, nil
 	}
@@ -414,13 +414,13 @@ func lookupEthAddress(addr address.Address, st *state.StateTree) (ethtypes.EthAd
 		return ethtypes.EthAddress{}, err
 	} else if actor.Address == nil {
 		// No delegated address -> use masked ID address.
-	} else if ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(*actor.Address); err == nil && !ethAddr.IsMaskedID() {
+	} else if ethAddr, err := ethtypes.EthAddressFromQoinAddress(*actor.Address); err == nil && !ethAddr.IsMaskedID() {
 		// Conversable into an eth address, use it.
 		return ethAddr, nil
 	}
 
 	// Otherwise, use the masked address.
-	return ethtypes.EthAddressFromFilecoinAddress(idAddr)
+	return ethtypes.EthAddressFromQoinAddress(idAddr)
 }
 
 func parseEthTopics(topics ethtypes.EthTopicSpec) (map[string][][]byte, error) {

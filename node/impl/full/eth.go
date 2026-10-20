@@ -200,7 +200,7 @@ func (a *EthAPI) EthAddressToFilecoinAddress(ctx context.Context, ethAddress eth
 }
 
 func (a *EthAPI) FilecoinAddressToEthAddress(ctx context.Context, filecoinAddress address.Address) (ethtypes.EthAddress, error) {
-	return ethtypes.EthAddressFromFilecoinAddress(filecoinAddress)
+	return ethtypes.EthAddressFromQoinAddress(filecoinAddress)
 }
 
 func (a *EthModule) countTipsetMsgs(ctx context.Context, ts *types.TipSet) (int, error) {

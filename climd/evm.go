@@ -507,7 +507,7 @@ func ethAddrFromFilecoinAddress(ctx context.Context, addr address.Address, fnapi
 		return ethtypes.EthAddress{}, addr, xerrors.Errorf("qoin address doesn't match known protocols")
 	}
 
-	ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(faddr)
+	ethAddr, err := ethtypes.EthAddressFromQoinAddress(faddr)
 	if err != nil {
 		return ethtypes.EthAddress{}, addr, err
 	}

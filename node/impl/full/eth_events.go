@@ -112,7 +112,7 @@ func ethFilterResultFromEvents(ctx context.Context, evs []*filter.CollectedEvent
 			continue
 		}
 
-		log.Address, err = ethtypes.EthAddressFromFilecoinAddress(ev.EmitterAddr)
+		log.Address, err = ethtypes.EthAddressFromQoinAddress(ev.EmitterAddr)
 		if err != nil {
 			return nil, err
 		}
