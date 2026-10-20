@@ -111,6 +111,10 @@ var UpgradeDragonHeight = abi.ChainEpoch(3817920)
 // 2024-04-11T15:00:00Z
 var UpgradePhoenixHeight = UpgradeDragonHeight + 120
 
+// Last epoch that permits historical PQC messages without signer address binding.
+// Address binding is mandatory from epoch 2037616 onward.
+const UpgradePqcAddressBindingHeight = abi.ChainEpoch(2037615)
+
 // This fix upgrade only ran on calibrationnet
 const UpgradeWatermelonFixHeight = -1
 
