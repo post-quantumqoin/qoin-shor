@@ -191,7 +191,7 @@
 // 		baseFeeIn := tipset.Blocks()[0].ParentBaseFee
 // 		newBaseFee := store.ComputeNextBaseFee(baseFeeIn, totalUniqGasLimit, len(tipset.Blocks()), tipset.Height())
 
-// 		baseFeeRat := new(big.Rat).SetFrac(newBaseFee.Int, new(big.Int).SetUint64(build.FilecoinPrecision))
+// 		baseFeeRat := new(big.Rat).SetFrac(newBaseFee.Int, new(big.Int).SetUint64(build.QoinPrecision))
 // 		baseFeeFloat, _ := baseFeeRat.Float64()
 // 		p = influx.NewPoint("chain.basefee", baseFeeFloat)
 // 		pl.AddPoint(p)
@@ -222,7 +222,7 @@
 // 		done()
 // 	}()
 
-// 	attoFil := types.NewInt(build.FilecoinPrecision).Int
+// 	attoFil := types.NewInt(build.QoinPrecision).Int
 
 // 	netBal, err := c.api.WalletBalance(ctx, reward.Address)
 // 	if err != nil {

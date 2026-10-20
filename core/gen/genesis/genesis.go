@@ -328,7 +328,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		return nil, nil, xerrors.Errorf("summing account balances in state tree: %w", err)
 	}
 
-	totalFil := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))
+	totalFil := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.QoinPrecision)))
 	remainingFil := big.Sub(totalFil, totalFilAllocated)
 	if remainingFil.Sign() < 0 {
 		return nil, nil, xerrors.Errorf("somehow overallocated qoin (allocated = %s)", types.FIL(totalFilAllocated))

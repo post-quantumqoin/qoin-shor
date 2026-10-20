@@ -22,7 +22,7 @@ func NewInt(i uint64) BigInt {
 }
 
 func FromFil(i uint64) BigInt {
-	return BigMul(NewInt(i), NewInt(build.FilecoinPrecision))
+	return BigMul(NewInt(i), NewInt(build.QoinPrecision))
 }
 
 func BigFromBytes(b []byte) BigInt {
