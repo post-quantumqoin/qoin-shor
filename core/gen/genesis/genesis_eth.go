@@ -104,7 +104,7 @@ func SetupEthNullAddresses(ctx context.Context, st *state.StateTree, nv network.
 	var ret []address.Address
 	for _, ethAddr := range ethAddresses {
 		// Place an EthAccount at the 0x0 Eth Null Address.
-		f4Addr, err := ethAddr.ToFilecoinAddress()
+		f4Addr, err := ethAddr.ToQoinAddress()
 		if err != nil {
 			return nil, xerrors.Errorf("failed to compute Filecoin address for Eth addr 0x0: %w", err)
 		}

@@ -196,7 +196,7 @@ func (a *EthModule) EthAccounts(context.Context) ([]ethtypes.EthAddress, error) 
 }
 
 func (a *EthAPI) EthAddressToFilecoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) {
-	return ethAddress.ToFilecoinAddress()
+	return ethAddress.ToQoinAddress()
 }
 
 func (a *EthAPI) FilecoinAddressToEthAddress(ctx context.Context, filecoinAddress address.Address) (ethtypes.EthAddress, error) {
@@ -362,7 +362,7 @@ func (a *EthModule) EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid)
 }
 
 func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
-	addr, err := sender.ToFilecoinAddress()
+	addr, err := sender.ToQoinAddress()
 	if err != nil {
 		return ethtypes.EthUint64(0), nil
 	}
@@ -459,7 +459,7 @@ func (a *EthAPI) EthGetTransactionByBlockNumberAndIndex(context.Context, ethtype
 // EthGetCode returns string value of the compiled bytecode
 func (a *EthModule) EthGetCode(ctx context.Context, ethAddr ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	// return nil, nil
-	to, err := ethAddr.ToFilecoinAddress()
+	to, err := ethAddr.ToQoinAddress()
 	if err != nil {
 		return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
 	}
@@ -556,7 +556,7 @@ func (a *EthModule) EthGetStorageAt(ctx context.Context, ethAddr ethtypes.EthAdd
 	// pad with zero bytes if smaller than 32 bytes
 	position = append(make([]byte, 32-l, 32), position...)
 
-	to, err := ethAddr.ToFilecoinAddress()
+	to, err := ethAddr.ToQoinAddress()
 	if err != nil {
 		return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
 	}
@@ -650,7 +650,7 @@ func (a *EthModule) EthGetBalance(ctx context.Context, addr ethtypes.EthAddress,
 	// 	// return xerrors.Errorf("failed to unmarshal storage slot: %w", err)
 	// }
 
-	filAddr, err := addr.ToFilecoinAddress()
+	filAddr, err := addr.ToQoinAddress()
 	if err != nil {
 		return ethtypes.EthBigInt{}, err
 	}
@@ -1493,7 +1493,7 @@ func (e *EthEventHandler) installEthFilterSpec(ctx context.Context, filterSpec *
 
 	// Convert all addresses to filecoin Q4 Addresses
 	for _, ea := range filterSpec.Address {
-		a, err := ea.ToFilecoinAddress()
+		a, err := ea.ToQoinAddress()
 		if err != nil {
 			return nil, xerrors.Errorf("invalid address %x", ea)
 		}
@@ -1684,7 +1684,7 @@ func (e *EthEventHandler) EthSubscribe(ctx context.Context, p jsonrpc.RawParams)
 		var addresses []address.Address
 		if params.Params != nil {
 			for _, ea := range params.Params.Address {
-				a, err := ea.ToFilecoinAddress()
+				a, err := ea.ToQoinAddress()
 				if err != nil {
 					return ethtypes.EthSubscriptionID{}, xerrors.Errorf("invalid address %x", ea)
 				}

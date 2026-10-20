@@ -178,7 +178,7 @@ func (tx *EthTxArgs) ToUnsignedMessage(from address.Address) (*types.Message, er
 		to = builtintypes.EthereumAddressManagerActorAddr
 	} else {
 		method = builtintypes.MethodsEVM.InvokeContract
-		to, err = tx.To.ToFilecoinAddress()
+		to, err = tx.To.ToQoinAddress()
 		if err != nil {
 			return nil, xerrors.Errorf("failed to convert To into filecoin addr: %w", err)
 		}
@@ -414,7 +414,7 @@ func (tx *EthTxArgs) Sender() (address.Address, error) {
 		return address.Undef, err
 	}
 
-	return ea.ToFilecoinAddress()
+	return ea.ToQoinAddress()
 }
 
 func RecoverSignature(sig typescrypto.Signature) (r, s, v EthBigInt, err error) {

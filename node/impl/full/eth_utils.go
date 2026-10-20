@@ -139,14 +139,14 @@ func ethCallToFilecoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.
 	if tx.From == nil || *tx.From == (ethtypes.EthAddress{}) {
 		// Send from the filecoin "system" address.
 		var err error
-		from, err = (ethtypes.EthAddress{}).ToFilecoinAddress()
+		from, err = (ethtypes.EthAddress{}).ToQoinAddress()
 		if err != nil {
 			return nil, fmt.Errorf("failed to construct the ethereum system address: %w", err)
 		}
 	} else {
 		// The from address must be translatable to an Q4 Address.
 		var err error
-		from, err = tx.From.ToFilecoinAddress()
+		from, err = tx.From.ToQoinAddress()
 		if err != nil {
 			return nil, fmt.Errorf("failed to translate sender address (%s): %w", tx.From.String(), err)
 		}
@@ -172,7 +172,7 @@ func ethCallToFilecoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.
 		to = builtintypes.EthereumAddressManagerActorAddr
 		method = builtintypes.MethodsEAM.CreateExternal
 	} else {
-		addr, err := tx.To.ToFilecoinAddress()
+		addr, err := tx.To.ToQoinAddress()
 		if err != nil {
 			return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
 		}

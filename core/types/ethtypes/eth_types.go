@@ -474,7 +474,7 @@ func (ea EthAddress) IsMaskedID() bool {
 	return bytes.HasPrefix(ea[:], maskedIDPrefix[:])
 }
 
-func (ea EthAddress) ToFilecoinAddress() (address.Address, error) {
+func (ea EthAddress) ToQoinAddress() (address.Address, error) {
 	if ea.IsMaskedID() {
 		// This is a masked ID address.
 		id := binary.BigEndian.Uint64(ea[12:])

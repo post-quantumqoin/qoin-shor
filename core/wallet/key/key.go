@@ -73,7 +73,7 @@ func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 			return nil, xerrors.Errorf("failed to create ethereum address from bytes: %w", err)
 		}
 
-		k.Address, err = ea.ToFilecoinAddress()
+		k.Address, err = ea.ToQoinAddress()
 		if err != nil {
 			return nil, xerrors.Errorf("converting Delegated to address: %w", err)
 		}
