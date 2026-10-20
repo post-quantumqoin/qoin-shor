@@ -805,7 +805,7 @@ func encodeQoinParamsAsABI(method abi.MethodNum, codec uint64, params []byte) []
 	return append(buf, encodeAsABIHelper(uint64(method), codec, params)...)
 }
 
-func encodeFilecoinReturnAsABI(exitCode exitcode.ExitCode, codec uint64, data []byte) []byte {
+func encodeQoinReturnAsABI(exitCode exitcode.ExitCode, codec uint64, data []byte) []byte {
 	return encodeAsABIHelper(uint64(exitCode), codec, data)
 }
 

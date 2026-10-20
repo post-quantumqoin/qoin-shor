@@ -306,7 +306,7 @@ func traceCall(env *environment, addr []int, et *types.ExecutionTrace, input, ou
 func traceNativeCall(env *environment, addr []int, et *types.ExecutionTrace) *ethtypes.EthTrace {
 	return traceCall(env, addr, et,
 		encodeQoinParamsAsABI(et.Msg.Method, et.Msg.ParamsCodec, et.Msg.Params),
-		encodeFilecoinReturnAsABI(et.MsgRct.ExitCode, et.MsgRct.ReturnCodec, et.MsgRct.Return),
+		encodeQoinReturnAsABI(et.MsgRct.ExitCode, et.MsgRct.ReturnCodec, et.MsgRct.Return),
 	)
 }
 
