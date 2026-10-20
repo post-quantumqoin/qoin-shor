@@ -40,7 +40,7 @@ func authenticateMessage(msg *types.SignedMessage, signer address.Address, requi
 		}
 		roundTripMsg, err := txArgs.ToUnsignedMessage(msg.Message.From)
 		if err != nil {
-			return xerrors.Errorf("failed to reconstruct filecoin msg: %w", err)
+			return xerrors.Errorf("failed to reconstruct qoin msg: %w", err)
 		}
 
 		if !msg.Message.Equals(roundTripMsg) {
