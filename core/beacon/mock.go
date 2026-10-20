@@ -15,7 +15,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 )
 
-// Mock beacon assumes that filecoin rounds are 1:1 mapped with the beacon rounds
+// Mock beacon assumes that Qoin rounds are 1:1 mapped with the beacon rounds
 type mockBeacon struct {
 	interval time.Duration
 }
