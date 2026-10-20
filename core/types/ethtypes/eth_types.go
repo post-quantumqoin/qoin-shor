@@ -227,7 +227,7 @@ func NewEthBlock(hasTransactions bool) EthBlock {
 		Extradata:        []byte{},
 		MixHash:          EmptyEthHash,
 		Nonce:            EmptyEthNonce,
-		GasLimit:         EthUint64(build.BlockGasLimit), // TODO we map Ethereum blocks to Filecoin tipsets; this is inconsistent.
+		GasLimit:         EthUint64(build.BlockGasLimit), // TODO we map Ethereum blocks to Qoin tipsets; this is inconsistent.
 		Uncles:           []EthHash{},
 		Transactions:     []interface{}{},
 	}
@@ -514,7 +514,7 @@ func (h EthHash) String() string {
 	return "0x" + hex.EncodeToString(h[:])
 }
 
-// Should ONLY be used for blocks and Filecoin messages. Eth transactions expect a different hashing scheme.
+// Should ONLY be used for blocks and Qoin messages. Eth transactions expect a different hashing scheme.
 func (h EthHash) ToCid() cid.Cid {
 	// err is always nil
 	mh, _ := multihash.EncodeName(h[:], "blake2b-256")
