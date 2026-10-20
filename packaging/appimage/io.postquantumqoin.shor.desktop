@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Qoin Shor
+Comment=Qoin command-line client
+Exec=shor
+Icon=io.postquantumqoin.shor
+Terminal=true
+Categories=Utility;
+Keywords=Qoin;Shor;Blockchain;
