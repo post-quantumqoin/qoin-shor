@@ -98,7 +98,7 @@ const (
 	StartListeningKey
 	BootstrapKey
 
-	// filecoin
+	// Qoin
 	SetGenesisKey
 
 	RunHelloKey
@@ -349,7 +349,7 @@ func Repo(r repo.Repo) Option {
 
 type StopFunc func(context.Context) error
 
-// New builds and starts new Filecoin node
+// New builds and starts new Qoin node
 func New(ctx context.Context, opts ...Option) (StopFunc, error) {
 	settings := Settings{
 		modules: map[interface{}]fx.Option{},
