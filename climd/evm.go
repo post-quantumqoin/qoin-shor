@@ -70,7 +70,7 @@ var EvmGetInfoCmd = &cli.Command{
 				return err
 			}
 		} else {
-			eaddr, faddr, err = ethAddrFromFilecoinAddress(ctx, addr, api)
+			eaddr, faddr, err = ethAddrFromQoinAddress(ctx, addr, api)
 			if err != nil {
 				return err
 			}
@@ -479,7 +479,7 @@ var EvmInvokeCmd = &cli.Command{
 	},
 }
 
-func ethAddrFromFilecoinAddress(ctx context.Context, addr address.Address, fnapi v0api.FullNode) (ethtypes.EthAddress, address.Address, error) {
+func ethAddrFromQoinAddress(ctx context.Context, addr address.Address, fnapi v0api.FullNode) (ethtypes.EthAddress, address.Address, error) {
 	var faddr address.Address
 	var err error
 
