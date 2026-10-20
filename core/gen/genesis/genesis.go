@@ -630,13 +630,13 @@ func MakeGenesisBlock(ctx context.Context, j journal.Journal, bs bstore.Blocksto
 		VRFProof: tickBuf,
 	}
 
-	filecoinGenesisCid, err := cid.Decode("bafyreiaqpwbbyjo4a42saasj36kkrpv4tsherf2e7bvezkert2a7dhonoi")
+	qoinGenesisCid, err := cid.Decode("bafyreiaqpwbbyjo4a42saasj36kkrpv4tsherf2e7bvezkert2a7dhonoi")
 	if err != nil {
 		return nil, xerrors.Errorf("failed to decode qoin genesis block CID: %w", err)
 	}
 
-	if !expectedCid().Equals(filecoinGenesisCid) {
-		return nil, xerrors.Errorf("expectedCid != filecoinGenesisCid")
+	if !expectedCid().Equals(qoinGenesisCid) {
+		return nil, xerrors.Errorf("expectedCid != qoinGenesisCid")
 	}
 
 	gblk, err := getGenesisBlock()
@@ -644,8 +644,8 @@ func MakeGenesisBlock(ctx context.Context, j journal.Journal, bs bstore.Blocksto
 		return nil, xerrors.Errorf("failed to construct qoin genesis block: %w", err)
 	}
 
-	if !filecoinGenesisCid.Equals(gblk.Cid()) {
-		return nil, xerrors.Errorf("filecoinGenesisCid != gblk.Cid")
+	if !qoinGenesisCid.Equals(gblk.Cid()) {
+		return nil, xerrors.Errorf("qoinGenesisCid != gblk.Cid")
 	}
 
 	if err := bs.Put(ctx, gblk); err != nil {
@@ -660,7 +660,7 @@ func MakeGenesisBlock(ctx context.Context, j journal.Journal, bs bstore.Blocksto
 	b := &types.BlockHeader{
 		Miner:                 system.Address,
 		Ticket:                genesisticket,
-		Parents:               []cid.Cid{filecoinGenesisCid},
+		Parents:               []cid.Cid{qoinGenesisCid},
 		Height:                0,
 		ParentWeight:          types.NewInt(0),
 		ParentStateRoot:       stateroot,
