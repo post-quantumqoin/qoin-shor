@@ -575,7 +575,7 @@ func ethTxFromNativeMessage(msg *types.Message, sig *crypto.Signature, st *state
 		// want and may send garbage.
 		fallthrough
 	default:
-		input = encodeFilecoinParamsAsABI(msg.Method, codec, msg.Params)
+		input = encodeQoinParamsAsABI(msg.Method, codec, msg.Params)
 	}
 
 	return ethtypes.EthTx{
@@ -800,7 +800,7 @@ func newEthTxReceipt(ctx context.Context, tx ethtypes.EthTx, lookup *api.MsgLook
 	return receipt, nil
 }
 
-func encodeFilecoinParamsAsABI(method abi.MethodNum, codec uint64, params []byte) []byte {
+func encodeQoinParamsAsABI(method abi.MethodNum, codec uint64, params []byte) []byte {
 	buf := []byte{0x86, 0x8e, 0x10, 0xc4} // Native method selector.
 	return append(buf, encodeAsABIHelper(uint64(method), codec, params)...)
 }

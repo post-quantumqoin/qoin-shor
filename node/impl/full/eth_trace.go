@@ -305,7 +305,7 @@ func traceCall(env *environment, addr []int, et *types.ExecutionTrace, input, ou
 // Build an EthTrace for a "call", parsing the inputs & outputs as a "native" FVM call.
 func traceNativeCall(env *environment, addr []int, et *types.ExecutionTrace) *ethtypes.EthTrace {
 	return traceCall(env, addr, et,
-		encodeFilecoinParamsAsABI(et.Msg.Method, et.Msg.ParamsCodec, et.Msg.Params),
+		encodeQoinParamsAsABI(et.Msg.Method, et.Msg.ParamsCodec, et.Msg.Params),
 		encodeFilecoinReturnAsABI(et.MsgRct.ExitCode, et.MsgRct.ReturnCodec, et.MsgRct.Return),
 	)
 }
