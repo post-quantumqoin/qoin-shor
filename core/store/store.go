@@ -1313,7 +1313,7 @@ func (cs *ChainStore) IsStoringEvents() bool {
 	return cs.storeEvents
 }
 
-// true if ts1 wins according to the filecoin tie-break rule
+// true if ts1 wins according to the Qoin tie-break rule
 func breakWeightTie(ts1, ts2 *types.TipSet) bool {
 	s := len(ts1.Blocks())
 	if s > len(ts2.Blocks()) {
