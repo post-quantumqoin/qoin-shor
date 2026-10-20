@@ -19,6 +19,7 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types/pqcaddress"
 )
 
 const Eip1559TxType = 2
@@ -354,6 +355,41 @@ func (tx *EthTxArgs) Signature() (*typescrypto.Signature, error) {
 }
 
 func (tx *EthTxArgs) Sender() (address.Address, error) {
+	sig, err := tx.Signature()
+	if err != nil {
+		return address.Undef, err
+	}
+
+	hasPqcCertificate := len(sig.PqcCert.Pubkeys) > 0
+	hasPqcSignatures := len(sig.PqcSignatures) > 0
+	if hasPqcCertificate || hasPqcSignatures {
+		if sig.Type != typescrypto.SigTypeDelegated {
+			return address.Undef, xerrors.Errorf("Ethereum PQC transaction requires delegated signature type, got %d", sig.Type)
+		}
+		if len(sig.Data) != 0 {
+			return address.Undef, xerrors.New("ambiguous signature: legacy data and PQC fields are both present")
+		}
+
+		candidates, err := pqcaddress.SignerAddressCandidates(sig.PqcCert, address.Delegated)
+		if err != nil {
+			return address.Undef, xerrors.Errorf("derive PQC transaction sender: %w", err)
+		}
+		if len(candidates) != 1 {
+			return address.Undef, xerrors.Errorf(
+				"legacy PQC address scheme is ambiguous for Ethereum sender recovery; new transactions must use canonical CBOR certificate version 1",
+			)
+		}
+		return candidates[0], nil
+	}
+
+	if sig.Type != typescrypto.SigTypeDelegated || len(sig.Data) != 65 {
+		return address.Undef, xerrors.Errorf(
+			"invalid delegated signature structure: type=%d dataLength=%d",
+			sig.Type,
+			len(sig.Data),
+		)
+	}
+
 	msg, err := tx.ToRlpUnsignedMsg()
 	if err != nil {
 		return address.Undef, err
@@ -362,11 +398,6 @@ func (tx *EthTxArgs) Sender() (address.Address, error) {
 	hasher := sha3.NewLegacyKeccak256()
 	hasher.Write(msg)
 	hash := hasher.Sum(nil)
-
-	sig, err := tx.Signature()
-	if err != nil {
-		return address.Undef, err
-	}
 
 	pubk, err := gocrypto.EcRecover(hash, sig.Data)
 	if err != nil {
