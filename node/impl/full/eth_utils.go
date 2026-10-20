@@ -134,7 +134,7 @@ func getTipsetByEthBlockNumberOrHash(ctx context.Context, chain *store.ChainStor
 	return nil, errors.New("invalid block param")
 }
 
-func ethCallToFilecoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.Message, error) {
+func ethCallToQoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.Message, error) {
 	var from address.Address
 	if tx.From == nil || *tx.From == (ethtypes.EthAddress{}) {
 		// Send from the filecoin "system" address.
