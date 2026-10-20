@@ -20,7 +20,7 @@ type ActorEventBlock struct {
 
 type ActorEventFilter struct {
 	// Matches events from one of these actors, or any actor if empty.
-	// For now, this MUST be a Filecoin address.
+	// For now, this MUST be a Qoin address.
 	Addresses []address.Address `json:"addresses,omitempty"`
 
 	// Matches events with the specified key/values, or all events if empty.
@@ -47,7 +47,7 @@ type ActorEvent struct {
 	// Event entries in log form.
 	Entries []EventEntry `json:"entries"`
 
-	// Filecoin address of the actor that emitted this event.
+	// Qoin address of the actor that emitted this event.
 	// NOTE: In a future upgrade, this will change to always be an ID address. Currently this will be
 	// either the Q4 Address, or ID address if an f4 is not available for this actor.
 	Emitter address.Address `json:"emitter"`
