@@ -48,7 +48,7 @@ import (
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
-// FullNode API is a low-level interface to the Filecoin network full node
+// FullNode API is a low-level interface to the Qoin network full node
 type FullNode interface {
 	Common
 	Net
@@ -163,7 +163,7 @@ type FullNode interface {
 	// MethodGroup: Beacon
 	// The Beacon method group contains methods for interacting with the random beacon (DRAND)
 
-	// BeaconGetEntry returns the beacon entry for the given filecoin epoch. If
+	// BeaconGetEntry returns the beacon entry for the given Qoin epoch. If
 	// the entry has not yet been produced, the call will block until the entry
 	// becomes available
 	BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) //perm:read
@@ -611,10 +611,10 @@ type FullNode interface {
 	// can issue. It takes the deal size and verified status as parameters.
 	StateDealProviderCollateralBounds(context.Context, abi.PaddedPieceSize, bool, types.TipSetKey) (api.DealCollateralBounds, error) //perm:read
 
-	// StateCirculatingSupply returns the exact circulating supply of Filecoin at the given tipset.
+	// StateCirculatingSupply returns the exact circulating supply of Qoin at the given tipset.
 	// This is not used anywhere in the protocol itself, and is only for external consumption.
 	StateCirculatingSupply(context.Context, types.TipSetKey) (abi.TokenAmount, error) //perm:read
-	// StateVMCirculatingSupplyInternal returns an approximation of the circulating supply of Filecoin at the given tipset.
+	// StateVMCirculatingSupplyInternal returns an approximation of the circulating supply of Qoin at the given tipset.
 	// This is the value reported by the runtime interface to actors code.
 	StateVMCirculatingSupplyInternal(context.Context, types.TipSetKey) (api.CirculatingSupply, error) //perm:read
 	// StateNetworkVersion returns the network version at the given tipset
@@ -634,7 +634,7 @@ type FullNode interface {
 
 	// MethodGroup: Msig
 	// The Msig methods are used to interact with multisig wallets on the
-	// filecoin network
+	// Qoin network
 
 	// MsigGetAvailableBalance returns the portion of a multisig's balance that can be withdrawn or spent
 	MsigGetAvailableBalance(context.Context, address.Address, types.TipSetKey) (types.BigInt, error) //perm:read
