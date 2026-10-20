@@ -62,7 +62,7 @@ const LookbackNoLimit = abi.ChainEpoch(-1)
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
-// FullNode API is a low-level interface to the Filecoin network full node
+// FullNode API is a low-level interface to the Qoin network full node
 type FullNode interface {
 	Common
 	Net
@@ -179,7 +179,7 @@ type FullNode interface {
 	// messages and stateroots for the length between the specified head
 	// and tail, thus producing "archival-grade" snapshots that include
 	// all the on-chain data.  The header chain is included back to
-	// genesis and these snapshots can be used to initialize Filecoin
+	// genesis and these snapshots can be used to initialize Qoin
 	// nodes.
 	ChainExportRangeInternal(ctx context.Context, head, tail types.TipSetKey, cfg ChainExportConfig) error //perm:admin
 
@@ -629,10 +629,10 @@ type FullNode interface {
 	// can issue. It takes the deal size and verified status as parameters.
 	StateDealProviderCollateralBounds(context.Context, abi.PaddedPieceSize, bool, types.TipSetKey) (DealCollateralBounds, error) //perm:read
 
-	// StateCirculatingSupply returns the exact circulating supply of Filecoin at the given tipset.
+	// StateCirculatingSupply returns the exact circulating supply of Qoin at the given tipset.
 	// This is not used anywhere in the protocol itself, and is only for external consumption.
 	StateCirculatingSupply(context.Context, types.TipSetKey) (abi.TokenAmount, error) //perm:read
-	// StateVMCirculatingSupplyInternal returns an approximation of the circulating supply of Filecoin at the given tipset.
+	// StateVMCirculatingSupplyInternal returns an approximation of the circulating supply of Qoin at the given tipset.
 	// This is the value reported by the runtime interface to actors code.
 	StateVMCirculatingSupplyInternal(context.Context, types.TipSetKey) (CirculatingSupply, error) //perm:read
 	// StateNetworkVersion returns the network version at the given tipset
@@ -652,7 +652,7 @@ type FullNode interface {
 	// StateGetRandomnessDigestFromBeacon is used to sample the beacon for randomness.
 	StateGetRandomnessDigestFromBeacon(ctx context.Context, randEpoch abi.ChainEpoch, tsk types.TipSetKey) (abi.Randomness, error) //perm:read
 
-	// StateGetBeaconEntry returns the beacon entry for the given filecoin epoch. If
+	// StateGetBeaconEntry returns the beacon entry for the given Qoin epoch. If
 	// the entry has not yet been produced, the call will block until the entry
 	// becomes available
 	StateGetBeaconEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) //perm:read
@@ -662,7 +662,7 @@ type FullNode interface {
 
 	// MethodGroup: Msig
 	// The Msig methods are used to interact with multisig wallets on the
-	// filecoin network
+	// Qoin network
 
 	// MsigGetAvailableBalance returns the portion of a multisig's balance that can be withdrawn or spent
 	MsigGetAvailableBalance(context.Context, address.Address, types.TipSetKey) (types.BigInt, error) //perm:read
@@ -877,7 +877,7 @@ type FullNode interface {
 	// TraceAPI related methods
 
 	// Returns an OpenEthereum-compatible trace of the given block (implementing `trace_block`),
-	// translating Filecoin semantics into Ethereum semantics and tracing both EVM and FVM calls.
+	// translating Qoin semantics into Ethereum semantics and tracing both EVM and FVM calls.
 	//
 	// Features:
 	//
