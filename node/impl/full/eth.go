@@ -241,7 +241,7 @@ func (a *EthModule) EthGetBlockByHash(ctx context.Context, blkHash ethtypes.EthH
 	if err != nil {
 		return ethtypes.EthBlock{}, xerrors.Errorf("error loading tipset %s: %w", ts, err)
 	}
-	return newEthBlockFromFilecoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
+	return newEthBlockFromQoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
 }
 
 func (a *EthModule) EthGetBlockByNumber(ctx context.Context, blkParam string, fullTxInfo bool) (ethtypes.EthBlock, error) {
@@ -249,7 +249,7 @@ func (a *EthModule) EthGetBlockByNumber(ctx context.Context, blkParam string, fu
 	if err != nil {
 		return ethtypes.EthBlock{}, err
 	}
-	return newEthBlockFromFilecoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
+	return newEthBlockFromQoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
 }
 
 func (a *EthModule) EthGetTransactionByHash(ctx context.Context, txHash *ethtypes.EthHash) (*ethtypes.EthTx, error) {

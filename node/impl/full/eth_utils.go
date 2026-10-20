@@ -192,7 +192,7 @@ func ethCallToQoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.Mess
 	}, nil
 }
 
-func newEthBlockFromFilecoinTipSet(ctx context.Context, ts *types.TipSet, fullTxInfo bool, cs *store.ChainStore, sa StateAPI) (ethtypes.EthBlock, error) {
+func newEthBlockFromQoinTipSet(ctx context.Context, ts *types.TipSet, fullTxInfo bool, cs *store.ChainStore, sa StateAPI) (ethtypes.EthBlock, error) {
 	parentKeyCid, err := ts.Parents().Cid()
 	if err != nil {
 		return ethtypes.EthBlock{}, err
