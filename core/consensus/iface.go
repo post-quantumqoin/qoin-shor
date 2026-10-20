@@ -37,7 +37,7 @@ type Consensus interface {
 	// - It's not too far in the future.
 	IsEpochInConsensusRange(epoch abi.ChainEpoch) bool
 
-	// CreateBlock implements all the logic required to propose and assemble a new Filecoin block.
+	// CreateBlock implements all the logic required to propose and assemble a new Qoin block.
 	//
 	// This function encapsulate all the consensus-specific actions to propose a new block
 	// such as the ordering of transactions, the inclusion of consensus proofs, the signature
