@@ -87,7 +87,7 @@ func TestVersionedAddressEncoding(t *testing.T) {
 		want   string
 	}{
 		{SchemeLegacyCompatible, "816966616c636f6e35313243010203"},
-		{SchemeCanonicalCBOR, "816966616c636f6e35313243010203"},
+		{SchemeCanonicalCBOR, "826966616c636f6e35313243010203"},
 	} {
 		encoded, err := serializeCertPublicKey(key, test.scheme)
 		if err != nil {
@@ -109,16 +109,16 @@ func TestVersionedAddressEncoding(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		encoded, _ := hex.DecodeString("816966616c636f6e35313243010203")
+		encoded, _ := hex.DecodeString("826966616c636f6e35313243010203")
 		want, err := fromBytes(encoded, protocol)
 		if err != nil {
 			t.Fatal(err)
 		}
 		if len(modern) != 1 || modern[0] != want {
-			t.Fatal("canonical scheme must use the first-key CBOR address")
+			t.Fatal("version 1 must use standard CBOR")
 		}
-		if !Contains(legacy[0], modern) || Contains(legacy[1], modern) {
-			t.Fatal("canonical scheme must accept CBOR and reject raw addresses")
+		if Contains(legacy[0], modern) || Contains(legacy[1], modern) || Contains(want, legacy) {
+			t.Fatal("versioned addresses must not accept the other encoding")
 		}
 	}
 }

@@ -25,7 +25,7 @@ const (
 	SchemeLegacyCompatible Scheme = iota
 
 	// SchemeCanonicalCBOR requires canonical certificate order and derives the
-	// address from the CBOR-serialized first certificate key. All new wallets
+	// address from the standard 0x82 CBOR-serialized first certificate key. All new wallets
 	// and signatures must use this scheme.
 	SchemeCanonicalCBOR
 )
@@ -118,8 +118,11 @@ func serializeCertPublicKey(publicKey typescrypto.SignPqcCertPubkey, scheme Sche
 		value := types.PqcCertPubkey{Typ: publicKey.Typ, Pubkey: publicKey.Pubkey}
 		return value.Serialize()
 	case SchemeCanonicalCBOR:
-		value := types.PqcCertPubkey{Typ: publicKey.Typ, Pubkey: publicKey.Pubkey}
-		return value.Serialize()
+		var buf bytes.Buffer
+		if err := publicKey.MarshalCBOR(&buf); err != nil {
+			return nil, err
+		}
+		return buf.Bytes(), nil
 	default:
 		return nil, xerrors.Errorf("unsupported PQC address scheme: %d", scheme)
 	}
