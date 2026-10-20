@@ -8,9 +8,11 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/golang/mock/gomock"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/go-jsonrpc"
 	"github.com/post-quantumqoin/qoin-shor/api"
+	"github.com/post-quantumqoin/qoin-shor/api/mocks"
 	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"
 )
 
@@ -80,5 +82,25 @@ func TestQoinAddressRPCNames(t *testing.T) {
 		if !ok || field.Tag.Get("perm") != "read" {
 			t.Fatalf("RPC %s must retain read permission", name)
 		}
+	}
+}
+
+func TestQoinAddressRPCMocks(t *testing.T) {
+	controller := gomock.NewController(t)
+	defer controller.Finish()
+	client := mocks.NewMockFullNode(controller)
+	ctx := context.Background()
+	input := ethtypes.EthAddress{0x12, 0x34}
+	qoinAddress, err := input.ToQoinAddress()
+	if err != nil {
+		t.Fatal(err)
+	}
+	client.EXPECT().EthAddressToQoinAddress(ctx, input).Return(qoinAddress, nil)
+	if got, err := client.EthAddressToQoinAddress(ctx, input); err != nil || got != qoinAddress {
+		t.Fatalf("new mock conversion failed: %v", err)
+	}
+	client.EXPECT().QoinAddressToEthAddress(ctx, qoinAddress).Return(input, nil)
+	if got, err := client.QoinAddressToEthAddress(ctx, qoinAddress); err != nil || got != input {
+		t.Fatalf("new mock conversion failed: %v", err)
 	}
 }
