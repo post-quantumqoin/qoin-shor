@@ -796,10 +796,10 @@ type FullNode interface {
 	//
 	// EthAccounts will always return [] since we don't expect Lotus to manage private keys
 	EthAccounts(ctx context.Context) ([]ethtypes.EthAddress, error) //perm:read
-	// EthAddressToFilecoinAddress converts an EthAddress into an f410 Filecoin Address
-	EthAddressToFilecoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) //perm:read
-	// FilecoinAddressToEthAddress converts an f410 or f0 Filecoin Address to an EthAddress
-	FilecoinAddressToEthAddress(ctx context.Context, filecoinAddress address.Address) (ethtypes.EthAddress, error) //perm:read
+	// EthAddressToQoinAddress converts an EthAddress into a Qoin Q410 or ID address.
+	EthAddressToQoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) //perm:read
+	// QoinAddressToEthAddress converts a Qoin Q410 or ID address into an EthAddress.
+	QoinAddressToEthAddress(ctx context.Context, qoinAddress address.Address) (ethtypes.EthAddress, error) //perm:read
 	// EthBlockNumber returns the height of the latest (heaviest) TipSet
 	EthBlockNumber(ctx context.Context) (ethtypes.EthUint64, error) //perm:read
 	// EthGetBlockTransactionCountByNumber returns the number of messages in the TipSet

@@ -195,12 +195,12 @@ func (a *EthModule) EthAccounts(context.Context) ([]ethtypes.EthAddress, error) 
 	return []ethtypes.EthAddress{}, nil
 }
 
-func (a *EthAPI) EthAddressToFilecoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) {
+func (a *EthAPI) EthAddressToQoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) {
 	return ethAddress.ToQoinAddress()
 }
 
-func (a *EthAPI) FilecoinAddressToEthAddress(ctx context.Context, filecoinAddress address.Address) (ethtypes.EthAddress, error) {
-	return ethtypes.EthAddressFromQoinAddress(filecoinAddress)
+func (a *EthAPI) QoinAddressToEthAddress(ctx context.Context, qoinAddress address.Address) (ethtypes.EthAddress, error) {
+	return ethtypes.EthAddressFromQoinAddress(qoinAddress)
 }
 
 func (a *EthModule) countTipsetMsgs(ctx context.Context, ts *types.TipSet) (int, error) {

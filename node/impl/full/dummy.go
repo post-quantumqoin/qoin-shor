@@ -19,7 +19,7 @@ var ErrModuleDisabled = errors.New("module disabled, enable with Fevm.EnableEthR
 
 type EthModuleDummy struct{}
 
-func (e *EthModuleDummy) EthAddressToFilecoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) {
+func (e *EthModuleDummy) EthAddressToQoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) {
 	return address.Undef, ErrModuleDisabled
 }
 
