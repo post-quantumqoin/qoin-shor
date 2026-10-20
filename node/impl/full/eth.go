@@ -109,7 +109,7 @@ var (
 // a transaction is also the block that executes it. Each block specifies the state root
 // resulting from executing all transactions within it (output state).
 //
-// In Filecoin, at every epoch there is an unknown number of round winners all of whom are
+// In Qoin, at every epoch there is an unknown number of round winners all of whom are
 // entitled to publish a block. Blocks are collected into a tipset. A tipset is committed
 // only when the subsequent tipset is built on it (i.e. it becomes a parent). Block producers
 // execute the parent tipset and specify the resulting state root in the block being produced.
@@ -268,7 +268,7 @@ func (a *EthModule) EthGetTransactionByHashLimited(ctx context.Context, txHash *
 		log.Debug("could not find transaction hash %s in lookup table", txHash.String())
 	}
 
-	// This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
+	// This isn't an eth transaction we have the mapping for, so let's look it up as a Qoin message
 	if c == cid.Undef {
 		c = txHash.ToCid()
 	}
@@ -330,7 +330,7 @@ func (a *EthModule) EthGetMessageCidByTransactionHash(ctx context.Context, txHas
 		return &c, nil
 	}
 
-	// This isn't an eth transaction we have the mapping for, so let's try looking it up as a filecoin message
+	// This isn't an eth transaction we have the mapping for, so let's try looking it up as a Qoin message
 	if c == cid.Undef {
 		c = txHash.ToCid()
 	}
@@ -412,7 +412,7 @@ func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, txHash 
 		log.Debug("could not find transaction hash %s in lookup table", txHash.String())
 	}
 
-	// This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
+	// This isn't an eth transaction we have the mapping for, so let's look it up as a Qoin message
 	if c == cid.Undef {
 		c = txHash.ToCid()
 	}
@@ -750,7 +750,7 @@ func (a *EthModule) EthFeeHistory(ctx context.Context, p jsonrpc.RawParams) (eth
 
 		// NOTE: baseFeePerGas should include the next block after the newest of the returned range,
 		//  because the next base fee can be inferred from the messages in the newest block.
-		//  However, this is NOT the case in Filecoin due to deferred execution, so the best
+		//  However, this is NOT the case in Qoin due to deferred execution, so the best
 		//  we can do is duplicate the last value.
 		baseFeeArray      = []ethtypes.EthBigInt{ethtypes.EthBigInt(basefee)}
 		rewardsArray      = make([][]ethtypes.EthBigInt, 0)
@@ -1491,7 +1491,7 @@ func (e *EthEventHandler) installEthFilterSpec(ctx context.Context, filterSpec *
 		}
 	}
 
-	// Convert all addresses to filecoin Q4 Addresses
+	// Convert all addresses to Qoin Q4 Addresses
 	for _, ea := range filterSpec.Address {
 		a, err := ea.ToQoinAddress()
 		if err != nil {

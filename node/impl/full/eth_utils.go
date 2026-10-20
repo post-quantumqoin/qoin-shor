@@ -137,7 +137,7 @@ func getTipsetByEthBlockNumberOrHash(ctx context.Context, chain *store.ChainStor
 func ethCallToQoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.Message, error) {
 	var from address.Address
 	if tx.From == nil || *tx.From == (ethtypes.EthAddress{}) {
-		// Send from the filecoin "system" address.
+		// Send from the Qoin "system" address.
 		var err error
 		from, err = (ethtypes.EthAddress{}).ToQoinAddress()
 		if err != nil {
@@ -384,7 +384,7 @@ func parseEthRevert(ret []byte) string {
 }
 
 // lookupEthAddress makes its best effort at finding the Ethereum address for a
-// Filecoin address. It does the following:
+// Qoin address. It does the following:
 //
 //  1. If the supplied address is an f410 address, we return its payload as the EthAddress.
 //  2. Otherwise (f0, f1, f2, f3), we look up the actor on the state tree. If it has a delegated address, we return it if it's f410 address.
@@ -505,7 +505,7 @@ func newEthTxFromSignedMessage(smsg *types.SignedMessage, st *state.StateTree) (
 		if err != nil {
 			return ethtypes.EthTx{}, err
 		}
-	} else { // BLS Filecoin message
+	} else { // BLS Qoin message
 		tx, err = ethTxFromNativeMessage(smsg.VMMessage(), &smsg.Signature, st)
 		if err != nil {
 			return ethtypes.EthTx{}, err
@@ -613,7 +613,7 @@ func getSignedMessage(ctx context.Context, cs *store.ChainStore, msgCid cid.Cid)
 	return smsg, nil
 }
 
-// newEthTxFromMessageLookup creates an ethereum transaction from filecoin message lookup. If a negative txIdx is passed
+// newEthTxFromMessageLookup creates an ethereum transaction from Qoin message lookup. If a negative txIdx is passed
 // into the function, it looks up the transaction index of the message in the tipset, otherwise it uses the txIdx passed into the
 // function
 func newEthTxFromMessageLookup(ctx context.Context, msgLookup *api.MsgLookup, txIdx int, cs *store.ChainStore, sa StateAPI) (ethtypes.EthTx, error) {
