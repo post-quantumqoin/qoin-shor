@@ -179,7 +179,7 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 		return xerrors.New("'Value' field cannot be negative")
 	}
 
-	if m.Value.GreaterThan(TotalFilecoinInt) {
+	if m.Value.GreaterThan(TotalQoinInt) {
 		return xerrors.New("'Value' field cannot be greater than total qoin supply")
 	}
 

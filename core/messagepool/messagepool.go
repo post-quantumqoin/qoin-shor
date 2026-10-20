@@ -740,7 +740,7 @@ func (mp *MessagePool) checkMessage(ctx context.Context, m *types.SignedMessage)
 		return ErrInvalidToAddr
 	}
 
-	if !m.Message.Value.LessThan(types.TotalFilecoinInt) {
+	if !m.Message.Value.LessThan(types.TotalQoinInt) {
 		return ErrMessageValueTooHigh
 	}
 

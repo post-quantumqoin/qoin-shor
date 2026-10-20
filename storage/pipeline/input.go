@@ -9,10 +9,10 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
-	"github.com/post-quantumqoin/go-paddedreader"
 	"github.com/filecoin-project/go-statemachine"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
+	"github.com/post-quantumqoin/go-paddedreader"
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/build"
@@ -773,7 +773,7 @@ func (m *Sealing) maybeUpgradeSector(ctx context.Context, sp abi.RegisteredSealP
 	var candidate abi.SectorID
 	var bestExpiration abi.ChainEpoch
 	var bestDealBytes abi.PaddedPieceSize
-	bestPledge := types.TotalFilecoinInt
+	bestPledge := types.TotalQoinInt
 
 	for s := range m.available {
 		expirationEpoch, pledge, err := ef(s.Number)

@@ -480,8 +480,8 @@ func (sm *StateManager) GetCirculatingSupply(ctx context.Context, height abi.Cha
 	}
 
 	total := big.Add(circ, unCirc)
-	if !total.Equals(types.TotalFilecoinInt) {
-		return types.EmptyInt, xerrors.Errorf("total qoin didn't add to expected amount: %s != %s", total, types.TotalFilecoinInt)
+	if !total.Equals(types.TotalQoinInt) {
+		return types.EmptyInt, xerrors.Errorf("total qoin didn't add to expected amount: %s != %s", total, types.TotalQoinInt)
 	}
 
 	return circ, nil
