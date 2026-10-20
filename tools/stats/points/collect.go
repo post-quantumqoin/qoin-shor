@@ -239,7 +239,7 @@
 // 		return err
 // 	}
 
-// 	// We divide the power into gibibytes because 2^63 bytes is 8 exbibytes which is smaller than the Filecoin Mainnet.
+// 	// We divide the power into gibibytes because 2^63 bytes is 8 exbibytes which is smaller than the Qoin Mainnet.
 // 	// Dividing by a gibibyte gives us more room to work with. This will allow the dashboard to report network and miner
 // 	// sizes up to 8192 yobibytes.
 // 	gibi := types.NewInt(1024 * 1024 * 1024)
