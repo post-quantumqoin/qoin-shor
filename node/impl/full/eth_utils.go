@@ -174,7 +174,7 @@ func ethCallToQoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.Mess
 	} else {
 		addr, err := tx.To.ToQoinAddress()
 		if err != nil {
-			return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
+			return nil, xerrors.Errorf("cannot get qoin address: %w", err)
 		}
 		to = addr
 		method = builtintypes.MethodsEVM.InvokeContract
@@ -273,7 +273,7 @@ func newEthBlockFromQoinTipSet(ctx context.Context, ts *types.TipSet, fullTxInfo
 	block.Timestamp = ethtypes.EthUint64(ts.Blocks()[0].Timestamp)
 	block.BaseFeePerGas = ethtypes.EthBigInt{Int: ts.Blocks()[0].ParentBaseFee.Int}
 	block.GasUsed = ethtypes.EthUint64(gasUsed)
-	
+
 	if ts.Blocks()[0].PqcPowProof != nil && len(ts.Blocks()[0].PqcPowProof.Nbit) > 0 {
 		block.Difficulty = ethtypes.EthUint64(big.PositiveFromUnsignedBytes(ts.Blocks()[0].PqcPowProof.Nbit).Int.Uint64())
 	}
