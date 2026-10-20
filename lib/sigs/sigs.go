@@ -166,6 +166,12 @@ func PqcSign(typ crypto.SigType, privkey []byte, msg []byte) ([]byte, error) {
 }
 
 func MultiPqcVerify(sig *crypto.Signature, addr address.Address, msg []byte) error {
+	return MultiPqcVerifyWithAddressBinding(sig, addr, msg, true)
+}
+
+// MultiPqcVerifyWithAddressBinding supports historical block authentication.
+// Only address matching is optional; envelope and cryptographic checks always run.
+func MultiPqcVerifyWithAddressBinding(sig *crypto.Signature, addr address.Address, msg []byte, requireAddressMatch bool) error {
 	if sig == nil {
 		return xerrors.Errorf("signature is nil")
 	}
@@ -179,12 +185,14 @@ func MultiPqcVerify(sig *crypto.Signature, addr address.Address, msg []byte) err
 		return err
 	}
 
-	candidates, err := pqcaddress.SignerAddressCandidates(sig.PqcCert, addr.Protocol())
-	if err != nil {
-		return xerrors.Errorf("derive signer address from PQC certificate: %w", err)
-	}
-	if !pqcaddress.Contains(addr, candidates) {
-		return xerrors.Errorf("signer address %s does not match the first PQC certificate public key", addr)
+	if requireAddressMatch {
+		candidates, err := pqcaddress.SignerAddressCandidates(sig.PqcCert, addr.Protocol())
+		if err != nil {
+			return xerrors.Errorf("derive signer address from PQC certificate: %w", err)
+		}
+		if !pqcaddress.Contains(addr, candidates) {
+			return xerrors.Errorf("signer address %s does not match the first PQC certificate public key", addr)
+		}
 	}
 
 	for _, publicKey := range sig.PqcCert.Pubkeys {
