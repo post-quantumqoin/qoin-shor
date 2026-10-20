@@ -29,3 +29,7 @@ ext/qvm/rust/target
 /docgen-md
 /docgen-openrpc
 build/paramfetch.sh
+/AppDir/
+/appimage-builder-cache/
+/appimage-build/
+/*.AppImage
