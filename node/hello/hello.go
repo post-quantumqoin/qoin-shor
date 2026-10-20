@@ -111,7 +111,7 @@ func (hs *Service) HandleStream(s inet.Stream) {
 	}
 
 	if hs.pmgr != nil {
-		hs.pmgr.AddFilecoinPeer(s.Conn().RemotePeer())
+		hs.pmgr.AddQoinPeer(s.Conn().RemotePeer())
 	}
 
 	ts, err := hs.syncer.FetchTipSet(context.Background(), s.Conn().RemotePeer(), types.NewTipSetKey(hmsg.HeaviestTipSet...))
