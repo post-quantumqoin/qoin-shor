@@ -301,7 +301,7 @@ func (a *EthModule) EthGetTransactionByHashLimited(ctx context.Context, txHash *
 			// accounts.
 			tx, err := ethtypes.EthTxFromSignedEthMessage(p)
 			if err != nil {
-				return nil, fmt.Errorf("could not convert Filecoin message into tx: %w", err)
+				return nil, fmt.Errorf("could not convert qoin message into tx: %w", err)
 			}
 			tx.Hash, err = tx.TxHash()
 			if err != nil {
@@ -461,7 +461,7 @@ func (a *EthModule) EthGetCode(ctx context.Context, ethAddr ethtypes.EthAddress,
 	// return nil, nil
 	to, err := ethAddr.ToQoinAddress()
 	if err != nil {
-		return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
+		return nil, xerrors.Errorf("cannot get qoin address: %w", err)
 	}
 
 	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
@@ -558,7 +558,7 @@ func (a *EthModule) EthGetStorageAt(ctx context.Context, ethAddr ethtypes.EthAdd
 
 	to, err := ethAddr.ToQoinAddress()
 	if err != nil {
-		return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
+		return nil, xerrors.Errorf("cannot get qoin address: %w", err)
 	}
 
 	// use the system actor as the caller
@@ -1330,7 +1330,7 @@ func ethGasSearch(
 func (a *EthModule) EthCall(ctx context.Context, tx ethtypes.EthCall, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	msg, err := ethCallToQoinMessage(ctx, tx)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to convert ethcall to filecoin message: %w", err)
+		return nil, xerrors.Errorf("failed to convert ethcall to qoin message: %w", err)
 	}
 
 	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
