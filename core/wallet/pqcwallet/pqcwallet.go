@@ -125,7 +125,7 @@ func (w *PqcWallet) findPqcKey(addr address.Address) (*key.PqcKey, error) {
 		return nil, err
 	}
 
-	pkey, err = key.NewPqcKey(ki)
+	pkey, err = key.NewPqcKeyForAddress(ki, addr)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to new pkey: %w", err)
 	}
@@ -336,7 +336,11 @@ func (w *PqcWallet) SetDefault(a address.Address) error {
 	}
 
 	log.Debug("SetDefault len(ki.PqcKeypairs):", len(ki.PqcKeypairs))
-	PqcKey, err := key.NewPqcKey(ki)
+	PqcKey, err := key.NewPqcKeyForAddress(ki, a)
+	if err != nil {
+		return err
+	}
+	ki = PqcKey.KeyInfo
 	log.Debug("SetDefault Address:", PqcKey.Address)
 
 	log.Debug("SetDefault PQCCert Version:", PqcKey.PQCCert.Version)
