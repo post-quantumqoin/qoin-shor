@@ -29,7 +29,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/lib/must"
 )
 
-var ErrInvalidAddress = errors.New("invalid Filecoin Eth address")
+var ErrInvalidAddress = errors.New("invalid qoin Eth address")
 
 type EthUint64 uint64
 
@@ -486,7 +486,7 @@ func (ea EthAddress) ToQoinAddress() (address.Address, error) {
 	addr, err := address.NewDelegatedAddress(builtintypes.EthereumAddressManagerActorID, ea[:])
 	if err != nil {
 		return address.Undef, fmt.Errorf("failed to translate supplied address (%s) into a "+
-			"Filecoin Q4 Address: %w", hex.EncodeToString(ea[:]), err)
+			"qoin Q4 Address: %w", hex.EncodeToString(ea[:]), err)
 	}
 	return addr, nil
 }
