@@ -180,7 +180,7 @@ func (tx *EthTxArgs) ToUnsignedMessage(from address.Address) (*types.Message, er
 		method = builtintypes.MethodsEVM.InvokeContract
 		to, err = tx.To.ToQoinAddress()
 		if err != nil {
-			return nil, xerrors.Errorf("failed to convert To into filecoin addr: %w", err)
+			return nil, xerrors.Errorf("failed to convert To into qoin addr: %w", err)
 		}
 	}
 
