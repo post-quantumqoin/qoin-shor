@@ -32,3 +32,13 @@ func TestQoinAddressConversionRoundTrip(t *testing.T) {
 		}
 	}
 }
+
+func TestQoinAddressConversionRejectsUnsupportedProtocols(t *testing.T) {
+	input, err := address.NewPqcAddress([]byte{1, 2, 3})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := EthAddressFromQoinAddress(input); err != ErrInvalidAddress {
+		t.Fatalf("expected ErrInvalidAddress for a PQC address, got %v", err)
+	}
+}
