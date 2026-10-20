@@ -180,7 +180,7 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 	}
 
 	if m.Value.GreaterThan(TotalFilecoinInt) {
-		return xerrors.New("'Value' field cannot be greater than total filecoin supply")
+		return xerrors.New("'Value' field cannot be greater than total qoin supply")
 	}
 
 	if m.GasFeeCap.Int == nil {
