@@ -60,7 +60,7 @@ var EvmGetInfoCmd = &cli.Command{
 		var faddr address.Address
 		var eaddr ethtypes.EthAddress
 		addr, err := address.NewFromString(addrString)
-		if err != nil { // This isn't a filecoin address
+		if err != nil { // This isn't a Qoin address
 			eaddr, err = ethtypes.ParseEthAddress(addrString)
 			if err != nil { // This isn't an Eth address either
 				return xerrors.Errorf("address is not a qoin or eth address")
