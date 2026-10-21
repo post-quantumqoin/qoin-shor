@@ -102,6 +102,31 @@ func SignerAddressCandidates(cert typescrypto.SignPQCCert, protocol address.Prot
 	return result, nil
 }
 
+// LegacyCertificateMatchesAddress checks every legacy key without changing the
+// certificate order. Callers must verify all required signatures separately.
+func LegacyCertificateMatchesAddress(cert typescrypto.SignPQCCert, addr address.Address) (bool, error) {
+	if Scheme(cert.Version) != SchemeLegacyCompatible {
+		return false, xerrors.New("expected legacy PQC certificate")
+	}
+	if err := ValidateCertificate(cert); err != nil {
+		return false, err
+	}
+	for _, key := range cert.Pubkeys {
+		single := typescrypto.SignPQCCert{
+			Version: cert.Version,
+			Pubkeys: []typescrypto.SignPqcCertPubkey{key},
+		}
+		candidates, err := SignerAddressCandidates(single, addr.Protocol())
+		if err != nil {
+			return false, err
+		}
+		if Contains(addr, candidates) {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
 // Contains reports whether expected is one of the address candidates.
 func Contains(expected address.Address, candidates []address.Address) bool {
 	for _, candidate := range candidates {
