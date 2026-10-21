@@ -185,20 +185,30 @@ func MultiPqcVerifyWithAddressBinding(sig *crypto.Signature, addr address.Addres
 		return err
 	}
 
-	if requireAddressMatch {
-		candidates, err := pqcaddress.SignerAddressCandidates(sig.PqcCert, addr.Protocol())
-		if err != nil {
-			return xerrors.Errorf("derive signer address from PQC certificate: %w", err)
-		}
-		if !pqcaddress.Contains(addr, candidates) {
-			return xerrors.Errorf("signer address %s does not match the first PQC certificate public key", addr)
-		}
-	}
-
 	for _, publicKey := range sig.PqcCert.Pubkeys {
 		typ := crypto.GetTypeByName(publicKey.Typ)
 		if err := PqcVerify(typ, signatures[typ], publicKey.Pubkey, msg); err != nil {
 			return xerrors.Errorf("verify PQC signature type %s: %w", publicKey.Typ, err)
+		}
+	}
+
+	if requireAddressMatch {
+		if sig.PqcCert.Version == uint8(pqcaddress.SchemeLegacyCompatible) {
+			matched, err := pqcaddress.LegacyCertificateMatchesAddress(sig.PqcCert, addr)
+			if err != nil {
+				return xerrors.Errorf("derive signer address from legacy PQC certificate: %w", err)
+			}
+			if !matched {
+				return xerrors.Errorf("signer address %s does not match any legacy PQC certificate public key", addr)
+			}
+		} else {
+			candidates, err := pqcaddress.SignerAddressCandidates(sig.PqcCert, addr.Protocol())
+			if err != nil {
+				return xerrors.Errorf("derive signer address from PQC certificate: %w", err)
+			}
+			if !pqcaddress.Contains(addr, candidates) {
+				return xerrors.Errorf("signer address %s does not match the first PQC certificate public key", addr)
+			}
 		}
 	}
 
