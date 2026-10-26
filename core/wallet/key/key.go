@@ -244,8 +244,23 @@ func NewPqcKey(keyInfo types.KeyInfo) (*PqcKey, error) {
 		if err != nil {
 			return nil, xerrors.Errorf("invalid stored PQC address: %w", err)
 		}
-		if !pqcaddress.Contains(expected, addresses) {
-			return nil, xerrors.Errorf("stored PQC address %s does not match certificate version %d and first public key", expected, version)
+		matched := pqcaddress.Contains(expected, addresses)
+		if !matched && version == uint8(pqcaddress.SchemeLegacyCompatible) {
+			legacy, err := pqcaddress.LegacyWalletAddressCandidates(crypto.SignPQCCert{
+				Pubkeys: signPubkeys, Version: cert.Version,
+			}, addressProtocol)
+			if err != nil {
+				return nil, xerrors.Errorf("derive legacy PQC wallet addresses: %w", err)
+			}
+			for _, candidate := range legacy {
+				if candidate.Address == expected {
+					matched = true
+					break
+				}
+			}
+		}
+		if !matched {
+			return nil, xerrors.Errorf("stored PQC address %s does not match certificate version %d wallet address candidates", expected, version)
 		}
 		pk.Address = expected
 	}
