@@ -335,8 +335,11 @@ var walletSetDefault = &cli.Command{
 			}
 		}
 
+		if err := api.WalletSetDefault(ctx, addr); err != nil {
+			return err
+		}
 		fmt.Println("Default address set to:", addr)
-		return api.WalletSetDefault(ctx, addr)
+		return nil
 	},
 }
 
