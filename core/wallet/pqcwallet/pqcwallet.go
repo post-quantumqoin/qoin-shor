@@ -16,6 +16,7 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/api"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
+	"github.com/post-quantumqoin/qoin-shor/core/types/pqcaddress"
 	"github.com/post-quantumqoin/qoin-shor/core/wallet/key"
 
 	// "github.com/post-quantumqoin/address"
@@ -213,6 +214,9 @@ func (w *PqcWallet) WalletExport(ctx context.Context, addr address.Address) (*ty
 func (w *PqcWallet) WalletImport(ctx context.Context, pki *types.KeyInfo) (address.Address, error) {
 	w.lk.Lock()
 	defer w.lk.Unlock()
+	if pki == nil {
+		return address.Undef, xerrors.New("key info is nil")
+	}
 
 	log.Debug("WalletImport pki typ:", pki.Type)
 	for _, kp := range pki.PqcKeypairs {
@@ -222,6 +226,25 @@ func (w *PqcWallet) WalletImport(ctx context.Context, pki *types.KeyInfo) (addre
 	k, err := key.NewPqcKey(*pki)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("failed to make key: %w", err)
+	}
+	if pki.PqcAddress == "" && k.PQCCert.Version == uint8(pqcaddress.SchemeLegacyCompatible) {
+		cert := crypto.SignPQCCert{Version: k.PQCCert.Version}
+		for _, publicKey := range k.PQCCert.Pubkeys {
+			cert.Pubkeys = append(cert.Pubkeys, crypto.SignPqcCertPubkey{
+				Typ: publicKey.Typ, Pubkey: publicKey.Pubkey,
+			})
+		}
+		candidates, err := pqcaddress.LegacyWalletAddressCandidates(cert, k.Address.Protocol())
+		if err != nil {
+			return address.Undef, xerrors.Errorf("derive legacy import candidates: %w", err)
+		}
+		if len(candidates) > 1 {
+			var addresses []string
+			for _, candidate := range candidates {
+				addresses = append(addresses, candidate.Address.String())
+			}
+			return address.Undef, xerrors.Errorf("ambiguous legacy PQC import: provide PqcAddress or wallet import --expected-address; candidates: %s", strings.Join(addresses, ", "))
+		}
 	}
 
 	if err := w.keystore.Put(KNamePrefix+k.Address.String(), k.KeyInfo); err != nil {
