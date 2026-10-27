@@ -392,6 +392,10 @@ var walletImport = &cli.Command{
 	ArgsUsage: "[<path> (optional, will read from stdin if omitted)]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
+			Name:  "expected-address",
+			Usage: "require the original PQC wallet address when importing legacy keys",
+		},
+		&cli.StringFlag{
 			Name:  "format",
 			Usage: "specify input format for key",
 			Value: "hex-shor",
@@ -486,6 +490,9 @@ var walletImport = &cli.Command{
 			return fmt.Errorf("unrecognized format: %s", cctx.String("format"))
 		}
 
+		if err := bindImportAddress(&ki, cctx.String("expected-address")); err != nil {
+			return err
+		}
 		addr, err := api.WalletImport(ctx, &ki)
 		if err != nil {
 			return err
@@ -508,6 +515,34 @@ var walletImport = &cli.Command{
 		fmt.Printf("imported key %s successfully!\n", addrStr)
 		return nil
 	},
+}
+
+func bindImportAddress(ki *types.KeyInfo, expected string) error {
+	if expected == "" {
+		return nil
+	}
+	if ki.Type != types.KTPqc && ki.Type != types.KTDelegated {
+		return fmt.Errorf("--expected-address requires a PQC or delegated key")
+	}
+	addr, err := address.NewFromString(expected)
+	if err != nil {
+		ethAddr, ethErr := ethtypes.ParseEthAddress(expected)
+		if ethErr != nil {
+			return fmt.Errorf("invalid expected wallet address: %w", err)
+		}
+		addr, err = ethAddr.ToQoinAddress()
+		if err != nil {
+			return err
+		}
+	}
+	if ki.PqcAddress != "" {
+		stored, err := address.NewFromString(ki.PqcAddress)
+		if err != nil || stored != addr {
+			return fmt.Errorf("expected wallet address conflicts with KeyInfo PqcAddress")
+		}
+	}
+	ki.PqcAddress = addr.String()
+	return nil
 }
 
 var walletSign = &cli.Command{
