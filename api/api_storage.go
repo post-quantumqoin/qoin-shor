@@ -41,7 +41,7 @@ import (
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
-// StorageMiner is a low-level interface to the Filecoin network storage miner node
+// StorageMiner is a low-level interface to the Qoin network storage miner node
 type StorageMiner interface {
 	Common
 	Net

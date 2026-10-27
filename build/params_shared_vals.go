@@ -78,7 +78,7 @@ var Devnet = true
 const FilBase = uint64(120_000_000_000_000)
 const FilAllocStorageMining = uint64(108_000_000_000_000)
 
-const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
+const QoinPrecision = uint64(1_000_000_000_000_000_000)
 const FilReserved = uint64(12_000_000_000_000)
 
 var InitialRewardBalance *big.Int
@@ -88,10 +88,10 @@ var InitialFilReserved *big.Int
 
 func init() {
 	InitialRewardBalance = big.NewInt(int64(FilAllocStorageMining))
-	InitialRewardBalance = InitialRewardBalance.Mul(InitialRewardBalance, big.NewInt(int64(FilecoinPrecision)))
+	InitialRewardBalance = InitialRewardBalance.Mul(InitialRewardBalance, big.NewInt(int64(QoinPrecision)))
 
 	InitialFilReserved = big.NewInt(int64(FilReserved))
-	InitialFilReserved = InitialFilReserved.Mul(InitialFilReserved, big.NewInt(int64(FilecoinPrecision)))
+	InitialFilReserved = InitialFilReserved.Mul(InitialFilReserved, big.NewInt(int64(QoinPrecision)))
 
 	if os.Getenv("QOIN_ADDRESS_TYPE") == AddressMainnetEnvVar {
 		SetAddressNetwork(address.Mainnet)

@@ -1,16 +1,24 @@
-# sector-storage
+# Qoin Sector Storage
+
+This module provides the sector storage subsystem used by Qoin Shor. It builds on
+the Filecoin Project's [sector-storage](https://github.com/filecoin-project/sector-storage)
+implementation of the [specs-storage](https://github.com/filecoin-project/specs-storage)
+interface.
+
+## Upstream Attribution
+
+The original sector-storage project was developed by Protocol Labs and Filecoin
+Project contributors. The following badges refer to the upstream project, not to
+Qoin authorship or the build status of this repository.
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
 [![CircleCI](https://circleci.com/gh/filecoin-project/sector-storage.svg?style=svg)](https://circleci.com/gh/filecoin-project/sector-storage)
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-> a concrete implementation of the [specs-storage](https://github.com/filecoin-project/specs-storage) interface
-
-The sector-storage project provides a implementation-nonspecific reference implementation of the [specs-storage](https://github.com/filecoin-project/specs-storage) interface.
-
 ## Disclaimer
 
-Please report your issues with regards to sector-storage at the [lotus issue tracker](https://github.com/post-quantumqoin/qoin-shor/issues)
+Please report issues with Qoin's sector storage module at the
+[Qoin Shor issue tracker](https://github.com/post-quantumqoin/qoin-shor/issues).
 
 ## Architecture
 
@@ -54,7 +62,12 @@ store.Store instance
 
 ## License
 
-The Filecoin Project is dual-licensed under Apache 2.0 and MIT terms:
+The upstream Filecoin Project sector-storage implementation is dual-licensed under
+Apache 2.0 and MIT terms:
 
 - Apache License, Version 2.0, ([LICENSE-APACHE](https://github.com/filecoin-project/sector-storage/blob/master/LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
 - MIT license ([LICENSE-MIT](https://github.com/filecoin-project/sector-storage/blob/master/LICENSE-MIT) or http://opensource.org/licenses/MIT)
+
+For this repository's license texts, see [LICENSE-APACHE](../../LICENSE-APACHE)
+and [LICENSE-MIT](../../LICENSE-MIT). Qoin branding does not replace upstream
+copyright notices or applicable license terms.

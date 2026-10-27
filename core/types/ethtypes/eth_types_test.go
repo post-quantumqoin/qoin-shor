@@ -169,10 +169,10 @@ func TestParseEthAddr(t *testing.T) {
 		addr, err := address.NewIDAddress(id)
 		require.Nil(t, err)
 
-		eaddr, err := EthAddressFromFilecoinAddress(addr)
+		eaddr, err := EthAddressFromQoinAddress(addr)
 		require.Nil(t, err)
 
-		faddr, err := eaddr.ToFilecoinAddress()
+		faddr, err := eaddr.ToQoinAddress()
 		require.Nil(t, err)
 
 		require.Equal(t, addr, faddr)
@@ -183,13 +183,13 @@ func TestMaskedIDInF4(t *testing.T) {
 	addr, err := address.NewIDAddress(100)
 	require.NoError(t, err)
 
-	eaddr, err := EthAddressFromFilecoinAddress(addr)
+	eaddr, err := EthAddressFromQoinAddress(addr)
 	require.NoError(t, err)
 
 	badaddr, err := address.NewDelegatedAddress(builtin.EthereumAddressManagerActorID, eaddr[:])
 	require.NoError(t, err)
 
-	_, err = EthAddressFromFilecoinAddress(badaddr)
+	_, err = EthAddressFromQoinAddress(badaddr)
 	require.Error(t, err)
 }
 

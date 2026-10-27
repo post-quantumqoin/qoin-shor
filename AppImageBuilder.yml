@@ -1,0 +1,26 @@
+version: 1
+
+AppDir:
+  path: ./AppDir
+  app_info:
+    id: io.postquantumqoin.shor
+    name: QoinShor
+    icon: io.postquantumqoin.shor
+    version: '{{APP_VERSION}}'
+    exec: usr/bin/shor
+    exec_args: '$@'
+  apt:
+    arch: [amd64]
+    sources:
+      - sourceline: 'deb [arch=amd64] https://deb.debian.org/debian bookworm main'
+        key_url: 'https://ftp-master.debian.org/keys/archive-key-12.asc'
+    include:
+      - libc6
+      - libgcc-s1
+      - libstdc++6
+  runtime:
+    arch: [x86_64]
+
+AppImage:
+  arch: x86_64
+  file_name: 'QoinShor-{{APP_VERSION}}-x86_64.AppImage'

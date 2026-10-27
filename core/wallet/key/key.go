@@ -14,6 +14,7 @@ import (
 
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"
+	"github.com/post-quantumqoin/qoin-shor/core/types/pqcaddress"
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"
 	// pqccrypto "github.com/post-quantumqoin/qoin-shor/pqccrypto"
 )
@@ -72,7 +73,7 @@ func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 			return nil, xerrors.Errorf("failed to create ethereum address from bytes: %w", err)
 		}
 
-		k.Address, err = ea.ToFilecoinAddress()
+		k.Address, err = ea.ToQoinAddress()
 		if err != nil {
 			return nil, xerrors.Errorf("converting Delegated to address: %w", err)
 		}
@@ -158,6 +159,8 @@ func GeneratePqcKeyWithAlgs(typ types.KeyType, algs []types.SigAlg) (*PqcKey, er
 		Type:        typ, // This should be set to a type that indicates it's a multi-algorithm key, e.g., "pqc-multi"
 		PqcKeypairs: kprs,
 	}
+	version := uint8(pqcaddress.SchemeCanonicalCBOR)
+	ki.PqcAddressVersion = &version
 
 	return NewPqcKey(ki)
 }
@@ -174,12 +177,21 @@ func NewPqcKey(keyInfo types.KeyInfo) (*PqcKey, error) {
 	if len(keyInfo.PqcKeypairs) == 0 {
 		return nil, xerrors.Errorf("no pqc keypairs in KeyInfo")
 	}
-	// Sort keypairs by type to ensure deterministic order in cert
+	// Missing metadata identifies legacy wallets; never reinterpret them as version 1.
+	version := uint8(pqcaddress.SchemeLegacyCompatible)
+	if keyInfo.PqcAddressVersion != nil {
+		version = *keyInfo.PqcAddressVersion
+	}
+	if version > uint8(pqcaddress.SchemeCanonicalCBOR) {
+		return nil, xerrors.Errorf("unsupported PQC address scheme: %d", version)
+	}
 	kpairs := make([]types.PqcKeypair, len(keyInfo.PqcKeypairs))
 	copy(kpairs, keyInfo.PqcKeypairs)
-	sort.Slice(kpairs, func(i, j int) bool {
-		return string(kpairs[i].PqcType) < string(kpairs[j].PqcType)
-	})
+	if version == uint8(pqcaddress.SchemeCanonicalCBOR) {
+		sort.Slice(kpairs, func(i, j int) bool {
+			return string(kpairs[i].PqcType) < string(kpairs[j].PqcType)
+		})
+	}
 
 	var pubkeys []types.PqcCertPubkey
 	for _, kp := range kpairs {
@@ -194,7 +206,7 @@ func NewPqcKey(keyInfo types.KeyInfo) (*PqcKey, error) {
 
 	cert := types.PQCCert{
 		Pubkeys: pubkeys,
-		Version: 0,
+		Version: version,
 	}
 
 	pk := &PqcKey{
@@ -207,36 +219,65 @@ func NewPqcKey(keyInfo types.KeyInfo) (*PqcKey, error) {
 		return nil, xerrors.Errorf("no cert pubkeys built")
 	}
 
-	// If the key type is Delegated, we derive the address from the first public key using Ethereum's method
-	if keyInfo.Type == types.KTDelegated {
-		pb, err := pubkeys[0].Serialize()
-		if err != nil {
-			return nil, xerrors.Errorf("serialize delegated pubkey: %w", err)
+	signPubkeys := make([]crypto.SignPqcCertPubkey, len(pubkeys))
+	for index, publicKey := range pubkeys {
+		signPubkeys[index] = crypto.SignPqcCertPubkey{
+			Typ:    publicKey.Typ,
+			Pubkey: publicKey.Pubkey,
 		}
-		ethAddr, err := ethtypes.EthAddressFromPubKey(pb)
-		if err != nil {
-			return nil, xerrors.Errorf("eth address from pubkey: %w", err)
-		}
-		ea, err := ethtypes.CastEthAddress(ethAddr)
-		if err != nil {
-			return nil, xerrors.Errorf("cast eth address: %w", err)
-		}
-		pk.Address, err = ea.ToFilecoinAddress()
-		if err != nil {
-			return nil, xerrors.Errorf("convert delegated to filecoin address: %w", err)
-		}
-		return pk, nil
 	}
 
-	// For non-delegated keys, we derive the address from the first public key using Filecoin's method
-	pb, err := pubkeys[0].Serialize()
-	if err != nil {
-		return nil, xerrors.Errorf("serialize pqc pubkey: %w", err)
+	addressProtocol := address.PQC
+	if keyInfo.Type == types.KTDelegated {
+		addressProtocol = address.Delegated
 	}
-	pk.Address, err = address.NewPqcAddress(pb)
+	addresses, err := pqcaddress.SignerAddressCandidates(crypto.SignPQCCert{
+		Pubkeys: signPubkeys,
+		Version: cert.Version,
+	}, addressProtocol)
 	if err != nil {
-		return nil, xerrors.Errorf("new pqc address: %w", err)
+		return nil, xerrors.Errorf("derive PQC wallet address: %w", err)
 	}
+	pk.Address = addresses[0]
+	if keyInfo.PqcAddress != "" {
+		expected, err := address.NewFromString(keyInfo.PqcAddress)
+		if err != nil {
+			return nil, xerrors.Errorf("invalid stored PQC address: %w", err)
+		}
+		matched := pqcaddress.Contains(expected, addresses)
+		if !matched && version == uint8(pqcaddress.SchemeLegacyCompatible) {
+			legacy, err := pqcaddress.LegacyWalletAddressCandidates(crypto.SignPQCCert{
+				Pubkeys: signPubkeys, Version: cert.Version,
+			}, addressProtocol)
+			if err != nil {
+				return nil, xerrors.Errorf("derive legacy PQC wallet addresses: %w", err)
+			}
+			for _, candidate := range legacy {
+				if candidate.Address == expected {
+					matched = true
+					break
+				}
+			}
+		}
+		if !matched {
+			return nil, xerrors.Errorf("stored PQC address %s does not match certificate version %d wallet address candidates", expected, version)
+		}
+		pk.Address = expected
+	}
+	pk.KeyInfo.PqcAddressVersion = &version
+	pk.KeyInfo.PqcAddress = pk.Address.String()
 
 	return pk, nil
+}
+
+// NewPqcKeyForAddress binds a keystore entry to the address used to load it.
+func NewPqcKeyForAddress(keyInfo types.KeyInfo, expected address.Address) (*PqcKey, error) {
+	if keyInfo.PqcAddress != "" {
+		stored, err := address.NewFromString(keyInfo.PqcAddress)
+		if err != nil || stored != expected {
+			return nil, xerrors.Errorf("keystore PQC address metadata does not match requested address %s", expected)
+		}
+	}
+	keyInfo.PqcAddress = expected.String()
+	return NewPqcKey(keyInfo)
 }

@@ -131,7 +131,7 @@ func (sm *StateManager) setupPostIgnitionVesting(ctx context.Context) error {
 	for k, v := range totalsByEpoch {
 		ns := msig0.State{
 			// In the pre-ignition logic, we incorrectly set this value in Fil, not attoFil, an off-by-10^18 error
-			InitialBalance: big.Mul(v, big.NewInt(int64(build.FilecoinPrecision))),
+			InitialBalance: big.Mul(v, big.NewInt(int64(build.QoinPrecision))),
 			UnlockDuration: k,
 			PendingTxns:    cid.Undef,
 			// In the pre-ignition logic, the start epoch was 0. This changes in the fork logic of the Ignition upgrade itself.
@@ -183,7 +183,7 @@ func (sm *StateManager) setupPostCalicoVesting(ctx context.Context) error {
 	sm.postCalicoVesting = make([]msig0.State, 0, len(totalsByEpoch))
 	for k, v := range totalsByEpoch {
 		ns := msig0.State{
-			InitialBalance: big.Mul(v, big.NewInt(int64(build.FilecoinPrecision))),
+			InitialBalance: big.Mul(v, big.NewInt(int64(build.QoinPrecision))),
 			UnlockDuration: k,
 			PendingTxns:    cid.Undef,
 			StartEpoch:     build.UpgradeLiftoffHeight,
@@ -480,8 +480,8 @@ func (sm *StateManager) GetCirculatingSupply(ctx context.Context, height abi.Cha
 	}
 
 	total := big.Add(circ, unCirc)
-	if !total.Equals(types.TotalFilecoinInt) {
-		return types.EmptyInt, xerrors.Errorf("total filecoin didn't add to expected amount: %s != %s", total, types.TotalFilecoinInt)
+	if !total.Equals(types.TotalQoinInt) {
+		return types.EmptyInt, xerrors.Errorf("total qoin didn't add to expected amount: %s != %s", total, types.TotalQoinInt)
 	}
 
 	return circ, nil

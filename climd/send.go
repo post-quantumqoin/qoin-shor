@@ -92,7 +92,7 @@ var sendCmd = &cli.Command{
 		if err != nil {
 			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().Get(0))
 			if ethErr == nil {
-				params.To, err = ethAddr.ToFilecoinAddress()
+				params.To, err = ethAddr.ToQoinAddress()
 			} else {
 				return ShowHelp(cctx, fmt.Errorf("failed to parse target address: %w", err))
 			}
@@ -116,7 +116,7 @@ var sendCmd = &cli.Command{
 			if err != nil {
 				return err
 			}
-			faddr, err := eaddr.ToFilecoinAddress()
+			faddr, err := eaddr.ToQoinAddress()
 			if err != nil {
 				fmt.Println("error on conversion to faddr")
 				return err

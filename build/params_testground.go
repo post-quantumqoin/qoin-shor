@@ -63,17 +63,17 @@ var (
 	FilAllocStorageMining uint64 = 1_400_000_000
 	FilReserved           uint64 = 300_000_000
 
-	FilecoinPrecision uint64 = 1_000_000_000_000_000_000
+	QoinPrecision uint64 = 1_000_000_000_000_000_000
 
 	InitialRewardBalance = func() *big.Int {
 		v := big.NewInt(int64(FilAllocStorageMining))
-		v = v.Mul(v, big.NewInt(int64(FilecoinPrecision)))
+		v = v.Mul(v, big.NewInt(int64(QoinPrecision)))
 		return v
 	}()
 
 	InitialFilReserved = func() *big.Int {
 		v := big.NewInt(int64(FilReserved))
-		v = v.Mul(v, big.NewInt(int64(FilecoinPrecision)))
+		v = v.Mul(v, big.NewInt(int64(QoinPrecision)))
 		return v
 	}()
 

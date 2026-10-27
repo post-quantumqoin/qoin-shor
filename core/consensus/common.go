@@ -251,8 +251,7 @@ func checkBlockMessages(ctx context.Context, sm *stmgr.StateManager, cs *store.C
 	// Validate message arrays in a temporary blockstore.
 	tmpbs := bstore.NewMemory()
 	tmpstore := blockadt.WrapStore(ctx, cbor.NewCborStore(tmpbs))
-	
-	
+
 	bmArr := blockadt.MakeEmptyArray(tmpstore)
 	for i, m := range b.BlsMessages {
 		if err := checkMsg(m); err != nil {
@@ -290,7 +289,7 @@ func checkBlockMessages(ctx context.Context, sm *stmgr.StateManager, cs *store.C
 			return xerrors.Errorf("failed to resolve key addr: %w", err)
 		}
 
-		if err := AuthenticateMessage(m, kaddr); err != nil {
+		if err := AuthenticateMessageAtHeight(m, kaddr, b.Header.Height); err != nil {
 			return xerrors.Errorf("failed to validate signature: %w", err)
 		}
 

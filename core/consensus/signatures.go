@@ -4,9 +4,11 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/crypto"
 	"github.com/post-quantumqoin/core-types/network"
 
+	"github.com/post-quantumqoin/qoin-shor/build"
 	"github.com/post-quantumqoin/qoin-shor/core/types"
 	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"
 	"github.com/post-quantumqoin/qoin-shor/lib/sigs"
@@ -17,6 +19,16 @@ import (
 // signature payload depending on the signature type. The supplied Address type
 // must be recognized by the registered verifier for the signature type.
 func AuthenticateMessage(msg *types.SignedMessage, signer address.Address) error {
+	return authenticateMessage(msg, signer, true)
+}
+
+// AuthenticateMessageAtHeight applies the block's historical address-binding rule.
+// Admission to the message pool must use AuthenticateMessage instead.
+func AuthenticateMessageAtHeight(msg *types.SignedMessage, signer address.Address, height abi.ChainEpoch) error {
+	return authenticateMessage(msg, signer, height > build.UpgradePqcAddressBindingHeight)
+}
+
+func authenticateMessage(msg *types.SignedMessage, signer address.Address, requireAddressMatch bool) error {
 	var digest []byte
 
 	typ := msg.Signature.Type
@@ -28,7 +40,7 @@ func AuthenticateMessage(msg *types.SignedMessage, signer address.Address) error
 		}
 		roundTripMsg, err := txArgs.ToUnsignedMessage(msg.Message.From)
 		if err != nil {
-			return xerrors.Errorf("failed to reconstruct filecoin msg: %w", err)
+			return xerrors.Errorf("failed to reconstruct qoin msg: %w", err)
 		}
 
 		if !msg.Message.Equals(roundTripMsg) {
@@ -45,7 +57,7 @@ func AuthenticateMessage(msg *types.SignedMessage, signer address.Address) error
 	}
 
 	if typ == crypto.SigTypeMultiPqc || typ == crypto.SigTypeDelegated {
-		if err := sigs.MultiPqcVerify(&msg.Signature, signer, digest); err != nil {
+		if err := sigs.MultiPqcVerifyWithAddressBinding(&msg.Signature, signer, digest, requireAddressMatch); err != nil {
 			return xerrors.Errorf("message %s has invalid signature (type %d): %w", msg.Cid(), typ, err)
 		}
 		return nil

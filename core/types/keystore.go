@@ -54,8 +54,9 @@ func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 		return nil
 	}
 }
-//Multi-Algorithm Signature Wallet
-//Single-Algorithm Signature Wallet
+
+// Multi-Algorithm Signature Wallet
+// Single-Algorithm Signature Wallet
 const (
 	// WTMAS       WalletType = "mas"
 	// WTSAS       WalletType = "sas"
@@ -111,9 +112,11 @@ func (pc *PQCCert) Serialize() ([]byte, error) {
 
 // KeyInfo is used for storing keys in KeyStore
 type KeyInfo struct {
-	Type        KeyType
-	PrivateKey  []byte
-	PqcKeypairs []PqcKeypair
+	Type              KeyType
+	PrivateKey        []byte
+	PqcKeypairs       []PqcKeypair
+	PqcAddressVersion *uint8 `json:",omitempty"`
+	PqcAddress        string `json:",omitempty"`
 	// PQCCert
 }
 

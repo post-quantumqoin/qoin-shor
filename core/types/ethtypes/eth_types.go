@@ -29,7 +29,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/lib/must"
 )
 
-var ErrInvalidAddress = errors.New("invalid Filecoin Eth address")
+var ErrInvalidAddress = errors.New("invalid qoin Eth address")
 
 type EthUint64 uint64
 
@@ -227,7 +227,7 @@ func NewEthBlock(hasTransactions bool) EthBlock {
 		Extradata:        []byte{},
 		MixHash:          EmptyEthHash,
 		Nonce:            EmptyEthNonce,
-		GasLimit:         EthUint64(build.BlockGasLimit), // TODO we map Ethereum blocks to Filecoin tipsets; this is inconsistent.
+		GasLimit:         EthUint64(build.BlockGasLimit), // TODO we map Ethereum blocks to Qoin tipsets; this is inconsistent.
 		Uncles:           []EthHash{},
 		Transactions:     []interface{}{},
 	}
@@ -398,7 +398,7 @@ func EthAddressFromActorID(id abi.ActorID) EthAddress {
 	return ethaddr
 }
 
-func EthAddressFromFilecoinAddress(addr address.Address) (EthAddress, error) {
+func EthAddressFromQoinAddress(addr address.Address) (EthAddress, error) {
 	switch addr.Protocol() {
 	case address.ID:
 		id, err := address.IDFromAddress(addr)
@@ -474,7 +474,7 @@ func (ea EthAddress) IsMaskedID() bool {
 	return bytes.HasPrefix(ea[:], maskedIDPrefix[:])
 }
 
-func (ea EthAddress) ToFilecoinAddress() (address.Address, error) {
+func (ea EthAddress) ToQoinAddress() (address.Address, error) {
 	if ea.IsMaskedID() {
 		// This is a masked ID address.
 		id := binary.BigEndian.Uint64(ea[12:])
@@ -486,7 +486,7 @@ func (ea EthAddress) ToFilecoinAddress() (address.Address, error) {
 	addr, err := address.NewDelegatedAddress(builtintypes.EthereumAddressManagerActorID, ea[:])
 	if err != nil {
 		return address.Undef, fmt.Errorf("failed to translate supplied address (%s) into a "+
-			"Filecoin Q4 Address: %w", hex.EncodeToString(ea[:]), err)
+			"qoin Q4 Address: %w", hex.EncodeToString(ea[:]), err)
 	}
 	return addr, nil
 }
@@ -514,7 +514,7 @@ func (h EthHash) String() string {
 	return "0x" + hex.EncodeToString(h[:])
 }
 
-// Should ONLY be used for blocks and Filecoin messages. Eth transactions expect a different hashing scheme.
+// Should ONLY be used for blocks and Qoin messages. Eth transactions expect a different hashing scheme.
 func (h EthHash) ToCid() cid.Cid {
 	// err is always nil
 	mh, _ := multihash.EncodeName(h[:], "blake2b-256")

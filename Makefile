@@ -132,7 +132,7 @@ an existing shor binary in your PATH. This may cause problems if you don't run '
 
 .PHONY: build
 
-install: shor-daemon shor-miner shor-worker shor-provider
+install: shor-daemon shor-miner 
 
 install-daemon:
 	install -C ./shor /usr/local/bin/shor
@@ -344,14 +344,21 @@ api-gen:
 cfgdoc-gen:
 	$(GOCC) run ./node/config/cfgdocgen > ./node/config/doc_gen.go
 
-appimage: shor
-	rm -rf appimage-builder-cache || true
-	rm AppDir/io.filecoin.shor.desktop || true
-	rm AppDir/icon.svg || true
-	rm Appdir/AppRun || true
-	mkdir -p AppDir/usr/bin
-	cp ./shor AppDir/usr/bin/
-	appimage-builder
+APPIMAGE_VERSION ?= $(shell git describe --tags --always --dirty)
+
+appimage-check:
+	@command -v appimage-builder >/dev/null || { echo "Install appimage-builder before packaging Qoin Shor." >&2; exit 1; }
+	@test "$$(uname -m)" = x86_64 || { echo "The AppImage recipe currently supports x86_64 only." >&2; exit 1; }
+
+appimage: appimage-check shor
+	rm -f AppDir/*.desktop AppDir/icon.svg AppDir/AppRun
+	install -Dm755 ./shor AppDir/usr/bin/shor
+	install -Dm644 packaging/appimage/io.postquantumqoin.shor.desktop AppDir/io.postquantumqoin.shor.desktop
+	install -Dm644 packaging/appimage/io.postquantumqoin.shor.desktop AppDir/usr/share/applications/io.postquantumqoin.shor.desktop
+	install -Dm644 packaging/appimage/io.postquantumqoin.shor.svg AppDir/io.postquantumqoin.shor.svg
+	install -Dm644 packaging/appimage/io.postquantumqoin.shor.svg AppDir/usr/share/icons/hicolor/scalable/apps/io.postquantumqoin.shor.svg
+	APP_VERSION="$(APPIMAGE_VERSION)" appimage-builder --recipe AppImageBuilder.yml
+.PHONY: appimage appimage-check
 
 docsgen: docsgen-md docsgen-openrpc fiximports
 

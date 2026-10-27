@@ -104,7 +104,7 @@ func baseEnvironment(st *state.StateTree, from address.Address) (*environment, e
 
 func traceToAddress(act *types.ActorTrace) ethtypes.EthAddress {
 	if act.State.Address != nil {
-		if addr, err := ethtypes.EthAddressFromFilecoinAddress(*act.State.Address); err == nil {
+		if addr, err := ethtypes.EthAddressFromQoinAddress(*act.State.Address); err == nil {
 			return addr
 		}
 	}
@@ -305,8 +305,8 @@ func traceCall(env *environment, addr []int, et *types.ExecutionTrace, input, ou
 // Build an EthTrace for a "call", parsing the inputs & outputs as a "native" FVM call.
 func traceNativeCall(env *environment, addr []int, et *types.ExecutionTrace) *ethtypes.EthTrace {
 	return traceCall(env, addr, et,
-		encodeFilecoinParamsAsABI(et.Msg.Method, et.Msg.ParamsCodec, et.Msg.Params),
-		encodeFilecoinReturnAsABI(et.MsgRct.ExitCode, et.MsgRct.ReturnCodec, et.MsgRct.Return),
+		encodeQoinParamsAsABI(et.Msg.Method, et.Msg.ParamsCodec, et.Msg.Params),
+		encodeQoinReturnAsABI(et.MsgRct.ExitCode, et.MsgRct.ReturnCodec, et.MsgRct.Return),
 	)
 }
 

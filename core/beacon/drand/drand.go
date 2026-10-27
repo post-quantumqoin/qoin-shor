@@ -30,7 +30,7 @@ import (
 var log = logging.Logger("drand")
 
 // DrandBeacon connects Lotus with a drand network in order to provide
-// randomness to the system in a way that's aligned with Filecoin rounds/epochs.
+// randomness to the system in a way that's aligned with Qoin rounds/epochs.
 //
 // We connect to drand peers via their public HTTP endpoints. The peers are
 // enumerated in the drandServers variable.
@@ -208,7 +208,7 @@ func (db *DrandBeacon) VerifyEntry(entry types.BeaconEntry, prevEntrySig []byte)
 }
 
 func (db *DrandBeacon) MaxBeaconRoundForEpoch(nv network.Version, filEpoch abi.ChainEpoch) uint64 {
-	// TODO: sometimes the genesis time for filecoin is zero and this goes negative
+	// TODO: sometimes the genesis time for Qoin is zero and this goes negative
 	latestTs := ((uint64(filEpoch) * db.filRoundTime) + db.filGenTime) - db.filRoundTime
 
 	if nv <= network.Version15 {

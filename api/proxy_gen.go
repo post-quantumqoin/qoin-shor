@@ -249,7 +249,7 @@ type FullNodeMethods struct {
 
 	EthAccounts func(p0 context.Context) ([]ethtypes.EthAddress, error) `perm:"read"`
 
-	EthAddressToFilecoinAddress func(p0 context.Context, p1 ethtypes.EthAddress) (address.Address, error) `perm:"read"`
+	EthAddressToQoinAddress func(p0 context.Context, p1 ethtypes.EthAddress) (address.Address, error) `perm:"read"`
 
 	EthBlockNumber func(p0 context.Context) (ethtypes.EthUint64, error) `perm:"read"`
 
@@ -327,7 +327,7 @@ type FullNodeMethods struct {
 
 	EthUnsubscribe func(p0 context.Context, p1 ethtypes.EthSubscriptionID) (bool, error) `perm:"read"`
 
-	FilecoinAddressToEthAddress func(p0 context.Context, p1 address.Address) (ethtypes.EthAddress, error) `perm:"read"`
+	QoinAddressToEthAddress func(p0 context.Context, p1 address.Address) (ethtypes.EthAddress, error) `perm:"read"`
 
 	GasEstimateFeeCap func(p0 context.Context, p1 *types.Message, p2 int64, p3 types.TipSetKey) (types.BigInt, error) `perm:"read"`
 
@@ -2125,14 +2125,14 @@ func (s *FullNodeStub) EthAccounts(p0 context.Context) ([]ethtypes.EthAddress, e
 	return *new([]ethtypes.EthAddress), ErrNotSupported
 }
 
-func (s *FullNodeStruct) EthAddressToFilecoinAddress(p0 context.Context, p1 ethtypes.EthAddress) (address.Address, error) {
-	if s.Internal.EthAddressToFilecoinAddress == nil {
+func (s *FullNodeStruct) EthAddressToQoinAddress(p0 context.Context, p1 ethtypes.EthAddress) (address.Address, error) {
+	if s.Internal.EthAddressToQoinAddress == nil {
 		return *new(address.Address), ErrNotSupported
 	}
-	return s.Internal.EthAddressToFilecoinAddress(p0, p1)
+	return s.Internal.EthAddressToQoinAddress(p0, p1)
 }
 
-func (s *FullNodeStub) EthAddressToFilecoinAddress(p0 context.Context, p1 ethtypes.EthAddress) (address.Address, error) {
+func (s *FullNodeStub) EthAddressToQoinAddress(p0 context.Context, p1 ethtypes.EthAddress) (address.Address, error) {
 	return *new(address.Address), ErrNotSupported
 }
 
@@ -2557,14 +2557,14 @@ func (s *FullNodeStub) EthUnsubscribe(p0 context.Context, p1 ethtypes.EthSubscri
 	return false, ErrNotSupported
 }
 
-func (s *FullNodeStruct) FilecoinAddressToEthAddress(p0 context.Context, p1 address.Address) (ethtypes.EthAddress, error) {
-	if s.Internal.FilecoinAddressToEthAddress == nil {
+func (s *FullNodeStruct) QoinAddressToEthAddress(p0 context.Context, p1 address.Address) (ethtypes.EthAddress, error) {
+	if s.Internal.QoinAddressToEthAddress == nil {
 		return *new(ethtypes.EthAddress), ErrNotSupported
 	}
-	return s.Internal.FilecoinAddressToEthAddress(p0, p1)
+	return s.Internal.QoinAddressToEthAddress(p0, p1)
 }
 
-func (s *FullNodeStub) FilecoinAddressToEthAddress(p0 context.Context, p1 address.Address) (ethtypes.EthAddress, error) {
+func (s *FullNodeStub) QoinAddressToEthAddress(p0 context.Context, p1 address.Address) (ethtypes.EthAddress, error) {
 	return *new(ethtypes.EthAddress), ErrNotSupported
 }
 

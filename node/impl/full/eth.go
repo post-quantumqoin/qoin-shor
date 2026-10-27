@@ -109,7 +109,7 @@ var (
 // a transaction is also the block that executes it. Each block specifies the state root
 // resulting from executing all transactions within it (output state).
 //
-// In Filecoin, at every epoch there is an unknown number of round winners all of whom are
+// In Qoin, at every epoch there is an unknown number of round winners all of whom are
 // entitled to publish a block. Blocks are collected into a tipset. A tipset is committed
 // only when the subsequent tipset is built on it (i.e. it becomes a parent). Block producers
 // execute the parent tipset and specify the resulting state root in the block being produced.
@@ -195,12 +195,12 @@ func (a *EthModule) EthAccounts(context.Context) ([]ethtypes.EthAddress, error) 
 	return []ethtypes.EthAddress{}, nil
 }
 
-func (a *EthAPI) EthAddressToFilecoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) {
-	return ethAddress.ToFilecoinAddress()
+func (a *EthAPI) EthAddressToQoinAddress(ctx context.Context, ethAddress ethtypes.EthAddress) (address.Address, error) {
+	return ethAddress.ToQoinAddress()
 }
 
-func (a *EthAPI) FilecoinAddressToEthAddress(ctx context.Context, filecoinAddress address.Address) (ethtypes.EthAddress, error) {
-	return ethtypes.EthAddressFromFilecoinAddress(filecoinAddress)
+func (a *EthAPI) QoinAddressToEthAddress(ctx context.Context, qoinAddress address.Address) (ethtypes.EthAddress, error) {
+	return ethtypes.EthAddressFromQoinAddress(qoinAddress)
 }
 
 func (a *EthModule) countTipsetMsgs(ctx context.Context, ts *types.TipSet) (int, error) {
@@ -241,7 +241,7 @@ func (a *EthModule) EthGetBlockByHash(ctx context.Context, blkHash ethtypes.EthH
 	if err != nil {
 		return ethtypes.EthBlock{}, xerrors.Errorf("error loading tipset %s: %w", ts, err)
 	}
-	return newEthBlockFromFilecoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
+	return newEthBlockFromQoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
 }
 
 func (a *EthModule) EthGetBlockByNumber(ctx context.Context, blkParam string, fullTxInfo bool) (ethtypes.EthBlock, error) {
@@ -249,7 +249,7 @@ func (a *EthModule) EthGetBlockByNumber(ctx context.Context, blkParam string, fu
 	if err != nil {
 		return ethtypes.EthBlock{}, err
 	}
-	return newEthBlockFromFilecoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
+	return newEthBlockFromQoinTipSet(ctx, ts, fullTxInfo, a.Chain, a.StateAPI)
 }
 
 func (a *EthModule) EthGetTransactionByHash(ctx context.Context, txHash *ethtypes.EthHash) (*ethtypes.EthTx, error) {
@@ -268,7 +268,7 @@ func (a *EthModule) EthGetTransactionByHashLimited(ctx context.Context, txHash *
 		log.Debug("could not find transaction hash %s in lookup table", txHash.String())
 	}
 
-	// This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
+	// This isn't an eth transaction we have the mapping for, so let's look it up as a Qoin message
 	if c == cid.Undef {
 		c = txHash.ToCid()
 	}
@@ -301,7 +301,7 @@ func (a *EthModule) EthGetTransactionByHashLimited(ctx context.Context, txHash *
 			// accounts.
 			tx, err := ethtypes.EthTxFromSignedEthMessage(p)
 			if err != nil {
-				return nil, fmt.Errorf("could not convert Filecoin message into tx: %w", err)
+				return nil, fmt.Errorf("could not convert qoin message into tx: %w", err)
 			}
 			tx.Hash, err = tx.TxHash()
 			if err != nil {
@@ -330,7 +330,7 @@ func (a *EthModule) EthGetMessageCidByTransactionHash(ctx context.Context, txHas
 		return &c, nil
 	}
 
-	// This isn't an eth transaction we have the mapping for, so let's try looking it up as a filecoin message
+	// This isn't an eth transaction we have the mapping for, so let's try looking it up as a Qoin message
 	if c == cid.Undef {
 		c = txHash.ToCid()
 	}
@@ -362,7 +362,7 @@ func (a *EthModule) EthGetTransactionHashByCid(ctx context.Context, cid cid.Cid)
 }
 
 func (a *EthModule) EthGetTransactionCount(ctx context.Context, sender ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthUint64, error) {
-	addr, err := sender.ToFilecoinAddress()
+	addr, err := sender.ToQoinAddress()
 	if err != nil {
 		return ethtypes.EthUint64(0), nil
 	}
@@ -412,7 +412,7 @@ func (a *EthModule) EthGetTransactionReceiptLimited(ctx context.Context, txHash 
 		log.Debug("could not find transaction hash %s in lookup table", txHash.String())
 	}
 
-	// This isn't an eth transaction we have the mapping for, so let's look it up as a filecoin message
+	// This isn't an eth transaction we have the mapping for, so let's look it up as a Qoin message
 	if c == cid.Undef {
 		c = txHash.ToCid()
 	}
@@ -459,9 +459,9 @@ func (a *EthAPI) EthGetTransactionByBlockNumberAndIndex(context.Context, ethtype
 // EthGetCode returns string value of the compiled bytecode
 func (a *EthModule) EthGetCode(ctx context.Context, ethAddr ethtypes.EthAddress, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
 	// return nil, nil
-	to, err := ethAddr.ToFilecoinAddress()
+	to, err := ethAddr.ToQoinAddress()
 	if err != nil {
-		return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
+		return nil, xerrors.Errorf("cannot get qoin address: %w", err)
 	}
 
 	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
@@ -556,9 +556,9 @@ func (a *EthModule) EthGetStorageAt(ctx context.Context, ethAddr ethtypes.EthAdd
 	// pad with zero bytes if smaller than 32 bytes
 	position = append(make([]byte, 32-l, 32), position...)
 
-	to, err := ethAddr.ToFilecoinAddress()
+	to, err := ethAddr.ToQoinAddress()
 	if err != nil {
-		return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
+		return nil, xerrors.Errorf("cannot get qoin address: %w", err)
 	}
 
 	// use the system actor as the caller
@@ -650,7 +650,7 @@ func (a *EthModule) EthGetBalance(ctx context.Context, addr ethtypes.EthAddress,
 	// 	// return xerrors.Errorf("failed to unmarshal storage slot: %w", err)
 	// }
 
-	filAddr, err := addr.ToFilecoinAddress()
+	filAddr, err := addr.ToQoinAddress()
 	if err != nil {
 		return ethtypes.EthBigInt{}, err
 	}
@@ -750,7 +750,7 @@ func (a *EthModule) EthFeeHistory(ctx context.Context, p jsonrpc.RawParams) (eth
 
 		// NOTE: baseFeePerGas should include the next block after the newest of the returned range,
 		//  because the next base fee can be inferred from the messages in the newest block.
-		//  However, this is NOT the case in Filecoin due to deferred execution, so the best
+		//  However, this is NOT the case in Qoin due to deferred execution, so the best
 		//  we can do is duplicate the last value.
 		baseFeeArray      = []ethtypes.EthBigInt{ethtypes.EthBigInt(basefee)}
 		rewardsArray      = make([][]ethtypes.EthBigInt, 0)
@@ -1161,7 +1161,7 @@ func (a *EthModule) EthEstimateGas(ctx context.Context, p jsonrpc.RawParams) (et
 	// 	GasFeeCap:  big.Zero(),
 	// 	GasPremium: big.Zero(),
 	// }
-	msg, err := ethCallToFilecoinMessage(ctx, params.Tx)
+	msg, err := ethCallToQoinMessage(ctx, params.Tx)
 	if err != nil {
 		return ethtypes.EthUint64(0), err
 	}
@@ -1328,9 +1328,9 @@ func ethGasSearch(
 }
 
 func (a *EthModule) EthCall(ctx context.Context, tx ethtypes.EthCall, blkParam ethtypes.EthBlockNumberOrHash) (ethtypes.EthBytes, error) {
-	msg, err := ethCallToFilecoinMessage(ctx, tx)
+	msg, err := ethCallToQoinMessage(ctx, tx)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to convert ethcall to filecoin message: %w", err)
+		return nil, xerrors.Errorf("failed to convert ethcall to qoin message: %w", err)
 	}
 
 	ts, err := getTipsetByEthBlockNumberOrHash(ctx, a.Chain, blkParam)
@@ -1491,9 +1491,9 @@ func (e *EthEventHandler) installEthFilterSpec(ctx context.Context, filterSpec *
 		}
 	}
 
-	// Convert all addresses to filecoin Q4 Addresses
+	// Convert all addresses to Qoin Q4 Addresses
 	for _, ea := range filterSpec.Address {
-		a, err := ea.ToFilecoinAddress()
+		a, err := ea.ToQoinAddress()
 		if err != nil {
 			return nil, xerrors.Errorf("invalid address %x", ea)
 		}
@@ -1684,7 +1684,7 @@ func (e *EthEventHandler) EthSubscribe(ctx context.Context, p jsonrpc.RawParams)
 		var addresses []address.Address
 		if params.Params != nil {
 			for _, ea := range params.Params.Address {
-				a, err := ea.ToFilecoinAddress()
+				a, err := ea.ToQoinAddress()
 				if err != nil {
 					return ethtypes.EthSubscriptionID{}, xerrors.Errorf("invalid address %x", ea)
 				}

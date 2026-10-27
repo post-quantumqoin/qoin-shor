@@ -67,11 +67,11 @@ func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.
 
 	go func() {
 		// We want to get information on connected peers, we don't want to trigger new connections.
-		ctx := network.WithNoDial(ctx, "filecoin hello")
+		ctx := network.WithNoDial(ctx, "qoin hello")
 		for evt := range sub.Out() {
 			pic := evt.(event.EvtPeerIdentificationCompleted)
 			// We just finished identifying the peer, that means we should know what
-			// protocols it speaks. Check if it speeks the Filecoin hello protocol
+			// protocols it speaks. Check if it speeks the Qoin hello protocol
 			// before continuing.
 			if p, _ := h.Peerstore().FirstSupportedProtocol(pic.Peer, hello.ProtocolID); p != hello.ProtocolID {
 				continue
