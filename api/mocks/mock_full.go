@@ -981,19 +981,19 @@ func (mr *MockFullNodeMockRecorder) EthAccounts(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EthAccounts", reflect.TypeOf((*MockFullNode)(nil).EthAccounts), arg0)
 }
 
-// EthAddressToFilecoinAddress mocks base method.
-func (m *MockFullNode) EthAddressToFilecoinAddress(arg0 context.Context, arg1 ethtypes.EthAddress) (address.Address, error) {
+// EthAddressToQoinAddress mocks base method.
+func (m *MockFullNode) EthAddressToQoinAddress(arg0 context.Context, arg1 ethtypes.EthAddress) (address.Address, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "EthAddressToFilecoinAddress", arg0, arg1)
+	ret := m.ctrl.Call(m, "EthAddressToQoinAddress", arg0, arg1)
 	ret0, _ := ret[0].(address.Address)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// EthAddressToFilecoinAddress indicates an expected call of EthAddressToFilecoinAddress.
-func (mr *MockFullNodeMockRecorder) EthAddressToFilecoinAddress(arg0, arg1 interface{}) *gomock.Call {
+// EthAddressToQoinAddress indicates an expected call of EthAddressToQoinAddress.
+func (mr *MockFullNodeMockRecorder) EthAddressToQoinAddress(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EthAddressToFilecoinAddress", reflect.TypeOf((*MockFullNode)(nil).EthAddressToFilecoinAddress), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EthAddressToQoinAddress", reflect.TypeOf((*MockFullNode)(nil).EthAddressToQoinAddress), arg0, arg1)
 }
 
 // EthBlockNumber mocks base method.
@@ -1551,19 +1551,19 @@ func (mr *MockFullNodeMockRecorder) EthUnsubscribe(arg0, arg1 interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EthUnsubscribe", reflect.TypeOf((*MockFullNode)(nil).EthUnsubscribe), arg0, arg1)
 }
 
-// FilecoinAddressToEthAddress mocks base method.
-func (m *MockFullNode) FilecoinAddressToEthAddress(arg0 context.Context, arg1 address.Address) (ethtypes.EthAddress, error) {
+// QoinAddressToEthAddress mocks base method.
+func (m *MockFullNode) QoinAddressToEthAddress(arg0 context.Context, arg1 address.Address) (ethtypes.EthAddress, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FilecoinAddressToEthAddress", arg0, arg1)
+	ret := m.ctrl.Call(m, "QoinAddressToEthAddress", arg0, arg1)
 	ret0, _ := ret[0].(ethtypes.EthAddress)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FilecoinAddressToEthAddress indicates an expected call of FilecoinAddressToEthAddress.
-func (mr *MockFullNodeMockRecorder) FilecoinAddressToEthAddress(arg0, arg1 interface{}) *gomock.Call {
+// QoinAddressToEthAddress indicates an expected call of QoinAddressToEthAddress.
+func (mr *MockFullNodeMockRecorder) QoinAddressToEthAddress(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilecoinAddressToEthAddress", reflect.TypeOf((*MockFullNode)(nil).FilecoinAddressToEthAddress), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QoinAddressToEthAddress", reflect.TypeOf((*MockFullNode)(nil).QoinAddressToEthAddress), arg0, arg1)
 }
 
 // GasEstimateFeeCap mocks base method.

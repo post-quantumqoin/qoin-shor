@@ -4,6 +4,6 @@
 // For support of secp256k1 import:
 // _ "github.com/post-quantumqoin/qoin-shor/lib/sigs/secp"
 //
-// For  support of Filecoin BLS import:
+// For  support of Qoin BLS import:
 // _ "github.com/post-quantumqoin/qoin-shor/lib/sigs/bls"
 package sigs

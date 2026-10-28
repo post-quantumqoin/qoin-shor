@@ -19,7 +19,7 @@ func (q QOIN) String() string {
 }
 
 func (q QOIN) Unitless() string {
-	r := new(big.Rat).SetFrac(q.Int, big.NewInt(int64(build.FilecoinPrecision)))
+	r := new(big.Rat).SetFrac(q.Int, big.NewInt(int64(build.QoinPrecision)))
 	if r.Sign() == 0 {
 		return "0"
 	}
@@ -111,7 +111,7 @@ func ParseQ(s string) (QOIN, error) {
 	}
 
 	if !attoq {
-		r = r.Mul(r, big.NewRat(int64(build.FilecoinPrecision), 1))
+		r = r.Mul(r, big.NewRat(int64(build.QoinPrecision), 1))
 	}
 
 	if !r.IsInt() {

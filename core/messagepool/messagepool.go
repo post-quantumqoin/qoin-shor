@@ -70,7 +70,7 @@ const MaxMessageSize = 64 << 10 // 64KiB
 var (
 	ErrMessageTooBig = errors.New("message too big")
 
-	ErrMessageValueTooHigh = errors.New("cannot send more filecoin than will ever exist")
+	ErrMessageValueTooHigh = errors.New("cannot send more qoin than will ever exist")
 
 	ErrNonceTooLow = errors.New("message nonce too low")
 
@@ -740,7 +740,7 @@ func (mp *MessagePool) checkMessage(ctx context.Context, m *types.SignedMessage)
 		return ErrInvalidToAddr
 	}
 
-	if !m.Message.Value.LessThan(types.TotalFilecoinInt) {
+	if !m.Message.Value.LessThan(types.TotalQoinInt) {
 		return ErrMessageValueTooHigh
 	}
 

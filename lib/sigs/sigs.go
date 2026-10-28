@@ -13,7 +13,7 @@ import (
 	// pqccrypto "github.com/post-quantumqoin/qoin-shor/pqccrypto"
 
 	"github.com/post-quantumqoin/qoin-shor/core/types"
-	"github.com/post-quantumqoin/qoin-shor/core/types/ethtypes"
+	"github.com/post-quantumqoin/qoin-shor/core/types/pqcaddress"
 )
 
 // Sign takes in signature type, private key and message. Returns a signature for that message.
@@ -166,6 +166,12 @@ func PqcSign(typ crypto.SigType, privkey []byte, msg []byte) ([]byte, error) {
 }
 
 func MultiPqcVerify(sig *crypto.Signature, addr address.Address, msg []byte) error {
+	return MultiPqcVerifyWithAddressBinding(sig, addr, msg, true)
+}
+
+// MultiPqcVerifyWithAddressBinding supports historical block authentication.
+// Only address matching is optional; envelope and cryptographic checks always run.
+func MultiPqcVerifyWithAddressBinding(sig *crypto.Signature, addr address.Address, msg []byte, requireAddressMatch bool) error {
 	if sig == nil {
 		return xerrors.Errorf("signature is nil")
 	}
@@ -174,91 +180,79 @@ func MultiPqcVerify(sig *crypto.Signature, addr address.Address, msg []byte) err
 		return fmt.Errorf("must resolve ID addresses before using them to verify a signature")
 	}
 
-	// Verify that the signer address matches the public key in the PqcCert
-	if len(sig.PqcCert.Pubkeys) == 0 {
-		return xerrors.Errorf("empty pubkeys in pqc cert")
+	signatures, err := validatePqcSignatureEnvelope(sig)
+	if err != nil {
+		return err
 	}
 
-	verifyMatch := func(pb []byte) bool {
-		var expectedAddr address.Address
-		var err error
-		if addr.Protocol() == address.Delegated {
-			ethAddr, err := ethtypes.EthAddressFromPubKey(pb)
+	for _, publicKey := range sig.PqcCert.Pubkeys {
+		typ := crypto.GetTypeByName(publicKey.Typ)
+		if err := PqcVerify(typ, signatures[typ], publicKey.Pubkey, msg); err != nil {
+			return xerrors.Errorf("verify PQC signature type %s: %w", publicKey.Typ, err)
+		}
+	}
+
+	if requireAddressMatch {
+		if sig.PqcCert.Version == uint8(pqcaddress.SchemeLegacyCompatible) {
+			matched, err := pqcaddress.LegacyCertificateMatchesAddress(sig.PqcCert, addr)
 			if err != nil {
-				return false
+				return xerrors.Errorf("derive signer address from legacy PQC certificate: %w", err)
 			}
-			ea, err := ethtypes.CastEthAddress(ethAddr)
-			if err != nil {
-				return false
-			}
-			expectedAddr, err = ea.ToFilecoinAddress()
-			if err != nil {
-				return false
+			if !matched {
+				return xerrors.Errorf("signer address %s does not match any legacy PQC certificate public key", addr)
 			}
 		} else {
-			expectedAddr, err = address.NewPqcAddress(pb)
+			candidates, err := pqcaddress.SignerAddressCandidates(sig.PqcCert, addr.Protocol())
 			if err != nil {
-				return false
+				return xerrors.Errorf("derive signer address from PQC certificate: %w", err)
+			}
+			if !pqcaddress.Contains(addr, candidates) {
+				return xerrors.Errorf("signer address %s does not match the first PQC certificate public key", addr)
 			}
 		}
-		return expectedAddr == addr
 	}
 
-	addressMatched := false
-
-	for _, pk := range sig.PqcCert.Pubkeys {
-		// Try matching using raw public key bytes (compatible with JS/TS wallets)
-		if verifyMatch(pk.Pubkey) {
-			addressMatched = true
-			fmt.Printf("MultiPqcVerify: Address matched using raw public key bytes (JS/TS wallet style, typ: %s)\n", pk.Typ)
-			break
-		}
-
-		// Try matching using CBOR serialized public key struct (compatible with Go backend)
-		certPubkey := types.PqcCertPubkey{
-			Typ:    pk.Typ,
-			Pubkey: pk.Pubkey,
-		}
-
-		serializedPubkey, err := certPubkey.Serialize()
-		if err != nil {
-			continue
-		}
-
-		if verifyMatch(serializedPubkey) {
-			addressMatched = true
-			fmt.Printf("MultiPqcVerify: Address matched using CBOR serialized public key struct (Go backend style, typ: %s)\n", pk.Typ)
-			break
-		}
-	}
-
-	if !addressMatched {
-		return xerrors.Errorf("signer address %s does not match address derived from signature public key", addr)
-	}
-
-	fmt.Println("MultiPqcVerify msg:", msg)
-	for _, pk := range sig.PqcCert.Pubkeys {
-		fmt.Println("MultiPqcVerify Typ:", crypto.GetTypeByName(pk.Typ))
-		sig, err := findSign(crypto.GetTypeByName(pk.Typ), sig.PqcSignatures)
-		if err != nil {
-			return err
-		}
-		fmt.Println("MultiPqcVerify len(sig):", len(sig))
-		err = PqcVerify(crypto.GetTypeByName(pk.Typ), sig, pk.Pubkey, msg)
-		if err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
-func findSign(typ crypto.SigType, signatures []crypto.PqcSignature) ([]byte, error) {
-	for _, sg := range signatures {
-		if typ == sg.Type {
-			return sg.Data, nil
-		}
+func validatePqcSignatureEnvelope(sig *crypto.Signature) (map[crypto.SigType][]byte, error) {
+	if sig.Type != crypto.SigTypeDelegated && sig.Type != crypto.SigTypeMultiPqc {
+		return nil, xerrors.Errorf("invalid outer PQC signature type: %d", sig.Type)
 	}
-	return nil, xerrors.Errorf("fail to find a valid signature")
+	if len(sig.Data) != 0 {
+		return nil, xerrors.Errorf("PQC signature envelope must not contain legacy signature data")
+	}
+	if err := pqcaddress.ValidateCertificate(sig.PqcCert); err != nil {
+		return nil, err
+	}
+	if len(sig.PqcCert.Pubkeys) != len(sig.PqcSignatures) {
+		return nil, xerrors.Errorf(
+			"PQC certificate/signature count mismatch: %d != %d",
+			len(sig.PqcCert.Pubkeys),
+			len(sig.PqcSignatures),
+		)
+	}
+
+	certificateTypes := make(map[crypto.SigType]struct{}, len(sig.PqcCert.Pubkeys))
+	for _, publicKey := range sig.PqcCert.Pubkeys {
+		certificateTypes[crypto.GetTypeByName(publicKey.Typ)] = struct{}{}
+	}
+
+	signatures := make(map[crypto.SigType][]byte, len(sig.PqcSignatures))
+	for index, signature := range sig.PqcSignatures {
+		if _, ok := certificateTypes[signature.Type]; !ok {
+			return nil, xerrors.Errorf("PQC signature at index %d has no matching certificate key", index)
+		}
+		if len(signature.Data) == 0 {
+			return nil, xerrors.Errorf("empty PQC signature at index %d", index)
+		}
+		if _, ok := signatures[signature.Type]; ok {
+			return nil, xerrors.Errorf("duplicate PQC signature type: %d", signature.Type)
+		}
+		signatures[signature.Type] = signature.Data
+	}
+
+	return signatures, nil
 }
 
 func PqcVerify(typ crypto.SigType, sig []byte, pk []byte, msg []byte) error {

@@ -148,7 +148,7 @@ var genesisAddMinerCmd = &cli.Command{
 			log.Infof("Giving %s some initial balance", miner.Owner)
 			template.Accounts = append(template.Accounts, genesis.Actor{
 				Type:    genesis.TAccount,
-				Balance: big.Mul(big.NewInt(50_000_000), big.NewInt(int64(build.FilecoinPrecision))),
+				Balance: big.Mul(big.NewInt(50_000_000), big.NewInt(int64(build.QoinPrecision))),
 				Meta:    (&genesis.AccountMeta{Owner: miner.Owner}).ActorMeta(),
 			})
 		}
@@ -629,7 +629,7 @@ var genesisSetVRKSignersCmd = &cli.Command{
 				signers = append(signers, signer)
 				template.Accounts = append(template.Accounts, genesis.Actor{
 					Type:    genesis.TAccount,
-					Balance: big.Mul(big.NewInt(50_000), big.NewInt(int64(build.FilecoinPrecision))),
+					Balance: big.Mul(big.NewInt(50_000), big.NewInt(int64(build.QoinPrecision))),
 					Meta:    (&genesis.AccountMeta{Owner: signer}).ActorMeta(),
 				})
 			}

@@ -328,10 +328,10 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		return nil, nil, xerrors.Errorf("summing account balances in state tree: %w", err)
 	}
 
-	totalFil := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))
+	totalFil := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.QoinPrecision)))
 	remainingFil := big.Sub(totalFil, totalFilAllocated)
 	if remainingFil.Sign() < 0 {
-		return nil, nil, xerrors.Errorf("somehow overallocated filecoin (allocated = %s)", types.FIL(totalFilAllocated))
+		return nil, nil, xerrors.Errorf("somehow overallocated qoin (allocated = %s)", types.FIL(totalFilAllocated))
 	}
 
 	template.RemainderAccount.Balance = remainingFil
@@ -630,26 +630,26 @@ func MakeGenesisBlock(ctx context.Context, j journal.Journal, bs bstore.Blocksto
 		VRFProof: tickBuf,
 	}
 
-	filecoinGenesisCid, err := cid.Decode("bafyreiaqpwbbyjo4a42saasj36kkrpv4tsherf2e7bvezkert2a7dhonoi")
+	qoinGenesisCid, err := cid.Decode("bafyreiaqpwbbyjo4a42saasj36kkrpv4tsherf2e7bvezkert2a7dhonoi")
 	if err != nil {
-		return nil, xerrors.Errorf("failed to decode filecoin genesis block CID: %w", err)
+		return nil, xerrors.Errorf("failed to decode qoin genesis block CID: %w", err)
 	}
 
-	if !expectedCid().Equals(filecoinGenesisCid) {
-		return nil, xerrors.Errorf("expectedCid != filecoinGenesisCid")
+	if !expectedCid().Equals(qoinGenesisCid) {
+		return nil, xerrors.Errorf("expectedCid != qoinGenesisCid")
 	}
 
 	gblk, err := getGenesisBlock()
 	if err != nil {
-		return nil, xerrors.Errorf("failed to construct filecoin genesis block: %w", err)
+		return nil, xerrors.Errorf("failed to construct qoin genesis block: %w", err)
 	}
 
-	if !filecoinGenesisCid.Equals(gblk.Cid()) {
-		return nil, xerrors.Errorf("filecoinGenesisCid != gblk.Cid")
+	if !qoinGenesisCid.Equals(gblk.Cid()) {
+		return nil, xerrors.Errorf("qoinGenesisCid != gblk.Cid")
 	}
 
 	if err := bs.Put(ctx, gblk); err != nil {
-		return nil, xerrors.Errorf("failed writing filecoin genesis block to blockstore: %w", err)
+		return nil, xerrors.Errorf("failed writing qoin genesis block to blockstore: %w", err)
 	}
 
 	nb := make([]byte, 3)
@@ -660,7 +660,7 @@ func MakeGenesisBlock(ctx context.Context, j journal.Journal, bs bstore.Blocksto
 	b := &types.BlockHeader{
 		Miner:                 system.Address,
 		Ticket:                genesisticket,
-		Parents:               []cid.Cid{filecoinGenesisCid},
+		Parents:               []cid.Cid{qoinGenesisCid},
 		Height:                0,
 		ParentWeight:          types.NewInt(0),
 		ParentStateRoot:       stateroot,

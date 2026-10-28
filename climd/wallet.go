@@ -100,7 +100,7 @@ var walletNew = &cli.Command{
 		}
 
 		if ethtypes.IsEthAddress(nk) {
-			ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(nk)
+			ethAddr, err := ethtypes.EthAddressFromQoinAddress(nk)
 			if err == nil {
 				afmt.Printf("%s\n", ethAddr)
 				return nil
@@ -164,7 +164,7 @@ var walletList = &cli.Command{
 		for _, addr := range addrs {
 			addrStr := addr.String()
 			if ethtypes.IsEthAddress(addr) {
-				ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+				ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 				if err == nil {
 					addrStr = fmt.Sprintf("%s ", ethAddr)
 				}
@@ -247,7 +247,7 @@ var walletBalance = &cli.Command{
 				// Fallback: If NewFromString fails, try parsing as an Ethereum string directly
 				ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().First())
 				if ethErr == nil {
-					addr, err = ethAddr.ToFilecoinAddress()
+					addr, err = ethAddr.ToQoinAddress()
 				}
 			}
 		} else {
@@ -297,7 +297,7 @@ var walletGetDefault = &cli.Command{
 		}
 
 		if ethtypes.IsEthAddress(addr) {
-			ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+			ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 			if err == nil {
 				afmt.Printf("%s\n", ethAddr.String())
 				return nil
@@ -329,14 +329,17 @@ var walletSetDefault = &cli.Command{
 		if err != nil {
 			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().First())
 			if ethErr == nil {
-				addr, err = ethAddr.ToFilecoinAddress()
+				addr, err = ethAddr.ToQoinAddress()
 			} else {
 				return err
 			}
 		}
 
+		if err := api.WalletSetDefault(ctx, addr); err != nil {
+			return err
+		}
 		fmt.Println("Default address set to:", addr)
-		return api.WalletSetDefault(ctx, addr)
+		return nil
 	},
 }
 
@@ -362,7 +365,7 @@ var walletExport = &cli.Command{
 		if err != nil {
 			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().First())
 			if ethErr == nil {
-				addr, err = ethAddr.ToFilecoinAddress()
+				addr, err = ethAddr.ToQoinAddress()
 			} else {
 				return err
 			}
@@ -388,6 +391,10 @@ var walletImport = &cli.Command{
 	Usage:     "import keys",
 	ArgsUsage: "[<path> (optional, will read from stdin if omitted)]",
 	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:  "expected-address",
+			Usage: "require the original PQC wallet address when importing legacy keys",
+		},
 		&cli.StringFlag{
 			Name:  "format",
 			Usage: "specify input format for key",
@@ -483,6 +490,9 @@ var walletImport = &cli.Command{
 			return fmt.Errorf("unrecognized format: %s", cctx.String("format"))
 		}
 
+		if err := bindImportAddress(&ki, cctx.String("expected-address")); err != nil {
+			return err
+		}
 		addr, err := api.WalletImport(ctx, &ki)
 		if err != nil {
 			return err
@@ -496,7 +506,7 @@ var walletImport = &cli.Command{
 
 		addrStr := addr.String()
 		if ethtypes.IsEthAddress(addr) {
-			ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+			ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 			if err == nil {
 				addrStr = ethAddr.String()
 			}
@@ -505,6 +515,34 @@ var walletImport = &cli.Command{
 		fmt.Printf("imported key %s successfully!\n", addrStr)
 		return nil
 	},
+}
+
+func bindImportAddress(ki *types.KeyInfo, expected string) error {
+	if expected == "" {
+		return nil
+	}
+	if ki.Type != types.KTPqc && ki.Type != types.KTDelegated {
+		return fmt.Errorf("--expected-address requires a PQC or delegated key")
+	}
+	addr, err := address.NewFromString(expected)
+	if err != nil {
+		ethAddr, ethErr := ethtypes.ParseEthAddress(expected)
+		if ethErr != nil {
+			return fmt.Errorf("invalid expected wallet address: %w", err)
+		}
+		addr, err = ethAddr.ToQoinAddress()
+		if err != nil {
+			return err
+		}
+	}
+	if ki.PqcAddress != "" {
+		stored, err := address.NewFromString(ki.PqcAddress)
+		if err != nil || stored != addr {
+			return fmt.Errorf("expected wallet address conflicts with KeyInfo PqcAddress")
+		}
+	}
+	ki.PqcAddress = addr.String()
+	return nil
 }
 
 var walletSign = &cli.Command{
@@ -529,7 +567,7 @@ var walletSign = &cli.Command{
 		if err != nil {
 			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().First())
 			if ethErr == nil {
-				addr, err = ethAddr.ToFilecoinAddress()
+				addr, err = ethAddr.ToQoinAddress()
 			} else {
 				return err
 			}
@@ -588,7 +626,7 @@ var walletVerify = &cli.Command{
 		if err != nil {
 			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().First())
 			if ethErr == nil {
-				addr, err = ethAddr.ToFilecoinAddress()
+				addr, err = ethAddr.ToQoinAddress()
 			} else {
 				return err
 			}
@@ -652,7 +690,7 @@ var walletDelete = &cli.Command{
 		if err != nil {
 			ethAddr, ethErr := ethtypes.ParseEthAddress(cctx.Args().First())
 			if ethErr == nil {
-				addr, err = ethAddr.ToFilecoinAddress()
+				addr, err = ethAddr.ToQoinAddress()
 			} else {
 				return err
 			}

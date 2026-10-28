@@ -10,8 +10,8 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/bitset"
 	"github.com/post-quantumqoin/address"
+	"github.com/post-quantumqoin/bitset"
 	"github.com/post-quantumqoin/core-types/abi"
 	"github.com/post-quantumqoin/core-types/big"
 	"github.com/post-quantumqoin/core-types/builtin"
@@ -624,7 +624,7 @@ func (b *CommitBatcher) processIndividually(cfg sealiface.Config) ([]sealiface.C
 		return nil, xerrors.Errorf("couldn't get miner info: %w", err)
 	}
 
-	avail := types.TotalFilecoinInt
+	avail := types.TotalQoinInt
 
 	if cfg.CollateralFromMinerBalance && !cfg.DisableCollateralFallback {
 		avail, err = b.api.StateMinerAvailableBalance(b.mctx, b.maddr, types.EmptyTSK)

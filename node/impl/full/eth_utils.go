@@ -134,19 +134,19 @@ func getTipsetByEthBlockNumberOrHash(ctx context.Context, chain *store.ChainStor
 	return nil, errors.New("invalid block param")
 }
 
-func ethCallToFilecoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.Message, error) {
+func ethCallToQoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.Message, error) {
 	var from address.Address
 	if tx.From == nil || *tx.From == (ethtypes.EthAddress{}) {
-		// Send from the filecoin "system" address.
+		// Send from the Qoin "system" address.
 		var err error
-		from, err = (ethtypes.EthAddress{}).ToFilecoinAddress()
+		from, err = (ethtypes.EthAddress{}).ToQoinAddress()
 		if err != nil {
 			return nil, fmt.Errorf("failed to construct the ethereum system address: %w", err)
 		}
 	} else {
 		// The from address must be translatable to an Q4 Address.
 		var err error
-		from, err = tx.From.ToFilecoinAddress()
+		from, err = tx.From.ToQoinAddress()
 		if err != nil {
 			return nil, fmt.Errorf("failed to translate sender address (%s): %w", tx.From.String(), err)
 		}
@@ -172,9 +172,9 @@ func ethCallToFilecoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.
 		to = builtintypes.EthereumAddressManagerActorAddr
 		method = builtintypes.MethodsEAM.CreateExternal
 	} else {
-		addr, err := tx.To.ToFilecoinAddress()
+		addr, err := tx.To.ToQoinAddress()
 		if err != nil {
-			return nil, xerrors.Errorf("cannot get Filecoin address: %w", err)
+			return nil, xerrors.Errorf("cannot get qoin address: %w", err)
 		}
 		to = addr
 		method = builtintypes.MethodsEVM.InvokeContract
@@ -192,7 +192,7 @@ func ethCallToFilecoinMessage(ctx context.Context, tx ethtypes.EthCall) (*types.
 	}, nil
 }
 
-func newEthBlockFromFilecoinTipSet(ctx context.Context, ts *types.TipSet, fullTxInfo bool, cs *store.ChainStore, sa StateAPI) (ethtypes.EthBlock, error) {
+func newEthBlockFromQoinTipSet(ctx context.Context, ts *types.TipSet, fullTxInfo bool, cs *store.ChainStore, sa StateAPI) (ethtypes.EthBlock, error) {
 	parentKeyCid, err := ts.Parents().Cid()
 	if err != nil {
 		return ethtypes.EthBlock{}, err
@@ -273,7 +273,7 @@ func newEthBlockFromFilecoinTipSet(ctx context.Context, ts *types.TipSet, fullTx
 	block.Timestamp = ethtypes.EthUint64(ts.Blocks()[0].Timestamp)
 	block.BaseFeePerGas = ethtypes.EthBigInt{Int: ts.Blocks()[0].ParentBaseFee.Int}
 	block.GasUsed = ethtypes.EthUint64(gasUsed)
-	
+
 	if ts.Blocks()[0].PqcPowProof != nil && len(ts.Blocks()[0].PqcPowProof.Nbit) > 0 {
 		block.Difficulty = ethtypes.EthUint64(big.PositiveFromUnsignedBytes(ts.Blocks()[0].PqcPowProof.Nbit).Int.Uint64())
 	}
@@ -384,7 +384,7 @@ func parseEthRevert(ret []byte) string {
 }
 
 // lookupEthAddress makes its best effort at finding the Ethereum address for a
-// Filecoin address. It does the following:
+// Qoin address. It does the following:
 //
 //  1. If the supplied address is an f410 address, we return its payload as the EthAddress.
 //  2. Otherwise (f0, f1, f2, f3), we look up the actor on the state tree. If it has a delegated address, we return it if it's f410 address.
@@ -395,7 +395,7 @@ func parseEthRevert(ret []byte) string {
 // If the actor doesn't exist in the state-tree but we have its ID, we use a masked ID address. It could have been deleted.
 func lookupEthAddress(addr address.Address, st *state.StateTree) (ethtypes.EthAddress, error) {
 	// Attempt to convert directly, if it's an Q4 Address.
-	ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(addr)
+	ethAddr, err := ethtypes.EthAddressFromQoinAddress(addr)
 	if err == nil && !ethAddr.IsMaskedID() {
 		return ethAddr, nil
 	}
@@ -414,13 +414,13 @@ func lookupEthAddress(addr address.Address, st *state.StateTree) (ethtypes.EthAd
 		return ethtypes.EthAddress{}, err
 	} else if actor.Address == nil {
 		// No delegated address -> use masked ID address.
-	} else if ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(*actor.Address); err == nil && !ethAddr.IsMaskedID() {
+	} else if ethAddr, err := ethtypes.EthAddressFromQoinAddress(*actor.Address); err == nil && !ethAddr.IsMaskedID() {
 		// Conversable into an eth address, use it.
 		return ethAddr, nil
 	}
 
 	// Otherwise, use the masked address.
-	return ethtypes.EthAddressFromFilecoinAddress(idAddr)
+	return ethtypes.EthAddressFromQoinAddress(idAddr)
 }
 
 func parseEthTopics(topics ethtypes.EthTopicSpec) (map[string][][]byte, error) {
@@ -505,7 +505,7 @@ func newEthTxFromSignedMessage(smsg *types.SignedMessage, st *state.StateTree) (
 		if err != nil {
 			return ethtypes.EthTx{}, err
 		}
-	} else { // BLS Filecoin message
+	} else { // BLS Qoin message
 		tx, err = ethTxFromNativeMessage(smsg.VMMessage(), &smsg.Signature, st)
 		if err != nil {
 			return ethtypes.EthTx{}, err
@@ -575,7 +575,7 @@ func ethTxFromNativeMessage(msg *types.Message, sig *crypto.Signature, st *state
 		// want and may send garbage.
 		fallthrough
 	default:
-		input = encodeFilecoinParamsAsABI(msg.Method, codec, msg.Params)
+		input = encodeQoinParamsAsABI(msg.Method, codec, msg.Params)
 	}
 
 	return ethtypes.EthTx{
@@ -613,7 +613,7 @@ func getSignedMessage(ctx context.Context, cs *store.ChainStore, msgCid cid.Cid)
 	return smsg, nil
 }
 
-// newEthTxFromMessageLookup creates an ethereum transaction from filecoin message lookup. If a negative txIdx is passed
+// newEthTxFromMessageLookup creates an ethereum transaction from Qoin message lookup. If a negative txIdx is passed
 // into the function, it looks up the transaction index of the message in the tipset, otherwise it uses the txIdx passed into the
 // function
 func newEthTxFromMessageLookup(ctx context.Context, msgLookup *api.MsgLookup, txIdx int, cs *store.ChainStore, sa StateAPI) (ethtypes.EthTx, error) {
@@ -800,12 +800,12 @@ func newEthTxReceipt(ctx context.Context, tx ethtypes.EthTx, lookup *api.MsgLook
 	return receipt, nil
 }
 
-func encodeFilecoinParamsAsABI(method abi.MethodNum, codec uint64, params []byte) []byte {
+func encodeQoinParamsAsABI(method abi.MethodNum, codec uint64, params []byte) []byte {
 	buf := []byte{0x86, 0x8e, 0x10, 0xc4} // Native method selector.
 	return append(buf, encodeAsABIHelper(uint64(method), codec, params)...)
 }
 
-func encodeFilecoinReturnAsABI(exitCode exitcode.ExitCode, codec uint64, data []byte) []byte {
+func encodeQoinReturnAsABI(exitCode exitcode.ExitCode, codec uint64, data []byte) []byte {
 	return encodeAsABIHelper(uint64(exitCode), codec, data)
 }
 

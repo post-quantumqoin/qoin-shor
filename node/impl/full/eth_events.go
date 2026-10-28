@@ -112,7 +112,7 @@ func ethFilterResultFromEvents(ctx context.Context, evs []*filter.CollectedEvent
 			continue
 		}
 
-		log.Address, err = ethtypes.EthAddressFromFilecoinAddress(ev.EmitterAddr)
+		log.Address, err = ethtypes.EthAddressFromQoinAddress(ev.EmitterAddr)
 		if err != nil {
 			return nil, err
 		}
@@ -337,7 +337,7 @@ func (e *ethSubscription) start(ctx context.Context) {
 					e.send(ctx, r)
 				}
 			case *types.TipSet:
-				ev, err := newEthBlockFromFilecoinTipSet(ctx, vt, true, e.Chain, e.StateAPI)
+				ev, err := newEthBlockFromQoinTipSet(ctx, vt, true, e.Chain, e.StateAPI)
 				if err != nil {
 					break
 				}

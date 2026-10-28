@@ -50,7 +50,7 @@ import (
 	"github.com/post-quantumqoin/qoin-shor/storage/sealer/storiface"
 )
 
-// Chain node provides access to the Filecoin blockchain, by setting up a full
+// Chain node provides access to the Qoin blockchain, by setting up a full
 // validator node, or by delegating some actions to other nodes (lite mode)
 var ChainNode = Options(
 	// Full node or lite node

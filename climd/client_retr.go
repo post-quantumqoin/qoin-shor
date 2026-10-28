@@ -27,9 +27,9 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
 	"github.com/post-quantumqoin/address"
 	"github.com/post-quantumqoin/core-types/big"
+	"github.com/post-quantumqoin/go-qoin-markets/retrievalmarket"
 
 	lapi "github.com/post-quantumqoin/qoin-shor/api"
 	cliutil "github.com/post-quantumqoin/qoin-shor/climd/util"
@@ -236,7 +236,7 @@ var clientRetrieveCmd = &cli.Command{
 	Name:      "retrieve",
 	Usage:     "Retrieve data from network",
 	ArgsUsage: "[dataCid outputPath]",
-	Description: `Retrieve data from the Filecoin network.
+	Description: `Retrieve data from the Qoin network.
 
 The retrieve command will attempt to find a provider make a retrieval deal with
 them. In case a provider can't be found, it can be specified with the --provider

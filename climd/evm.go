@@ -60,17 +60,17 @@ var EvmGetInfoCmd = &cli.Command{
 		var faddr address.Address
 		var eaddr ethtypes.EthAddress
 		addr, err := address.NewFromString(addrString)
-		if err != nil { // This isn't a filecoin address
+		if err != nil { // This isn't a Qoin address
 			eaddr, err = ethtypes.ParseEthAddress(addrString)
 			if err != nil { // This isn't an Eth address either
 				return xerrors.Errorf("address is not a qoin or eth address")
 			}
-			faddr, err = eaddr.ToFilecoinAddress()
+			faddr, err = eaddr.ToQoinAddress()
 			if err != nil {
 				return err
 			}
 		} else {
-			eaddr, faddr, err = ethAddrFromFilecoinAddress(ctx, addr, api)
+			eaddr, faddr, err = ethAddrFromQoinAddress(ctx, addr, api)
 			if err != nil {
 				return err
 			}
@@ -246,7 +246,7 @@ var EvmDeployCmd = &cli.Command{
 				if err != nil {
 					return xerrors.Errorf("from address is neither a qoin nor an eth address")
 				}
-				fromAddr, err = eaddr.ToFilecoinAddress()
+				fromAddr, err = eaddr.ToQoinAddress()
 				if err != nil {
 					return err
 				}
@@ -310,7 +310,7 @@ var EvmDeployCmd = &cli.Command{
 			return fmt.Errorf("failed to create ethereum address: %w", err)
 		}
 
-		delegated, err := ea.ToFilecoinAddress()
+		delegated, err := ea.ToQoinAddress()
 		if err != nil {
 			return fmt.Errorf("failed to calculate Q4 Address: %w", err)
 		}
@@ -361,7 +361,7 @@ var EvmInvokeCmd = &cli.Command{
 			if err != nil {
 				return xerrors.Errorf("failed to decode address as either qoin or eth address")
 			}
-			addr, err = eaddr.ToFilecoinAddress()
+			addr, err = eaddr.ToQoinAddress()
 			if err != nil {
 				return err
 			}
@@ -395,7 +395,7 @@ var EvmInvokeCmd = &cli.Command{
 				if err != nil {
 					return xerrors.Errorf("from address is neither a qoin nor an eth address")
 				}
-				fAddr, err = eaddr.ToFilecoinAddress()
+				fAddr, err = eaddr.ToQoinAddress()
 				if err != nil {
 					return err
 				}
@@ -479,7 +479,7 @@ var EvmInvokeCmd = &cli.Command{
 	},
 }
 
-func ethAddrFromFilecoinAddress(ctx context.Context, addr address.Address, fnapi v0api.FullNode) (ethtypes.EthAddress, address.Address, error) {
+func ethAddrFromQoinAddress(ctx context.Context, addr address.Address, fnapi v0api.FullNode) (ethtypes.EthAddress, address.Address, error) {
 	var faddr address.Address
 	var err error
 
@@ -507,7 +507,7 @@ func ethAddrFromFilecoinAddress(ctx context.Context, addr address.Address, fnapi
 		return ethtypes.EthAddress{}, addr, xerrors.Errorf("qoin address doesn't match known protocols")
 	}
 
-	ethAddr, err := ethtypes.EthAddressFromFilecoinAddress(faddr)
+	ethAddr, err := ethtypes.EthAddressFromQoinAddress(faddr)
 	if err != nil {
 		return ethtypes.EthAddress{}, addr, err
 	}

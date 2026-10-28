@@ -191,7 +191,7 @@
 // 		baseFeeIn := tipset.Blocks()[0].ParentBaseFee
 // 		newBaseFee := store.ComputeNextBaseFee(baseFeeIn, totalUniqGasLimit, len(tipset.Blocks()), tipset.Height())
 
-// 		baseFeeRat := new(big.Rat).SetFrac(newBaseFee.Int, new(big.Int).SetUint64(build.FilecoinPrecision))
+// 		baseFeeRat := new(big.Rat).SetFrac(newBaseFee.Int, new(big.Int).SetUint64(build.QoinPrecision))
 // 		baseFeeFloat, _ := baseFeeRat.Float64()
 // 		p = influx.NewPoint("chain.basefee", baseFeeFloat)
 // 		pl.AddPoint(p)
@@ -222,7 +222,7 @@
 // 		done()
 // 	}()
 
-// 	attoFil := types.NewInt(build.FilecoinPrecision).Int
+// 	attoFil := types.NewInt(build.QoinPrecision).Int
 
 // 	netBal, err := c.api.WalletBalance(ctx, reward.Address)
 // 	if err != nil {
@@ -239,7 +239,7 @@
 // 		return err
 // 	}
 
-// 	// We divide the power into gibibytes because 2^63 bytes is 8 exbibytes which is smaller than the Filecoin Mainnet.
+// 	// We divide the power into gibibytes because 2^63 bytes is 8 exbibytes which is smaller than the Qoin Mainnet.
 // 	// Dividing by a gibibyte gives us more room to work with. This will allow the dashboard to report network and miner
 // 	// sizes up to 8192 yobibytes.
 // 	gibi := types.NewInt(1024 * 1024 * 1024)
